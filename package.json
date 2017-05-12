@@ -1,0 +1,12 @@
+{
+  "name": "sentry-expo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@expo/spawn-async": "^1.2.8",
+    "mkdirp": "^0.5.1",
+    "react-native-sentry": "https://github.com/expo/react-native-sentry/archive/expo-initial-release.tar.gz",
+    "rimraf": "^2.6.1"
+  }
+}

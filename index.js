@@ -16,7 +16,7 @@ Sentry.config = (dsn, options = {}) => {
     },
   };
 
-  const release = Constants.manifest.revisionId || 'UNVERSIONED';
+  const release = options.release || Constants.manifest.revisionId || 'UNVERSIONED';
   return originalSentryConfig(dsn, { ...defaultOptions, ...options, release });
 };
 

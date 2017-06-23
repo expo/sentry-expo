@@ -37,11 +37,12 @@ module.exports = async options => {
       SENTRY_ORG: config.organization,
       SENTRY_PROJECT: config.project,
       SENTRY_AUTH_TOKEN: config.authToken,
+      SENTRY_URL: config.url || 'https://sentry.io/',
     });
-
+    let sentryCliBinary = '../sentry-cli-binary/bin/sentry-cli';
     let output;
     let createReleaseResult = await spawnAsync(
-      'sentry-cli',
+      sentryCliBinary,
       ['releases', 'new', version],
       {
         cwd: tmpdir,
@@ -53,7 +54,7 @@ module.exports = async options => {
     log(output);
 
     let uploadResult = await spawnAsync(
-      'sentry-cli',
+      sentryCliBinary,
       [
         'releases',
         'files',

@@ -40,7 +40,7 @@ module.exports = async options => {
       SENTRY_URL: config.url || 'https://sentry.io/',
     });
 
-    const sentryCliBinary = path.resolve(tmpdir, 'node_modules', 'sentry-cli-binary', 'bin', 'sentry-cli')
+    const sentryCliBinary = path.resolve(projectRoot, 'node_modules', 'sentry-cli-binary', 'bin', 'sentry-cli')
     log(sentryCliBinary);
 
     let output;

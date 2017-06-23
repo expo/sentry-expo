@@ -39,7 +39,8 @@ module.exports = async options => {
       SENTRY_AUTH_TOKEN: config.authToken,
       SENTRY_URL: config.url || 'https://sentry.io/',
     });
-    let sentryCliBinary = '../sentry-cli-binary/bin/sentry-cli';
+
+    let sentryCliBinary = 'node_modules/sentry-cli-binary/bin/sentry-cli';
     let output;
     let createReleaseResult = await spawnAsync(
       sentryCliBinary,

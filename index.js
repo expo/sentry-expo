@@ -117,13 +117,13 @@ function errorDataCallback(data) {
     stacktrace.frames.forEach(frame => {
       frame.filename = normalizeUrl(frame.filename);
     });
+    // NOTE: the following block is the only difference between the upstream
+    // react-native-sentry error callback. It removes the empty stackframe "? at
+    // [native code]"" from the trace
+    let lastFrame = stacktrace.frames[0];
+    if (lastFrame.filename === '[native code]' && lastFrame.function === '?') {
+      stacktrace.frames.splice(0, 1);
+    }
   }
 
-  // NOTE: the following block is the only difference between the upstream
-  // react-native-sentry error callback. It removes the empty stackframe "? at
-  // [native code]"" from the trace
-  let lastFrame = stacktrace.frames[0];
-  if (lastFrame.filename === '[native code]' && lastFrame.function === '?') {
-    stacktrace.frames.splice(0, 1);
-  }
 }

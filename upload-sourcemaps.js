@@ -3,6 +3,7 @@ const path = require('path');
 const rimraf = require('rimraf');
 const mkdirp = require('mkdirp');
 const fs = require('fs');
+const sentryCliBinary = require('sentry-cli-binary');
 
 module.exports = async options => {
   let {
@@ -37,11 +38,15 @@ module.exports = async options => {
       SENTRY_ORG: config.organization,
       SENTRY_PROJECT: config.project,
       SENTRY_AUTH_TOKEN: config.authToken,
+      SENTRY_URL: config.url || 'https://sentry.io/',
     });
+
+    const sentryCliBinaryPath = sentryCliBinary.getPath();
+    log(sentryCliBinaryPath);
 
     let output;
     let createReleaseResult = await spawnAsync(
-      'sentry-cli',
+      sentryCliBinaryPath,
       ['releases', 'new', version],
       {
         cwd: tmpdir,
@@ -53,7 +58,7 @@ module.exports = async options => {
     log(output);
 
     let uploadResult = await spawnAsync(
-      'sentry-cli',
+      sentryCliBinaryPath,
       [
         'releases',
         'files',

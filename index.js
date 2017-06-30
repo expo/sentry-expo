@@ -17,6 +17,16 @@ Sentry.config = (dsn, options = {}) => {
   };
 
   const release = Constants.manifest.revisionId || 'UNVERSIONED';
+
+  // Bail out automatically if the app isn't deployed
+  if (release === 'UNVERSIONED') {
+    return {
+      install: () => {
+        console.log('Automatically skipping Sentry initialization in development');
+      },
+    };
+  }
+
   return originalSentryConfig(dsn, { ...defaultOptions, ...options, release });
 };
 
@@ -117,6 +127,7 @@ function errorDataCallback(data) {
     stacktrace.frames.forEach(frame => {
       frame.filename = normalizeUrl(frame.filename);
     });
+
     // NOTE: the following block is the only difference between the upstream
     // react-native-sentry error callback. It removes the empty stackframe "? at
     // [native code]"" from the trace
@@ -125,5 +136,4 @@ function errorDataCallback(data) {
       stacktrace.frames.splice(0, 1);
     }
   }
-
 }

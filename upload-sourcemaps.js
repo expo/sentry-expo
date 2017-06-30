@@ -42,7 +42,6 @@ module.exports = async options => {
     });
 
     const sentryCliBinaryPath = sentryCliBinary.getPath();
-    log(sentryCliBinaryPath);
 
     let output;
     let createReleaseResult = await spawnAsync(
@@ -80,8 +79,22 @@ module.exports = async options => {
     output = uploadResult.stdout.toString();
     log(output);
   } catch (e) {
-    log(e.stack);
+    log(messageForError(e));
+    log(`Verify that your Sentry configuration in app.json is correct and refer to https://docs.expo.io/versions/latest/guides/using-sentry.html`);
   } finally {
     rimraf.sync(tmpdir);
   }
 };
+
+function messageForError(e) {
+  if (!e.stderr) {
+    return `Error uploading sourcemaps to Sentry`;
+  }
+
+  let message = e.stderr.replace(/^\s+|\s+$/g, '');
+  if (message.indexOf('error: ') === 0) {
+    message = message.replace('error: ', '');
+  }
+
+  return `Error uploading sourcemaps to Sentry: ${message}`;
+}

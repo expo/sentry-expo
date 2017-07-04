@@ -41,7 +41,9 @@ module.exports = async options => {
       SENTRY_URL: config.url || 'https://sentry.io/',
     });
 
-    const sentryCliBinaryPath = sentryCliBinary.getPath();
+    const sentryCliBinaryPath = config.useGlobalSentryCli ?
+      'sentry-cli' :
+      sentryCliBinary.getPath();
 
     let output;
     let createReleaseResult = await spawnAsync(

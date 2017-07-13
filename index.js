@@ -6,7 +6,7 @@ import { Sentry } from 'react-native-sentry';
 export default Sentry;
 
 const originalSentryConfig = Sentry.config;
-Sentry.config = (dsn, options = {}) => {
+Sentry.config = (dsn, options = {}, skipDev = true) => {
   let defaultOptions = {
     tags: {
       ...(options.tags || {}),
@@ -19,7 +19,13 @@ Sentry.config = (dsn, options = {}) => {
   const release = Constants.manifest.revisionId || 'UNVERSIONED';
 
   // Bail out automatically if the app isn't deployed
-  if (release === 'UNVERSIONED') {
+  if (release === 'UNVERSIONED' && skipDev) {
+    const noop = () => {};
+    Object.getOwnPropertyNames(Sentry).forEach((prop) => {
+      if (typeof Sentry[prop] === 'function') {
+        Sentry[prop] = noop;
+      }
+    });
     return {
       install: () => {
         console.log('Automatically skipping Sentry initialization in development');

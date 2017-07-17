@@ -6,7 +6,7 @@ import { Sentry } from 'react-native-sentry';
 export default Sentry;
 
 const originalSentryConfig = Sentry.config;
-Sentry.config = (dsn, options = {}, skipDev = true) => {
+Sentry.config = (dsn, options = {}) => {
   let defaultOptions = {
     tags: {
       ...(options.tags || {}),
@@ -19,7 +19,7 @@ Sentry.config = (dsn, options = {}, skipDev = true) => {
   const release = Constants.manifest.revisionId || 'UNVERSIONED';
 
   // Bail out automatically if the app isn't deployed
-  if (release === 'UNVERSIONED' && skipDev) {
+  if (release === 'UNVERSIONED' && !Sentry.enableInExpoDevelopment) {
     const noop = () => {};
     Object.getOwnPropertyNames(Sentry).forEach((prop) => {
       if (typeof Sentry[prop] === 'function') {

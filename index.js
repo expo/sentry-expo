@@ -19,7 +19,13 @@ Sentry.config = (dsn, options = {}) => {
   const release = Constants.manifest.revisionId || 'UNVERSIONED';
 
   // Bail out automatically if the app isn't deployed
-  if (release === 'UNVERSIONED') {
+  if (release === 'UNVERSIONED' && !Sentry.enableInExpoDevelopment) {
+    const noop = () => {};
+    Object.getOwnPropertyNames(Sentry).forEach((prop) => {
+      if (typeof Sentry[prop] === 'function') {
+        Sentry[prop] = noop;
+      }
+    });
     return {
       install: () => {
         console.log('Automatically skipping Sentry initialization in development');

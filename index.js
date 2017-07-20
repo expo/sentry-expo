@@ -43,6 +43,12 @@ Sentry.install = () => {
   return result;
 };
 
+const originalSetDataCallback = Sentry.setDataCallback;
+let _customDataCallback;
+Sentry.setDataCallback = dataCallback => {
+  _customDataCallback = dataCallback;
+};
+
 function configureSentryForExpo() {
   let sentryErrorHandler =
     (ErrorUtils.getGlobalHandler && ErrorUtils.getGlobalHandler()) ||
@@ -67,7 +73,14 @@ function configureSentryForExpo() {
     linkingUri: Constants.linkingUri,
   });
 
-  Sentry.setDataCallback(errorDataCallback);
+  originalSetDataCallback(data => {
+    data = errorDataCallback(data);
+    if (_customDataCallback) {
+      data = _customDataCallback(data);
+    }
+
+    return data;
+  });
 }
 
 /**
@@ -138,8 +151,10 @@ function errorDataCallback(data) {
     // react-native-sentry error callback. It removes the empty stackframe "? at
     // [native code]"" from the trace
     let lastFrame = stacktrace.frames[0];
-    if (lastFrame.filename === '[native code]' && lastFrame.function === '?') {
+    if (lastFrame.filename === '[native code]') {
       stacktrace.frames.splice(0, 1);
     }
   }
+
+  return data;
 }

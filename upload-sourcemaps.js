@@ -32,7 +32,7 @@ module.exports = async options => {
     fs.writeFileSync(tmpdir + '/main.ios.bundle', iosBundle, 'utf-8');
     fs.writeFileSync(tmpdir + '/main.android.bundle', androidBundle, 'utf-8');
     fs.writeFileSync(tmpdir + '/main.ios.map', iosSourceMap, 'utf-8');
-    fs.writeFileSync(tmpdir + '/main.android.map', iosSourceMap, 'utf-8');
+    fs.writeFileSync(tmpdir + '/main.android.map', androidSourceMap, 'utf-8');
 
     const childProcessEnv = Object.assign({}, process.env, {
       SENTRY_ORG: config.organization,

@@ -26,11 +26,13 @@ Sentry.config = (dsn, options = {}) => {
         Sentry[prop] = noop;
       }
     });
-    return {
-      install: () => {
-        console.log('Automatically skipping Sentry initialization in development');
-      },
+    console.log('[sentry-expo] Automatically skipping Sentry initialization in development. Note you can set Sentry.enableInExpoDevelopment=true before calling Sentry.config(...).install()');
+    const replacedConfigReturn = {
+      install: noop,
     };
+    // Ensure Sentry.config().install() do not throw on hot-reload if Sentry.enableInExpoDevelopment=false
+    Sentry.config = () => replacedConfigReturn;
+    return replacedConfigReturn;
   }
 
   return originalSentryConfig(dsn, { ...defaultOptions, ...options, release });

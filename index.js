@@ -12,7 +12,7 @@ Sentry.config = (dsn, options = {}) => {
       ...(options.tags || {}),
       deviceId: Constants.deviceId,
       appOwnership: Constants.appOwnership,
-      expoVerson: Constants.expoVersion,
+      expoVersion: Constants.expoVersion,
     },
   };
 

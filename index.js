@@ -13,6 +13,10 @@ Sentry.config = (dsn, options = {}) => {
       deviceId: Constants.deviceId,
       appOwnership: Constants.appOwnership,
       expoVersion: Constants.expoVersion,
+      expoSdkVersion: Constants.sdkVersion,
+      expoReleaseChannel: Constants.manifest.releaseChannel,
+      expoAppVersion: Constants.manifest.version,
+      expoAppPublishedTime: Constants.manifest.publishedTime,
     },
   };
 

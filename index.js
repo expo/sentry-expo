@@ -151,7 +151,7 @@ function errorDataCallback(data) {
     // react-native-sentry error callback. It removes the empty stackframe "? at
     // [native code]"" from the trace
     let lastFrame = stacktrace.frames[0];
-    if (lastFrame.filename === '[native code]') {
+    if (lastFrame && lastFrame.filename === '[native code]') {
       stacktrace.frames.splice(0, 1);
     }
   }

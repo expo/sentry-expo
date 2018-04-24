@@ -3,7 +3,7 @@ const path = require('path');
 const rimraf = require('rimraf');
 const mkdirp = require('mkdirp');
 const fs = require('fs');
-const sentryCliBinary = require('sentry-cli-binary');
+const sentryCliBinary = require('@sentry/cli');
 
 module.exports = async options => {
   let {

@@ -89,14 +89,15 @@ module.exports = async options => {
 };
 
 function messageForError(e) {
-  if (!e.stderr) {
-    return `Error uploading sourcemaps to Sentry`;
+  let message = e.stderr
+    ? e.stderr.replace(/^\s+|\s+$/g, '')
+    : e.message;
+  if (message) {
+    if (message.indexOf('error: ') === 0) {
+      message = message.replace('error: ', '');
+    }
+    return `Error uploading sourcemaps to Sentry: ${message}`;
   }
 
-  let message = e.stderr.replace(/^\s+|\s+$/g, '');
-  if (message.indexOf('error: ') === 0) {
-    message = message.replace('error: ', '');
-  }
-
-  return `Error uploading sourcemaps to Sentry: ${message}`;
+  return 'Error uploading sourcemaps to Sentry';
 }

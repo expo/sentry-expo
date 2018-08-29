@@ -23,7 +23,7 @@ module.exports = async options => {
 
   // revisionId is the same between the Android and IOS manifests, so
   // we just pick one and get on with it.
-  const version = iosManifest.revisionId;
+  const version = iosManifest.version;
 
   rimraf.sync(tmpdir);
   mkdirp.sync(tmpdir);

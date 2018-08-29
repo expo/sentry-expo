@@ -20,7 +20,7 @@ Sentry.config = (dsn, options = {}) => {
     },
   };
 
-  const release = Constants.manifest.revisionId || 'UNVERSIONED';
+  const release = Constants.manifest.version || 'UNVERSIONED';
 
   // Bail out automatically if the app isn't deployed
   if (release === 'UNVERSIONED' && !Sentry.enableInExpoDevelopment) {

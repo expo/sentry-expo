@@ -37,7 +37,7 @@ module.exports = async options => {
     const childProcessEnv = Object.assign({}, process.env, {
       SENTRY_ORG: config.organization,
       SENTRY_PROJECT: config.project,
-      SENTRY_AUTH_TOKEN: config.authToken,
+      SENTRY_AUTH_TOKEN: config.authToken || process.env.SENTRY_AUTH_TOKEN,
       SENTRY_URL: config.url || 'https://sentry.io/',
     });
 

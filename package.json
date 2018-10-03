@@ -6,7 +6,7 @@
   "dependencies": {
     "@expo/spawn-async": "^1.2.8",
     "mkdirp": "^0.5.1",
-    "react-native-sentry": "^0.37.1",
+    "react-native-sentry": "^0.39.0",
     "rimraf": "^2.6.1"
   }
 }

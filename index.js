@@ -5,6 +5,9 @@ import { Platform } from 'react-native';
 import { Sentry } from 'react-native-sentry';
 export default Sentry;
 
+import Raven from 'raven-js';
+Raven._hasDocument = false;
+
 const originalSentryConfig = Sentry.config;
 Sentry.config = (dsn, options = {}) => {
   let defaultOptions = {

@@ -2,6 +2,7 @@
   "name": "sentry-expo",
   "version": "1.11.1",
   "main": "index.js",
+  "types": "index.d.ts",
   "license": "MIT",
   "dependencies": {
     "@expo/spawn-async": "^1.2.8",

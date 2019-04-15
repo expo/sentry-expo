@@ -35,10 +35,10 @@ module.exports = async options => {
     fs.writeFileSync(tmpdir + '/main.android.map', androidSourceMap, 'utf-8');
 
     const childProcessEnv = Object.assign({}, process.env, {
-      SENTRY_ORG: config.organization,
-      SENTRY_PROJECT: config.project,
+      SENTRY_ORG: config.organization || process.env.SENTRY_ORG,
+      SENTRY_PROJECT: config.project || process.env.SENTRY_PROJECT,
       SENTRY_AUTH_TOKEN: config.authToken || process.env.SENTRY_AUTH_TOKEN,
-      SENTRY_URL: config.url || 'https://sentry.io/',
+      SENTRY_URL: config.url || process.env.SENTRY_URL || 'https://sentry.io/',
     });
 
     const sentryCliBinaryPath = config.useGlobalSentryCli ?

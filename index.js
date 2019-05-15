@@ -27,7 +27,7 @@ Sentry.config = (dsn, options = {}) => {
 
   // Bail out automatically if the app isn't deployed
   if (release === 'UNVERSIONED' && !Sentry.enableInExpoDevelopment) {
-    const noop = () => {};
+    const noop = () => { };
     Object.getOwnPropertyNames(Sentry).forEach((prop) => {
       if (typeof Sentry[prop] === 'function') {
         Sentry[prop] = noop;
@@ -130,7 +130,7 @@ function addContexts(data) {
     },
     os: {
       name: Platform.OS === 'ios' ? 'iOS' : 'Android',
-      version: Platform.Version,
+      version: `${Platform.Version}`,
     },
     app: {
       type: 'app',

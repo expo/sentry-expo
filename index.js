@@ -1,11 +1,11 @@
 /* @flow */
 
-import { Constants } from "expo";
-import { Platform } from "react-native";
-import { Sentry } from "react-native-sentry";
+import { Constants } from 'expo';
+import { Platform } from 'react-native';
+import { Sentry } from 'react-native-sentry';
 export default Sentry;
 
-import Raven from "raven-js";
+import Raven from 'raven-js';
 Raven._hasDocument = false;
 
 const originalSentryConfig = Sentry.config;
@@ -19,25 +19,23 @@ Sentry.config = (dsn, options = {}) => {
       expoSdkVersion: Constants.sdkVersion,
       expoReleaseChannel: Constants.manifest.releaseChannel,
       expoAppVersion: Constants.manifest.version,
-      expoAppPublishedTime: Constants.manifest.publishedTime
-    }
+      expoAppPublishedTime: Constants.manifest.publishedTime,
+    },
   };
 
-  const release = Constants.manifest.revisionId || "UNVERSIONED";
+  const release = Constants.manifest.revisionId || 'UNVERSIONED';
 
   // Bail out automatically if the app isn't deployed
-  if (release === "UNVERSIONED" && !Sentry.enableInExpoDevelopment) {
-    const noop = () => {};
-    Object.getOwnPropertyNames(Sentry).forEach(prop => {
-      if (typeof Sentry[prop] === "function") {
+  if (release === 'UNVERSIONED' && !Sentry.enableInExpoDevelopment) {
+    const noop = () => { };
+    Object.getOwnPropertyNames(Sentry).forEach((prop) => {
+      if (typeof Sentry[prop] === 'function') {
         Sentry[prop] = noop;
       }
     });
-    console.log(
-      "[sentry-expo] Automatically skipping Sentry initialization in development. Note you can set Sentry.enableInExpoDevelopment=true before calling Sentry.config(...).install()"
-    );
+    console.log('[sentry-expo] Automatically skipping Sentry initialization in development. Note you can set Sentry.enableInExpoDevelopment=true before calling Sentry.config(...).install()');
     const replacedConfigReturn = {
-      install: noop
+      install: noop,
     };
     // Ensure Sentry.config().install() do not throw on hot-reload if Sentry.enableInExpoDevelopment=false
     Sentry.config = () => replacedConfigReturn;
@@ -68,10 +66,10 @@ function configureSentryForExpo() {
   ErrorUtils.setGlobalHandler((error, isFatal) => {
     // On Android, the Expo bundle filepath cannot be handled by TraceKit,
     // so we normalize it to use the same filepath that we use on Expo iOS.
-    if (Platform.OS === "android") {
+    if (Platform.OS === 'android') {
       error.stack = error.stack.replace(
         /\/.*\/\d+\.\d+.\d+\/cached\-bundle\-experience\-/g,
-        "https://d1wp6m56sqw74a.cloudfront.net:443/"
+        'https://d1wp6m56sqw74a.cloudfront.net:443/'
       );
     }
 
@@ -81,7 +79,7 @@ function configureSentryForExpo() {
   Sentry.setExtraContext({
     manifest: Constants.manifest,
     deviceYearClass: Constants.deviceYearClass,
-    linkingUri: Constants.linkingUri
+    linkingUri: Constants.linkingUri,
   });
 
   originalSetDataCallback(data => {
@@ -99,7 +97,7 @@ function configureSentryForExpo() {
  * at some point in the future in order to be able to delete this code.
  */
 function isPublishedExpoUrl(url) {
-  return url.includes("https://d1wp6m56sqw74a.cloudfront.net");
+  return url.includes('https://d1wp6m56sqw74a.cloudfront.net');
 }
 
 function normalizeUrl(url) {
@@ -113,13 +111,13 @@ function normalizeUrl(url) {
 function addContexts(data) {
   let additionalDeviceInformation = {};
 
-  if (Platform.OS === "ios") {
+  if (Platform.OS === 'ios') {
     additionalDeviceInformation = {
-      model: Constants.platform.ios.model
+      model: Constants.platform.ios.model,
     };
   } else {
     additionalDeviceInformation = {
-      model: "n/a"
+      model: 'n/a',
     };
   }
 
@@ -128,15 +126,15 @@ function addContexts(data) {
     device: {
       deviceName: Constants.deviceName,
       simulator: !Constants.isDevice,
-      ...additionalDeviceInformation
+      ...additionalDeviceInformation,
     },
     os: {
-      name: Platform.OS === "ios" ? "iOS" : "Android",
-      version: `${Platform.Version}`
+      name: Platform.OS === 'ios' ? 'iOS' : 'Android',
+      version: `${Platform.Version}`,
     },
     app: {
-      type: "app"
-    }
+      type: 'app',
+    },
   };
 
   return data;
@@ -162,7 +160,7 @@ function errorDataCallback(data) {
     // react-native-sentry error callback. It removes the empty stackframe "? at
     // [native code]"" from the trace
     let lastFrame = stacktrace.frames[0];
-    if (lastFrame && lastFrame.filename === "[native code]") {
+    if (lastFrame && lastFrame.filename === '[native code]') {
       stacktrace.frames.splice(0, 1);
     }
   }

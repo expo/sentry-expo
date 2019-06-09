@@ -1,6 +1,6 @@
 /* @flow */
 
-import { Constants } from 'expo';
+import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 import { Sentry } from 'react-native-sentry';
 export default Sentry;

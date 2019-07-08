@@ -2,7 +2,7 @@
 
 import { Constants } from 'expo';
 import { Platform } from 'react-native';
-import * as Sentry from '@sentry/browser';
+import * as Sentry from '@sentry/react-native';
 export default Sentry;
 import { RewriteFrames } from "@sentry/integrations";
 
@@ -98,14 +98,7 @@ ExpoIntegration.prototype.setupOnce = function () {
 
 const originalSentryInit = Sentry.init;
 Sentry.init = (options = {}) => {
-
-  options.defaultIntegrations = [
-    ...Sentry.defaultIntegrations.filter(
-      integration =>
-        integration.name !== "GlobalHandlers" && // We will use the react-native internal handlers
-        integration.name !== "Breadcrumbs" && // We add it later, just not patching fetch
-        integration.name !== "TryCatch" // We don't need this
-    ),
+  options.integrations = [
     new ExpoIntegration(),
     new RewriteFrames({
       iteratee: frame => {

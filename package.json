@@ -6,6 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "@expo/spawn-async": "^1.2.8",
+    "expo-constants": "^6.0.0",
     "mkdirp": "^0.5.1",
     "react-native-sentry": "^0.43.2",
     "rimraf": "^2.6.1"

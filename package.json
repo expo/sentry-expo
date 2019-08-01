@@ -1,13 +1,13 @@
 {
   "name": "sentry-expo",
-  "version": "1.12.0",
+  "version": "2.0.0",
   "main": "index.js",
   "types": "index.d.ts",
   "license": "MIT",
   "dependencies": {
     "@expo/spawn-async": "^1.2.8",
-    "@sentry/react-native": "1.0.0-beta.1",
     "@sentry/integrations": "^5.5.0",
+    "@sentry/react-native": "1.0.0-beta.7",
     "mkdirp": "^0.5.1",
     "rimraf": "^2.6.1"
   }

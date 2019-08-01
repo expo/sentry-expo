@@ -1,9 +1,8 @@
 /* @flow */
-
-import { Constants } from 'expo';
+export * from '@sentry/react-native';
+import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 import * as Sentry from '@sentry/react-native';
-export default Sentry;
 import { RewriteFrames } from "@sentry/integrations";
 
 /**
@@ -22,47 +21,85 @@ function normalizeUrl(url) {
   }
 }
 
-function ExpoIntegration() {}
-ExpoIntegration.id = 'ExpoIntegration';
-ExpoIntegration.prototype.setupOnce = function () {
-  let sentryErrorHandler =
-    (ErrorUtils.getGlobalHandler && ErrorUtils.getGlobalHandler()) ||
-    ErrorUtils._globalHandler;
+class ExpoIntegration {
+  static id = "ExpoIntegration";
+  name = ExpoIntegration.id;
 
-  ErrorUtils.setGlobalHandler((error, isFatal) => {
-    // On Android, the Expo bundle filepath cannot be handled by TraceKit,
-    // so we normalize it to use the same filepath that we use on Expo iOS.
-    if (Platform.OS === 'android') {
-      error.stack = error.stack.replace(
-        /\/.*\/\d+\.\d+.\d+\/cached\-bundle\-experience\-/g,
-        'https://d1wp6m56sqw74a.cloudfront.net:443/'
-      );
-    }
-
-    Sentry.configureScope(scope => {
-      scope.setExtras({
-        manifest: Constants.manifest,
-        deviceYearClass: Constants.deviceYearClass,
-        linkingUri: Constants.linkingUri,
-      });
-      scope.setTags({
-        deviceId: Constants.deviceId,
-        appOwnership: Constants.appOwnership,
-        expoVersion: Constants.expoVersion,
-        expoSdkVersion: Constants.sdkVersion,
-        expoReleaseChannel: Constants.manifest.releaseChannel,
-        expoAppVersion: Constants.manifest.version,
-        expoAppPublishedTime: Constants.manifest.publishedTime,
-      });
+  setupOnce() {
+    Sentry.setExtras({
+      manifest: Constants.manifest,
+      deviceYearClass: Constants.deviceYearClass,
+      linkingUri: Constants.linkingUri,
     });
 
-    Sentry.captureException(error);
-  });
+    Sentry.setTags({
+      deviceId: Constants.deviceId,
+      appOwnership: Constants.appOwnership,
+      expoVersion: Constants.expoVersion,
+      // expoSdkVersion: Constants.sdkVersion,
+      // expoReleaseChannel: Constants.manifest.releaseChannel,
+      // expoAppVersion: Constants.manifest.version,
+      // expoAppPublishedTime: Constants.manifest.publishedTime,
+    });
 
-  Sentry.addGlobalEventProcessor(function (event, hint) {
-      var self = getCurrentHub().getIntegration(ExpoIntegration);
+    if (Constants.manifest.releaseChannel) {
+      Sentry.setTag('expoReleaseChannel', Constants.manifest.releaseChannel)
+    }
+    if (Constants.manifest.version) {
+      Sentry.setTag('expoAppVersion', Constants.manifest.version)
+    }
+    if (Constants.manifest.publishedTime) {
+      Sentry.setTag('expoAppPublishedTime', Constants.manifest.publishedTime)
+    }
+    if (Constants.sdkVersion) {
+      Sentry.setTag('expoSdkVersion', Constants.sdkVersion)
+    }
 
-      if (self) {
+    const defaultHandler =
+      (ErrorUtils.getGlobalHandler && ErrorUtils.getGlobalHandler()) ||
+      ErrorUtils._globalHandler;
+
+    ErrorUtils.setGlobalHandler((error, isFatal) => {
+      // On Android, the Expo bundle filepath cannot be handled by TraceKit,
+      // so we normalize it to use the same filepath that we use on Expo iOS.
+      if (Platform.OS === 'android') {
+        error.stack = error.stack.replace(
+          /\/.*\/\d+\.\d+.\d+\/cached\-bundle\-experience\-/g,
+          'https://d1wp6m56sqw74a.cloudfront.net:443/'
+        );
+      }
+
+      Sentry.getCurrentHub().withScope(scope => {
+        if (isFatal) {
+          scope.setLevel(Sentry.Severity.Fatal);
+        }
+        Sentry.getCurrentHub().captureException(error, {
+          originalException: error
+        });
+      });
+
+      const client = Sentry.getCurrentHub().getClient();
+      // If in dev, we call the default handler anyway and hope the error will be sent
+      // Just for a better dev experience
+      if (client && !__DEV__) {
+        client
+          .flush(client.getOptions().shutdownTimeout || 2000)
+          .then(() => {
+            defaultHandler(error, isFatal);
+          })
+          .catch(e => {
+            logger.error(e);
+          });
+      } else {
+        // If there is no client something is fishy, anyway we call the default handler
+        defaultHandler(error, isFatal);
+      }
+    });
+
+    Sentry.addGlobalEventProcessor(function (event, hint) {
+      var that = Sentry.getCurrentHub().getIntegration(ExpoIntegration);
+
+      if (that) {
         let additionalDeviceInformation = {};
 
         if (Platform.OS === 'ios') {
@@ -76,7 +113,7 @@ ExpoIntegration.prototype.setupOnce = function () {
         }
 
         event.contexts = {
-          ...(data.contexts || {}),
+          ...(event.contexts || {}),
           device: {
             deviceName: Constants.deviceName,
             simulator: !Constants.isDevice,
@@ -86,19 +123,21 @@ ExpoIntegration.prototype.setupOnce = function () {
             name: Platform.OS === 'ios' ? 'iOS' : 'Android',
             version: `${Platform.Version}`,
           },
-          app: {
-            type: 'app',
-          },
         };
       }
 
       return event;
-  });
-};
+    });
+  }
+}
 
 const originalSentryInit = Sentry.init;
-Sentry.init = (options = {}) => {
+export const init = (options = {}) => {
   options.integrations = [
+    new Sentry.Integrations.ReactNativeErrorHandlers({
+      onerror: false,
+      onunhandledrejection: true
+    }),
     new ExpoIntegration(),
     new RewriteFrames({
       iteratee: frame => {
@@ -113,10 +152,12 @@ Sentry.init = (options = {}) => {
   const release = Constants.manifest.revisionId || 'UNVERSIONED';
 
   // Bail out automatically if the app isn't deployed
-  if (release === 'UNVERSIONED' && !Sentry.enableInExpoDevelopment) {
+  if (release === 'UNVERSIONED' && !options.enableInExpoDevelopment) {
     options.enabled = false;
-    console.log('[sentry-expo] Disbaled Sentry in development. Note you can set Sentry.enableInExpoDevelopment=true before calling Sentry.init(...)');
+    console.log('[sentry-expo] Disbaled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });');
   }
 
+  // We don't want to have the native nagger.
+  options.enableNativeNagger = false;
   return originalSentryInit({ ...options });
 };

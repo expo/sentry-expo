@@ -8,7 +8,7 @@
     "@expo/spawn-async": "^1.2.8",
     "expo-constants": "*",
     "@sentry/integrations": "^5.5.0",
-    "@sentry/react-native": "1.0.0-beta.7",
+    "@sentry/react-native": "^1.0.0",
     "mkdirp": "^0.5.1",
     "rimraf": "^2.6.1"
   }

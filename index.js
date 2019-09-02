@@ -1,96 +1,9 @@
 /* @flow */
-
+export * from '@sentry/react-native';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
-import { Sentry } from 'react-native-sentry';
-export default Sentry;
-
-import Raven from 'raven-js';
-Raven._hasDocument = false;
-
-const originalSentryConfig = Sentry.config;
-Sentry.config = (dsn, options = {}) => {
-  let defaultOptions = {
-    tags: {
-      ...(options.tags || {}),
-      deviceId: Constants.deviceId,
-      appOwnership: Constants.appOwnership,
-      expoVersion: Constants.expoVersion,
-      expoSdkVersion: Constants.sdkVersion,
-      expoReleaseChannel: Constants.manifest.releaseChannel,
-      expoAppVersion: Constants.manifest.version,
-      expoAppPublishedTime: Constants.manifest.publishedTime,
-    },
-  };
-
-  const release = Constants.manifest.revisionId || 'UNVERSIONED';
-
-  // Bail out automatically if the app isn't deployed
-  if (release === 'UNVERSIONED' && !Sentry.enableInExpoDevelopment) {
-    const noop = () => { };
-    Object.getOwnPropertyNames(Sentry).forEach((prop) => {
-      if (typeof Sentry[prop] === 'function') {
-        Sentry[prop] = noop;
-      }
-    });
-    console.log('[sentry-expo] Automatically skipping Sentry initialization in development. Note you can set Sentry.enableInExpoDevelopment=true before calling Sentry.config(...).install()');
-    const replacedConfigReturn = {
-      install: noop,
-    };
-    // Ensure Sentry.config().install() do not throw on hot-reload if Sentry.enableInExpoDevelopment=false
-    Sentry.config = () => replacedConfigReturn;
-    return replacedConfigReturn;
-  }
-
-  return originalSentryConfig(dsn, { ...defaultOptions, ...options, release });
-};
-
-const originalSentryInstall = Sentry.install;
-Sentry.install = () => {
-  const result = originalSentryInstall();
-  configureSentryForExpo();
-  return result;
-};
-
-const originalSetDataCallback = Sentry.setDataCallback;
-let _customDataCallback;
-Sentry.setDataCallback = dataCallback => {
-  _customDataCallback = dataCallback;
-};
-
-function configureSentryForExpo() {
-  let sentryErrorHandler =
-    (ErrorUtils.getGlobalHandler && ErrorUtils.getGlobalHandler()) ||
-    ErrorUtils._globalHandler;
-
-  ErrorUtils.setGlobalHandler((error, isFatal) => {
-    // On Android, the Expo bundle filepath cannot be handled by TraceKit,
-    // so we normalize it to use the same filepath that we use on Expo iOS.
-    if (Platform.OS === 'android') {
-      error.stack = error.stack.replace(
-        /\/.*\/\d+\.\d+.\d+\/cached\-bundle\-experience\-/g,
-        'https://d1wp6m56sqw74a.cloudfront.net:443/'
-      );
-    }
-
-    sentryErrorHandler(error, isFatal);
-  });
-
-  Sentry.setExtraContext({
-    manifest: Constants.manifest,
-    deviceYearClass: Constants.deviceYearClass,
-    linkingUri: Constants.linkingUri,
-  });
-
-  originalSetDataCallback(data => {
-    data = errorDataCallback(data);
-    if (_customDataCallback) {
-      data = _customDataCallback(data);
-    }
-
-    return data;
-  });
-}
+import * as Sentry from '@sentry/react-native';
+import { RewriteFrames } from "@sentry/integrations";
 
 /**
  * Expo bundles are hosted on cloudfront. Expo bundle filename will change
@@ -108,62 +21,139 @@ function normalizeUrl(url) {
   }
 }
 
-function addContexts(data) {
-  let additionalDeviceInformation = {};
+class ExpoIntegration {
+  static id = "ExpoIntegration";
+  name = ExpoIntegration.id;
 
-  if (Platform.OS === 'ios') {
-    additionalDeviceInformation = {
-      model: Constants.platform.ios.model,
-    };
-  } else {
-    additionalDeviceInformation = {
-      model: 'n/a',
-    };
-  }
-
-  data.contexts = {
-    ...(data.contexts || {}),
-    device: {
-      deviceName: Constants.deviceName,
-      simulator: !Constants.isDevice,
-      ...additionalDeviceInformation,
-    },
-    os: {
-      name: Platform.OS === 'ios' ? 'iOS' : 'Android',
-      version: `${Platform.Version}`,
-    },
-    app: {
-      type: 'app',
-    },
-  };
-
-  return data;
-}
-
-function errorDataCallback(data) {
-  if (data.culprit) {
-    data.culprit = normalizeUrl(data.culprit);
-  }
-
-  data = addContexts(data);
-
-  // NOTE: if data.exception exists, exception.values and exception.values[0] are
-  // guaranteed to exist
-  let stacktrace =
-    data.stacktrace || (data.exception && data.exception.values[0].stacktrace);
-  if (stacktrace) {
-    stacktrace.frames.forEach(frame => {
-      frame.filename = normalizeUrl(frame.filename);
+  setupOnce() {
+    Sentry.setExtras({
+      manifest: Constants.manifest,
+      deviceYearClass: Constants.deviceYearClass,
+      linkingUri: Constants.linkingUri,
     });
 
-    // NOTE: the following block is the only difference between the upstream
-    // react-native-sentry error callback. It removes the empty stackframe "? at
-    // [native code]"" from the trace
-    let lastFrame = stacktrace.frames[0];
-    if (lastFrame && lastFrame.filename === '[native code]') {
-      stacktrace.frames.splice(0, 1);
+    Sentry.setTags({
+      deviceId: Constants.deviceId,
+      appOwnership: Constants.appOwnership,
+      expoVersion: Constants.expoVersion,
+    });
+
+    if (Constants.manifest.releaseChannel) {
+      Sentry.setTag('expoReleaseChannel', Constants.manifest.releaseChannel)
     }
+    if (Constants.manifest.version) {
+      Sentry.setTag('expoAppVersion', Constants.manifest.version)
+    }
+    if (Constants.manifest.publishedTime) {
+      Sentry.setTag('expoAppPublishedTime', Constants.manifest.publishedTime)
+    }
+    if (Constants.sdkVersion) {
+      Sentry.setTag('expoSdkVersion', Constants.sdkVersion)
+    }
+
+    const defaultHandler =
+      (ErrorUtils.getGlobalHandler && ErrorUtils.getGlobalHandler()) ||
+      ErrorUtils._globalHandler;
+
+    ErrorUtils.setGlobalHandler((error, isFatal) => {
+      // On Android, the Expo bundle filepath cannot be handled by TraceKit,
+      // so we normalize it to use the same filepath that we use on Expo iOS.
+      if (Platform.OS === 'android') {
+        error.stack = error.stack.replace(
+          /\/.*\/\d+\.\d+.\d+\/cached\-bundle\-experience\-/g,
+          'https://d1wp6m56sqw74a.cloudfront.net:443/'
+        );
+      }
+
+      Sentry.getCurrentHub().withScope(scope => {
+        if (isFatal) {
+          scope.setLevel(Sentry.Severity.Fatal);
+        }
+        Sentry.getCurrentHub().captureException(error, {
+          originalException: error
+        });
+      });
+
+      const client = Sentry.getCurrentHub().getClient();
+      // If in dev, we call the default handler anyway and hope the error will be sent
+      // Just for a better dev experience
+      if (client && !__DEV__) {
+        client
+          .flush(client.getOptions().shutdownTimeout || 2000)
+          .then(() => {
+            defaultHandler(error, isFatal);
+          })
+          .catch(e => {
+            logger.error(e);
+          });
+      } else {
+        // If there is no client something is fishy, anyway we call the default handler
+        defaultHandler(error, isFatal);
+      }
+    });
+
+    Sentry.addGlobalEventProcessor(function (event, hint) {
+      var that = Sentry.getCurrentHub().getIntegration(ExpoIntegration);
+
+      if (that) {
+        let additionalDeviceInformation = {};
+
+        if (Platform.OS === 'ios') {
+          additionalDeviceInformation = {
+            model: Constants.platform.ios.model,
+          };
+        } else {
+          additionalDeviceInformation = {
+            model: 'n/a',
+          };
+        }
+
+        event.contexts = {
+          ...(event.contexts || {}),
+          device: {
+            deviceName: Constants.deviceName,
+            simulator: !Constants.isDevice,
+            ...additionalDeviceInformation,
+          },
+          os: {
+            name: Platform.OS === 'ios' ? 'iOS' : 'Android',
+            version: `${Platform.Version}`,
+          },
+        };
+      }
+
+      return event;
+    });
+  }
+}
+
+const originalSentryInit = Sentry.init;
+export const init = (options = {}) => {
+  options.integrations = [
+    new Sentry.Integrations.ReactNativeErrorHandlers({
+      onerror: false,
+      onunhandledrejection: true
+    }),
+    new ExpoIntegration(),
+    new RewriteFrames({
+      iteratee: frame => {
+        if (frame.filename) {
+          frame.filename = normalizeUrl(frame.filename);
+        }
+        return frame;
+      }
+    })
+  ];
+
+  const release = Constants.manifest.revisionId || 'UNVERSIONED';
+
+  // Bail out automatically if the app isn't deployed
+  if (release === 'UNVERSIONED' && !options.enableInExpoDevelopment) {
+    options.enabled = false;
+    console.log('[sentry-expo] Disbaled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });');
   }
 
-  return data;
-}
+  // We don't want to have the native nagger.
+  options.enableNativeNagger = false;
+  return originalSentryInit({ ...options });
+};

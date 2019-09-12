@@ -150,7 +150,7 @@ export const init = (options = {}) => {
   // Bail out automatically if the app isn't deployed
   if (release === 'UNVERSIONED' && !options.enableInExpoDevelopment) {
     options.enabled = false;
-    console.log('[sentry-expo] Disbaled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });');
+    console.log('[sentry-expo] Disabled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });');
   }
 
   // We don't want to have the native nagger.

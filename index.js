@@ -3,7 +3,7 @@ export * from '@sentry/react-native';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 import * as Sentry from '@sentry/react-native';
-import { RewriteFrames } from "@sentry/integrations";
+import { RewriteFrames } from '@sentry/integrations';
 
 /**
  * Expo bundles are hosted on cloudfront. Expo bundle filename will change
@@ -22,7 +22,7 @@ function normalizeUrl(url) {
 }
 
 class ExpoIntegration {
-  static id = "ExpoIntegration";
+  static id = 'ExpoIntegration';
   name = ExpoIntegration.id;
 
   setupOnce() {
@@ -39,21 +39,20 @@ class ExpoIntegration {
     });
 
     if (Constants.manifest.releaseChannel) {
-      Sentry.setTag('expoReleaseChannel', Constants.manifest.releaseChannel)
+      Sentry.setTag('expoReleaseChannel', Constants.manifest.releaseChannel);
     }
     if (Constants.manifest.version) {
-      Sentry.setTag('expoAppVersion', Constants.manifest.version)
+      Sentry.setTag('expoAppVersion', Constants.manifest.version);
     }
     if (Constants.manifest.publishedTime) {
-      Sentry.setTag('expoAppPublishedTime', Constants.manifest.publishedTime)
+      Sentry.setTag('expoAppPublishedTime', Constants.manifest.publishedTime);
     }
     if (Constants.sdkVersion) {
-      Sentry.setTag('expoSdkVersion', Constants.sdkVersion)
+      Sentry.setTag('expoSdkVersion', Constants.sdkVersion);
     }
 
     const defaultHandler =
-      (ErrorUtils.getGlobalHandler && ErrorUtils.getGlobalHandler()) ||
-      ErrorUtils._globalHandler;
+      (ErrorUtils.getGlobalHandler && ErrorUtils.getGlobalHandler()) || ErrorUtils._globalHandler;
 
     ErrorUtils.setGlobalHandler((error, isFatal) => {
       // On Android, the Expo bundle filepath cannot be handled by TraceKit,
@@ -70,7 +69,7 @@ class ExpoIntegration {
           scope.setLevel(Sentry.Severity.Fatal);
         }
         Sentry.getCurrentHub().captureException(error, {
-          originalException: error
+          originalException: error,
         });
       });
 
@@ -92,7 +91,7 @@ class ExpoIntegration {
       }
     });
 
-    Sentry.addGlobalEventProcessor(function (event, hint) {
+    Sentry.addGlobalEventProcessor(function(event, hint) {
       var that = Sentry.getCurrentHub().getIntegration(ExpoIntegration);
 
       if (that) {
@@ -132,7 +131,7 @@ export const init = (options = {}) => {
   options.integrations = [
     new Sentry.Integrations.ReactNativeErrorHandlers({
       onerror: false,
-      onunhandledrejection: true
+      onunhandledrejection: true,
     }),
     new ExpoIntegration(),
     new RewriteFrames({
@@ -141,8 +140,8 @@ export const init = (options = {}) => {
           frame.filename = normalizeUrl(frame.filename);
         }
         return frame;
-      }
-    })
+      },
+    }),
   ];
 
   const release = Constants.manifest.revisionId || 'UNVERSIONED';
@@ -150,10 +149,12 @@ export const init = (options = {}) => {
   // Bail out automatically if the app isn't deployed
   if (release === 'UNVERSIONED' && !options.enableInExpoDevelopment) {
     options.enabled = false;
-    console.log('[sentry-expo] Disabled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });');
+    console.log(
+      '[sentry-expo] Disabled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });'
+    );
   }
 
   // We don't want to have the native nagger.
   options.enableNativeNagger = false;
-  return originalSentryInit({ ...options });
+  return originalSentryInit({ ...options, release });
 };

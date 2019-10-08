@@ -33,7 +33,7 @@ class ExpoIntegration {
     });
 
     Sentry.setTags({
-      deviceId: Constants.deviceId,
+      deviceId: Constants.installationId,
       appOwnership: Constants.appOwnership,
       expoVersion: Constants.expoVersion,
     });

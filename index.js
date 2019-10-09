@@ -129,6 +129,7 @@ class ExpoIntegration {
 const originalSentryInit = Sentry.init;
 export const init = (options = {}) => {
   options.integrations = [
+    ...options.integrations,
     new Sentry.Integrations.ReactNativeErrorHandlers({
       onerror: false,
       onunhandledrejection: true,

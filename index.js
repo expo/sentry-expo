@@ -110,7 +110,6 @@ class ExpoIntegration {
         event.contexts = {
           ...(event.contexts || {}),
           device: {
-            deviceName: Constants.deviceName,
             simulator: !Constants.isDevice,
             ...additionalDeviceInformation,
           },

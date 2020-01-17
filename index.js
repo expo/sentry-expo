@@ -38,15 +38,18 @@ class ExpoIntegration {
       expoVersion: Constants.expoVersion,
     });
 
-    if (Constants.manifest.releaseChannel) {
-      Sentry.setTag('expoReleaseChannel', Constants.manifest.releaseChannel);
+    if (!!Constants.manifest) {
+      if (Constants.manifest.releaseChannel) {
+        Sentry.setTag('expoReleaseChannel', Constants.manifest.releaseChannel);
+      }
+      if (Constants.manifest.version) {
+        Sentry.setTag('expoAppVersion', Constants.manifest.version);
+      }
+      if (Constants.manifest.publishedTime) {
+        Sentry.setTag('expoAppPublishedTime', Constants.manifest.publishedTime);
+      }
     }
-    if (Constants.manifest.version) {
-      Sentry.setTag('expoAppVersion', Constants.manifest.version);
-    }
-    if (Constants.manifest.publishedTime) {
-      Sentry.setTag('expoAppPublishedTime', Constants.manifest.publishedTime);
-    }
+
     if (Constants.sdkVersion) {
       Sentry.setTag('expoSdkVersion', Constants.sdkVersion);
     }
@@ -128,7 +131,7 @@ class ExpoIntegration {
 const originalSentryInit = Sentry.init;
 export const init = (options = {}) => {
   options.integrations = [
-    ...options.integrations,
+    ...(options.integrations || []),
     new Sentry.Integrations.ReactNativeErrorHandlers({
       onerror: false,
       onunhandledrejection: true,
@@ -144,7 +147,9 @@ export const init = (options = {}) => {
     }),
   ];
 
-  const release = Constants.manifest.revisionId || 'UNVERSIONED';
+  const release = !!Constants.manifest
+    ? Constants.manifest.revisionId || 'UNVERSIONED'
+    : Date.now();
 
   // Bail out automatically if the app isn't deployed
   if (release === 'UNVERSIONED' && !options.enableInExpoDevelopment) {

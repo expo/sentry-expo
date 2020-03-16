@@ -9,7 +9,7 @@
     "expo-constants": "*",
     "@sentry/integrations": "^5.5.0",
     "@sentry/react-native": "^1.0.0",
-    "mkdirp": "^0.5.1",
+    "mkdirp": "^1.0.3",
     "rimraf": "^2.6.1"
   }
 }

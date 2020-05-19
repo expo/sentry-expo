@@ -1,8 +1,6 @@
 import { ReactNativeOptions } from '@sentry/react-native';
 export * from '@sentry/react-native';
-
 export interface ExpoOptions extends ReactNativeOptions {
-  enableInExpoDevelopment?: boolean;
+    enableInExpoDevelopment?: boolean;
 }
-
-export function init(options: ExpoOptions): void;
+export declare const init: (options?: ExpoOptions) => void;

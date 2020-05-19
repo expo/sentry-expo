@@ -147,9 +147,18 @@ export const init = (options = {}) => {
     }),
   ];
 
-  const release = !!Constants.manifest
-    ? Constants.manifest.revisionId || 'UNVERSIONED'
-    : Date.now();
+  const hookOptions =
+    (Constants.manifest &&
+      Constants.manifest.hooks &&
+      Constants.manifest.hooks.postPublish &&
+      Constants.manifest.hooks.postPublish.find(
+        (hook) => hook.file === 'sentry-expo/upload-sourcemaps'
+      )) ||
+    {};
+
+  const release =
+    hookOptions.releaseVersion ||
+    (!!Constants.manifest ? Constants.manifest.revisionId || 'UNVERSIONED' : Date.now());
 
   // Bail out automatically if the app isn't deployed
   if (release === 'UNVERSIONED' && !options.enableInExpoDevelopment) {
@@ -161,5 +170,5 @@ export const init = (options = {}) => {
 
   // We don't want to have the native nagger.
   options.enableNativeNagger = false;
-  return originalSentryInit({ ...options, release });
+  return originalSentryInit({ release, ...options });
 };

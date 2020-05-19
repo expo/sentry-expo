@@ -21,10 +21,6 @@ module.exports = async (options) => {
 
   const tmpdir = path.resolve(projectRoot, '.tmp', 'sentry');
 
-  // revisionId is the same between the Android and IOS manifests, so
-  // we just pick one and get on with it.
-  const version = iosManifest.revisionId;
-
   rimraf.sync(tmpdir);
   mkdirp.sync(tmpdir);
 
@@ -34,12 +30,19 @@ module.exports = async (options) => {
     fs.writeFileSync(tmpdir + '/main.ios.map', iosSourceMap, 'utf-8');
     fs.writeFileSync(tmpdir + '/main.android.map', androidSourceMap, 'utf-8');
 
-    let organization, project, authToken, url, useGlobalSentryCli;
+    let organization, project, authToken, url, useGlobalSentryCli, releaseVersion;
     if (!config) {
       log('No config found in app.json, falling back to environment variables...');
     } else {
-      ({ organization, project, authToken, url, useGlobalSentryCli } = config);
+      ({ organization, project, authToken, url, useGlobalSentryCli, releaseVersion } = config);
     }
+
+    const version =
+      releaseVersion ||
+      process.env.SENTRY_RELEASE_VERSION ||
+      // revisionId is the same between the Android and IOS manifests, so
+      // we just pick one and get on with it.
+      iosManifest.revisionId;
 
     const childProcessEnv = Object.assign({}, process.env, {
       SENTRY_ORG: organization || process.env.SENTRY_ORG,

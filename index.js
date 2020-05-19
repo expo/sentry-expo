@@ -67,7 +67,7 @@ class ExpoIntegration {
         );
       }
 
-      Sentry.getCurrentHub().withScope(scope => {
+      Sentry.getCurrentHub().withScope((scope) => {
         if (isFatal) {
           scope.setLevel(Sentry.Severity.Fatal);
         }
@@ -85,7 +85,7 @@ class ExpoIntegration {
           .then(() => {
             defaultHandler(error, isFatal);
           })
-          .catch(e => {
+          .catch((e) => {
             logger.error(e);
           });
       } else {
@@ -94,7 +94,7 @@ class ExpoIntegration {
       }
     });
 
-    Sentry.addGlobalEventProcessor(function(event, hint) {
+    Sentry.addGlobalEventProcessor(function (event, hint) {
       var that = Sentry.getCurrentHub().getIntegration(ExpoIntegration);
 
       if (that) {
@@ -138,7 +138,7 @@ export const init = (options = {}) => {
     }),
     new ExpoIntegration(),
     new RewriteFrames({
-      iteratee: frame => {
+      iteratee: (frame) => {
         if (frame.filename) {
           frame.filename = normalizeUrl(frame.filename);
         }

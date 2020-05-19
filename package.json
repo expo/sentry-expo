@@ -6,10 +6,23 @@
   "license": "MIT",
   "dependencies": {
     "@expo/spawn-async": "^1.2.8",
-    "expo-constants": "*",
     "@sentry/integrations": "^5.5.0",
     "@sentry/react-native": "^1.0.0",
+    "expo-constants": "*",
     "mkdirp": "^1.0.3",
     "rimraf": "^2.6.1"
+  },
+  "devDependencies": {
+    "husky": ">=4",
+    "lint-staged": ">=10",
+    "prettier": "2.0.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,css,md}": "prettier --write"
   }
 }

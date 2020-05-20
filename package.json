@@ -21,6 +21,7 @@
   "homepage": "https://docs.expo.io/guides/using-sentry/",
   "dependencies": {
     "@expo/spawn-async": "^1.2.8",
+    "@sentry/browser": "^5.15.5",
     "@sentry/integrations": "^5.15.5",
     "@sentry/react-native": "1.4.2",
     "expo-constants": "*",

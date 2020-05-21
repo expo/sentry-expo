@@ -4,6 +4,10 @@
   "description": "Catch your Javascript errors for your production Expo apps!",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "dist/upload-sourcemaps.js"
+  ],
   "license": "MIT",
   "keywords": [
     "react-native",

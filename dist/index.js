@@ -22,9 +22,6 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
-}
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -44,12 +41,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.init = void 0;
-__exportStar(require("@sentry/react-native"), exports);
 var expo_constants_1 = __importDefault(require("expo-constants"));
 var react_native_1 = require("react-native");
-var Sentry = __importStar(require("@sentry/react-native"));
+var react_native_2 = require("@sentry/react-native");
 var integrations_1 = require("@sentry/integrations");
 var Device = __importStar(require("expo-device"));
+var browser_1 = require("@sentry/browser");
+exports.Native = __importStar(require("@sentry/react-native"));
+exports.Browser = __importStar(require("@sentry/browser"));
 /**
  * Expo bundles are hosted on cloudfront. Expo bundle filename will change
  * at some point in the future in order to be able to delete this code.
@@ -70,29 +69,29 @@ var ExpoIntegration = /** @class */ (function () {
         this.name = ExpoIntegration.id;
     }
     ExpoIntegration.prototype.setupOnce = function () {
-        Sentry.setExtras({
+        react_native_2.setExtras({
             manifest: expo_constants_1.default.manifest,
             deviceYearClass: expo_constants_1.default.deviceYearClass,
             linkingUri: expo_constants_1.default.linkingUri,
         });
-        Sentry.setTags({
+        react_native_2.setTags({
             deviceId: expo_constants_1.default.installationId,
             appOwnership: expo_constants_1.default.appOwnership,
             expoVersion: expo_constants_1.default.expoVersion,
         });
         if (!!expo_constants_1.default.manifest) {
             if (expo_constants_1.default.manifest.releaseChannel) {
-                Sentry.setTag('expoReleaseChannel', expo_constants_1.default.manifest.releaseChannel);
+                react_native_2.setTag('expoReleaseChannel', expo_constants_1.default.manifest.releaseChannel);
             }
             if (expo_constants_1.default.manifest.version) {
-                Sentry.setTag('expoAppVersion', expo_constants_1.default.manifest.version);
+                react_native_2.setTag('expoAppVersion', expo_constants_1.default.manifest.version);
             }
             if (expo_constants_1.default.manifest.publishedTime) {
-                Sentry.setTag('expoAppPublishedTime', expo_constants_1.default.manifest.publishedTime);
+                react_native_2.setTag('expoAppPublishedTime', expo_constants_1.default.manifest.publishedTime);
             }
         }
         if (expo_constants_1.default.sdkVersion) {
-            Sentry.setTag('expoSdkVersion', expo_constants_1.default.sdkVersion);
+            react_native_2.setTag('expoSdkVersion', expo_constants_1.default.sdkVersion);
         }
         var defaultHandler = ErrorUtils.getGlobalHandler();
         ErrorUtils.setGlobalHandler(function (error, isFatal) {
@@ -101,15 +100,15 @@ var ExpoIntegration = /** @class */ (function () {
             if (react_native_1.Platform.OS === 'android') {
                 error.stack = error.stack.replace(/\/.*\/\d+\.\d+.\d+\/cached\-bundle\-experience\-/g, 'https://d1wp6m56sqw74a.cloudfront.net:443/');
             }
-            Sentry.getCurrentHub().withScope(function (scope) {
+            react_native_2.getCurrentHub().withScope(function (scope) {
                 if (isFatal) {
-                    scope.setLevel(Sentry.Severity.Fatal);
+                    scope.setLevel(react_native_2.Severity.Fatal);
                 }
-                Sentry.getCurrentHub().captureException(error, {
+                react_native_2.getCurrentHub().captureException(error, {
                     originalException: error,
                 });
             });
-            var client = Sentry.getCurrentHub().getClient();
+            var client = react_native_2.getCurrentHub().getClient();
             if (client && !__DEV__) {
                 client.flush(2000).then(function () {
                     defaultHandler(error, isFatal);
@@ -120,8 +119,8 @@ var ExpoIntegration = /** @class */ (function () {
                 defaultHandler(error, isFatal);
             }
         });
-        Sentry.addGlobalEventProcessor(function (event, _hint) {
-            var that = Sentry.getCurrentHub().getIntegration(ExpoIntegration);
+        react_native_2.addGlobalEventProcessor(function (event, _hint) {
+            var that = react_native_2.getCurrentHub().getIntegration(ExpoIntegration);
             if (that) {
                 event.contexts = __assign(__assign({}, (event.contexts || {})), { device: {
                         simulator: !Device.isDevice,
@@ -137,13 +136,16 @@ var ExpoIntegration = /** @class */ (function () {
     ExpoIntegration.id = 'ExpoIntegration';
     return ExpoIntegration;
 }());
-var originalSentryInit = Sentry.init;
 exports.init = function (options) {
-    var _a, _b;
+    var _a, _b, _c;
     if (options === void 0) { options = {}; }
-    options.integrations = __spreadArrays((typeof options.integrations === 'object'
-        ? (_a = options.integrations) !== null && _a !== void 0 ? _a : [] : ((_b = options === null || options === void 0 ? void 0 : options.integrations) !== null && _b !== void 0 ? _b : (function () { return []; }))([])), [
-        new Sentry.Integrations.ReactNativeErrorHandlers({
+    if (react_native_1.Platform.OS === 'web') {
+        return browser_1.init(__assign(__assign({}, options), { enabled: __DEV__ ? (_a = options.enableInExpoDevelopment) !== null && _a !== void 0 ? _a : false : true }));
+    }
+    var optionsCopy = __assign({}, options);
+    optionsCopy.integrations = __spreadArrays((typeof optionsCopy.integrations === 'object'
+        ? (_b = optionsCopy.integrations) !== null && _b !== void 0 ? _b : [] : ((_c = optionsCopy === null || optionsCopy === void 0 ? void 0 : optionsCopy.integrations) !== null && _c !== void 0 ? _c : (function () { return []; }))([])), [
+        new react_native_2.Integrations.ReactNativeErrorHandlers({
             onerror: false,
             onunhandledrejection: true,
         }),
@@ -157,18 +159,18 @@ exports.init = function (options) {
             },
         }),
     ]);
-    if (!options.release) {
-        options.release = !!expo_constants_1.default.manifest
+    if (!optionsCopy.release) {
+        optionsCopy.release = !!expo_constants_1.default.manifest
             ? expo_constants_1.default.manifest.revisionId || 'UNVERSIONED'
             : Date.now();
     }
     // Bail out automatically if the app isn't deployed
-    if (options.release === 'UNVERSIONED' && !options.enableInExpoDevelopment) {
-        options.enabled = false;
+    if (optionsCopy.release === 'UNVERSIONED' && !optionsCopy.enableInExpoDevelopment) {
+        optionsCopy.enabled = false;
         console.log('[sentry-expo] Disabled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });');
     }
     // We don't want to have the native nagger.
-    options.enableNativeNagger = false;
-    options.enableNative = false;
-    return originalSentryInit(__assign({}, options));
+    optionsCopy.enableNativeNagger = false;
+    optionsCopy.enableNative = false;
+    return react_native_2.init(__assign({}, optionsCopy));
 };

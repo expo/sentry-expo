@@ -1,6 +1,11 @@
 import { ReactNativeOptions } from '@sentry/react-native';
-export * from '@sentry/react-native';
-export interface ExpoOptions extends ReactNativeOptions {
+import { BrowserOptions } from '@sentry/browser';
+export * as Native from '@sentry/react-native';
+export * as Browser from '@sentry/browser';
+export interface ExpoWebOptions extends BrowserOptions {
     enableInExpoDevelopment?: boolean;
 }
-export declare const init: (options?: ExpoOptions) => void;
+export interface ExpoNativeOptions extends ReactNativeOptions {
+    enableInExpoDevelopment?: boolean;
+}
+export declare const init: (options?: ExpoNativeOptions | ExpoWebOptions) => void;

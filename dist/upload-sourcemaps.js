@@ -46,29 +46,29 @@ var mkdirp_1 = __importDefault(require("mkdirp"));
 var fs_1 = __importDefault(require("fs"));
 var cli_1 = __importDefault(require("@sentry/cli"));
 exports.default = (function (options) { return __awaiter(void 0, void 0, void 0, function () {
-    var config, log, iosBundle, iosSourceMap, iosManifest, androidBundle, androidSourceMap, projectRoot, tmpdir, version, organization, project, authToken, url, useGlobalSentryCli, childProcessEnv, sentryCliBinaryPath, output, createReleaseResult, uploadResult, e_1;
+    var config, log, iosBundle, iosSourceMap, iosManifest, androidBundle, androidSourceMap, projectRoot, tmpdir, organization, project, authToken, url, useGlobalSentryCli, release, setCommits, deployEnv, version, childProcessEnv, sentryCliBinaryPath, output, createReleaseResult, uploadResult, commitsResult, finalizeReleaseResult, deployResult, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 config = options.config, log = options.log, iosBundle = options.iosBundle, iosSourceMap = options.iosSourceMap, iosManifest = options.iosManifest, androidBundle = options.androidBundle, androidSourceMap = options.androidSourceMap, projectRoot = options.projectRoot;
                 tmpdir = path_1.default.resolve(projectRoot, '.tmp', 'sentry');
-                version = iosManifest.revisionId;
                 rimraf_1.default.sync(tmpdir);
                 mkdirp_1.default.sync(tmpdir);
                 _a.label = 1;
             case 1:
-                _a.trys.push([1, 4, 5, 6]);
+                _a.trys.push([1, 9, 10, 11]);
                 fs_1.default.writeFileSync(tmpdir + '/main.ios.bundle', iosBundle, 'utf-8');
                 fs_1.default.writeFileSync(tmpdir + '/main.android.bundle', androidBundle, 'utf-8');
                 fs_1.default.writeFileSync(tmpdir + '/main.ios.map', iosSourceMap, 'utf-8');
                 fs_1.default.writeFileSync(tmpdir + '/main.android.map', androidSourceMap, 'utf-8');
-                organization = void 0, project = void 0, authToken = void 0, url = void 0, useGlobalSentryCli = void 0;
+                organization = void 0, project = void 0, authToken = void 0, url = void 0, useGlobalSentryCli = void 0, release = void 0, setCommits = void 0, deployEnv = void 0;
                 if (!config) {
                     log('No config found in app.json, falling back to environment variables...');
                 }
                 else {
-                    (organization = config.organization, project = config.project, authToken = config.authToken, url = config.url, useGlobalSentryCli = config.useGlobalSentryCli);
+                    (organization = config.organization, project = config.project, authToken = config.authToken, url = config.url, useGlobalSentryCli = config.useGlobalSentryCli, release = config.release, setCommits = config.setCommits, deployEnv = config.deployEnv);
                 }
+                version = release || process.env.SENTRY_RELEASE || iosManifest.revisionId;
                 childProcessEnv = Object.assign({}, process.env, {
                     SENTRY_ORG: organization || process.env.SENTRY_ORG,
                     SENTRY_PROJECT: project || process.env.SENTRY_PROJECT,
@@ -104,16 +104,43 @@ exports.default = (function (options) { return __awaiter(void 0, void 0, void 0,
                 uploadResult = _a.sent();
                 output = uploadResult.stdout.toString();
                 log(output);
-                return [3 /*break*/, 6];
+                if (!(setCommits || process.env.SENTRY_EXPO_SET_COMMITS)) return [3 /*break*/, 5];
+                return [4 /*yield*/, spawn_async_1.default(sentryCliBinaryPath, ['releases', 'set-commits', '--auto', version], {
+                        env: childProcessEnv,
+                    })];
             case 4:
+                commitsResult = _a.sent();
+                output = commitsResult.stdout.toString();
+                log(output);
+                _a.label = 5;
+            case 5: return [4 /*yield*/, spawn_async_1.default(sentryCliBinaryPath, ['releases', 'finalize', version], {
+                    env: childProcessEnv,
+                })];
+            case 6:
+                finalizeReleaseResult = _a.sent();
+                output = finalizeReleaseResult.stdout.toString();
+                log(output);
+                deployEnv = deployEnv || process.env.SENTRY_EXPO_DEPLOY_ENV;
+                if (!deployEnv) return [3 /*break*/, 8];
+                return [4 /*yield*/, spawn_async_1.default(sentryCliBinaryPath, ['releases', 'deploys', version, 'new', '-e', deployEnv], {
+                        env: childProcessEnv,
+                    })];
+            case 7:
+                deployResult = _a.sent();
+                // filter out unnamed deloy
+                output = deployResult.stdout.toString().replace('unnamed ', '');
+                log(output);
+                _a.label = 8;
+            case 8: return [3 /*break*/, 11];
+            case 9:
                 e_1 = _a.sent();
                 log(messageForError(e_1));
                 log("Verify that your Sentry configuration in app.json is correct and refer to https://docs.expo.io/versions/latest/guides/using-sentry.html");
-                return [3 /*break*/, 6];
-            case 5:
+                return [3 /*break*/, 11];
+            case 10:
                 rimraf_1.default.sync(tmpdir);
                 return [7 /*endfinally*/];
-            case 6: return [2 /*return*/];
+            case 11: return [2 /*return*/];
         }
     });
 }); });

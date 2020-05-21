@@ -1,12 +1,28 @@
-import { ReactNativeOptions } from '@sentry/react-native';
-export * from '@sentry/react-native';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
-import * as Sentry from '@sentry/react-native';
+import {
+  init as initNative,
+  ReactNativeOptions,
+  Integrations,
+  setExtras,
+  setTags,
+  getCurrentHub,
+  Severity,
+  setTag,
+  addGlobalEventProcessor,
+} from '@sentry/react-native';
 import { RewriteFrames } from '@sentry/integrations';
 import * as Device from 'expo-device';
+import { init as initBrowser, BrowserOptions } from '@sentry/browser';
 
-export interface ExpoOptions extends ReactNativeOptions {
+export * as Native from '@sentry/react-native';
+export * as Browser from '@sentry/browser';
+
+export interface ExpoWebOptions extends BrowserOptions {
+  enableInExpoDevelopment?: boolean;
+}
+
+export interface ExpoNativeOptions extends ReactNativeOptions {
   enableInExpoDevelopment?: boolean;
 }
 
@@ -31,13 +47,13 @@ class ExpoIntegration {
   name = ExpoIntegration.id;
 
   setupOnce() {
-    Sentry.setExtras({
+    setExtras({
       manifest: Constants.manifest,
       deviceYearClass: Constants.deviceYearClass,
       linkingUri: Constants.linkingUri,
     });
 
-    Sentry.setTags({
+    setTags({
       deviceId: Constants.installationId,
       appOwnership: Constants.appOwnership,
       expoVersion: Constants.expoVersion,
@@ -45,18 +61,18 @@ class ExpoIntegration {
 
     if (!!Constants.manifest) {
       if (Constants.manifest.releaseChannel) {
-        Sentry.setTag('expoReleaseChannel', Constants.manifest.releaseChannel);
+        setTag('expoReleaseChannel', Constants.manifest.releaseChannel);
       }
       if (Constants.manifest.version) {
-        Sentry.setTag('expoAppVersion', Constants.manifest.version);
+        setTag('expoAppVersion', Constants.manifest.version);
       }
       if (Constants.manifest.publishedTime) {
-        Sentry.setTag('expoAppPublishedTime', Constants.manifest.publishedTime);
+        setTag('expoAppPublishedTime', Constants.manifest.publishedTime);
       }
     }
 
     if (Constants.sdkVersion) {
-      Sentry.setTag('expoSdkVersion', Constants.sdkVersion);
+      setTag('expoSdkVersion', Constants.sdkVersion);
     }
 
     const defaultHandler = ErrorUtils.getGlobalHandler();
@@ -71,16 +87,16 @@ class ExpoIntegration {
         );
       }
 
-      Sentry.getCurrentHub().withScope((scope) => {
+      getCurrentHub().withScope((scope) => {
         if (isFatal) {
-          scope.setLevel(Sentry.Severity.Fatal);
+          scope.setLevel(Severity.Fatal);
         }
-        Sentry.getCurrentHub().captureException(error, {
+        getCurrentHub().captureException(error, {
           originalException: error,
         });
       });
 
-      const client = Sentry.getCurrentHub().getClient();
+      const client = getCurrentHub().getClient();
       if (client && !__DEV__) {
         client.flush(2000).then(() => {
           defaultHandler(error, isFatal);
@@ -91,8 +107,8 @@ class ExpoIntegration {
       }
     });
 
-    Sentry.addGlobalEventProcessor(function (event, _hint) {
-      var that = Sentry.getCurrentHub().getIntegration(ExpoIntegration);
+    addGlobalEventProcessor(function (event, _hint) {
+      var that = getCurrentHub().getIntegration(ExpoIntegration);
 
       if (that) {
         event.contexts = {
@@ -113,13 +129,21 @@ class ExpoIntegration {
   }
 }
 
-const originalSentryInit = Sentry.init;
-export const init = (options: ExpoOptions = {}) => {
-  options.integrations = [
-    ...(typeof options.integrations === 'object'
-      ? options.integrations ?? []
-      : (options?.integrations ?? (() => []))([])),
-    new Sentry.Integrations.ReactNativeErrorHandlers({
+export const init = (options: ExpoNativeOptions | ExpoWebOptions = {}) => {
+  if (Platform.OS === 'web') {
+    return initBrowser({
+      ...(options as ExpoWebOptions),
+      enabled: __DEV__ ? options.enableInExpoDevelopment ?? false : true,
+    });
+  }
+
+  let optionsCopy = { ...options } as ExpoNativeOptions;
+
+  optionsCopy.integrations = [
+    ...(typeof optionsCopy.integrations === 'object'
+      ? optionsCopy.integrations ?? []
+      : (optionsCopy?.integrations ?? (() => []))([])),
+    new Integrations.ReactNativeErrorHandlers({
       onerror: false,
       onunhandledrejection: true,
     }),
@@ -134,22 +158,22 @@ export const init = (options: ExpoOptions = {}) => {
     }),
   ];
 
-  if (!options.release) {
-    options.release = !!Constants.manifest
+  if (!optionsCopy.release) {
+    optionsCopy.release = !!Constants.manifest
       ? Constants.manifest.revisionId || 'UNVERSIONED'
       : Date.now();
   }
 
   // Bail out automatically if the app isn't deployed
-  if (options.release === 'UNVERSIONED' && !options.enableInExpoDevelopment) {
-    options.enabled = false;
+  if (optionsCopy.release === 'UNVERSIONED' && !optionsCopy.enableInExpoDevelopment) {
+    optionsCopy.enabled = false;
     console.log(
       '[sentry-expo] Disabled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });'
     );
   }
 
   // We don't want to have the native nagger.
-  options.enableNativeNagger = false;
-  options.enableNative = false;
-  return originalSentryInit({ ...options });
+  optionsCopy.enableNativeNagger = false;
+  optionsCopy.enableNative = false;
+  return initNative({ ...optionsCopy });
 };

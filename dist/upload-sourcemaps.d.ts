@@ -13,6 +13,9 @@ declare type Options = {
         project: string;
         authToken: string;
         url: string;
+        release?: string;
+        deployEnv?: string;
+        setCommits?: boolean;
         useGlobalSentryCli: boolean;
     };
 };

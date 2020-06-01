@@ -34,11 +34,11 @@ module.exports = async (options) => {
     fs.writeFileSync(tmpdir + '/main.ios.map', iosSourceMap, 'utf-8');
     fs.writeFileSync(tmpdir + '/main.android.map', androidSourceMap, 'utf-8');
 
-    let organization, project, authToken, url, useGlobalSentryCli;
+    let organization, project, authToken, url, useGlobalSentryCli, setCommits, deployEnv;
     if (!config) {
       log('No config found in app.json, falling back to environment variables...');
     } else {
-      ({ organization, project, authToken, url, useGlobalSentryCli } = config);
+      ({ organization, project, authToken, url, useGlobalSentryCli, setCommits, deployEnv } = config);
     }
 
     const childProcessEnv = Object.assign({}, process.env, {
@@ -81,6 +81,46 @@ module.exports = async (options) => {
 
     output = uploadResult.stdout.toString();
     log(output);
+
+    if (setCommits || process.env.SENTRY_EXPO_SET_COMMITS) {
+      let commitsResult = await spawnAsync(
+        sentryCliBinaryPath,
+        ['releases', 'set-commits', '--auto', version],
+        {
+          env: childProcessEnv,
+        }
+      );
+
+      output = commitsResult.stdout.toString();
+      log(output);
+    }
+
+    let finalizeReleaseResult = await spawnAsync(
+      sentryCliBinaryPath,
+      ['releases', 'finalize', version],
+      {
+        env: childProcessEnv,
+      }
+    );
+
+    output = finalizeReleaseResult.stdout.toString();
+    log(output);
+
+    deployEnv = deployEnv || process.env.SENTRY_EXPO_DEPLOY_ENV;
+    if (deployEnv) {
+      let deployResult = await spawnAsync(
+        sentryCliBinaryPath,
+        ['releases', 'deploys', version, 'new', '-e', deployEnv],
+        {
+          env: childProcessEnv,
+        }
+      )
+
+      // filter out unnamed deloy
+      output = deployResult.stdout.toString().replace('unnamed ', '');
+      log(output);
+    }
+
   } catch (e) {
     log(messageForError(e));
     log(

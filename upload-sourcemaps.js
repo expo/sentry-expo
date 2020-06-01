@@ -82,8 +82,7 @@ module.exports = async (options) => {
     output = uploadResult.stdout.toString();
     log(output);
 
-    setCommits = setCommits || process.env.SENTRY_EXPO_SET_COMMITS;
-    if (setCommits) {
+    if (setCommits || process.env.SENTRY_EXPO_SET_COMMITS) {
       let commitsResult = await spawnAsync(
         sentryCliBinaryPath,
         ['releases', 'set-commits', '--auto', version],
@@ -96,6 +95,17 @@ module.exports = async (options) => {
       log(output);
     }
 
+    let finalizeReleaseResult = await spawnAsync(
+      sentryCliBinaryPath,
+      ['releases', 'finalize', version],
+      {
+        env: childProcessEnv,
+      }
+    );
+
+    output = finalizeReleaseResult.stdout.toString();
+    log(output);
+
     deployEnv = deployEnv || process.env.SENTRY_EXPO_DEPLOY_ENV;
     if (deployEnv) {
       let deployResult = await spawnAsync(
@@ -106,7 +116,8 @@ module.exports = async (options) => {
         }
       )
 
-      output = deployResult.stdout.toString();
+      // filter out unnamed deloy
+      output = deployResult.stdout.toString().replace('unnamed ', '');
       log(output);
     }
 

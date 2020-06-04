@@ -21,10 +21,6 @@ module.exports = async (options) => {
 
   const tmpdir = path.resolve(projectRoot, '.tmp', 'sentry');
 
-  // revisionId is the same between the Android and IOS manifests, so
-  // we just pick one and get on with it.
-  const version = iosManifest.revisionId;
-
   rimraf.sync(tmpdir);
   mkdirp.sync(tmpdir);
 
@@ -34,12 +30,23 @@ module.exports = async (options) => {
     fs.writeFileSync(tmpdir + '/main.ios.map', iosSourceMap, 'utf-8');
     fs.writeFileSync(tmpdir + '/main.android.map', androidSourceMap, 'utf-8');
 
-    let organization, project, authToken, url, useGlobalSentryCli, setCommits, deployEnv;
+    let organization, project, authToken, url, useGlobalSentryCli, release, setCommits, deployEnv;
     if (!config) {
       log('No config found in app.json, falling back to environment variables...');
     } else {
-      ({ organization, project, authToken, url, useGlobalSentryCli, setCommits, deployEnv } = config);
+      ({
+        organization,
+        project,
+        authToken,
+        url,
+        useGlobalSentryCli,
+        release,
+        setCommits,
+        deployEnv,
+      } = config);
     }
+
+    const version = release || process.env.SENTRY_RELEASE || iosManifest.revisionId;
 
     const childProcessEnv = Object.assign({}, process.env, {
       SENTRY_ORG: organization || process.env.SENTRY_ORG,
@@ -114,13 +121,12 @@ module.exports = async (options) => {
         {
           env: childProcessEnv,
         }
-      )
+      );
 
       // filter out unnamed deloy
       output = deployResult.stdout.toString().replace('unnamed ', '');
       log(output);
     }
-
   } catch (e) {
     log(messageForError(e));
     log(

@@ -6,9 +6,10 @@
   "license": "MIT",
   "dependencies": {
     "@expo/spawn-async": "^1.2.8",
-    "expo-constants": "*",
     "@sentry/integrations": "^5.5.0",
     "@sentry/react-native": "^1.3.9",
+    "expo-constants": "*",
+    "expo-device": "*",
     "mkdirp": "^1.0.3",
     "rimraf": "^2.6.1"
   }

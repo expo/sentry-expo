@@ -4,6 +4,7 @@ import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 import * as Sentry from '@sentry/react-native';
 import { RewriteFrames } from '@sentry/integrations';
+import * as Device from 'expo-device';
 
 /**
  * Expo bundles are hosted on cloudfront. Expo bundle filename will change
@@ -98,23 +99,11 @@ class ExpoIntegration {
       var that = Sentry.getCurrentHub().getIntegration(ExpoIntegration);
 
       if (that) {
-        let additionalDeviceInformation = {};
-
-        if (Platform.OS === 'ios') {
-          additionalDeviceInformation = {
-            model: Constants.platform.ios.model,
-          };
-        } else {
-          additionalDeviceInformation = {
-            model: 'n/a',
-          };
-        }
-
         event.contexts = {
           ...(event.contexts || {}),
           device: {
-            simulator: !Constants.isDevice,
-            ...additionalDeviceInformation,
+            simulator: !Device.isDevice,
+            model: Device.modelName,
           },
           os: {
             name: Platform.OS === 'ios' ? 'iOS' : 'Android',

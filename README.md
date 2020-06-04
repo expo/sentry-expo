@@ -6,11 +6,11 @@
 
 Bugs can be [really cool](https://www.cbc.ca/kidscbc2/the-feed/14-of-the-worlds-weirdest-insects), but not when it comes to your app.
 
-That's where `sentry-expo` comes in! Keep a close on your app, whether it's in development, staging, or production, by getting real-time insight into issues. That way, you can quickly reproduce, fix, and re-deploy!
+That's where `sentry-expo` comes in! Keep a close eye on your app, whether it's in development, staging, or production, by getting real-time insight into errors and bugs. That way, you can quickly reproduce, fix, and re-deploy!
 
 ## 🤔 How do I use this?
 
-<details open>
+<details>
 <summary>Hey- before you actually use Sentry, make sure you've created a Sentry project. How do you do that? Open this drop-down to find out!</summary>
 <br>
 🚨 Creating a Sentry project
@@ -39,7 +39,7 @@ expo install sentry-expo
 
 Add the following to your app's main file (usually `App.js`):
 
-```
+```js
 import * as Sentry from 'sentry-expo';
 
 Sentry.init({
@@ -53,7 +53,7 @@ Sentry.init({
 
 Add the `expo.hooks` object to your project's `app.json` (or `app.config`) file:
 
-```
+```json
 {
   "expo": {
     // ... your existing configuration

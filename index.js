@@ -136,12 +136,14 @@ export const init = (options = {}) => {
     }),
   ];
 
-  const release = !!Constants.manifest
-    ? Constants.manifest.revisionId || 'UNVERSIONED'
-    : Date.now();
+  if (!options.release) {
+    options.release = !!Constants.manifest
+      ? Constants.manifest.revisionId || 'UNVERSIONED'
+      : Date.now();
+  }
 
   // Bail out automatically if the app isn't deployed
-  if (release === 'UNVERSIONED' && !options.enableInExpoDevelopment) {
+  if (options.release === 'UNVERSIONED' && !options.enableInExpoDevelopment) {
     options.enabled = false;
     console.log(
       '[sentry-expo] Disabled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });'
@@ -151,5 +153,5 @@ export const init = (options = {}) => {
   // We don't want to have the native nagger.
   options.enableNativeNagger = false;
   options.enableNative = false;
-  return originalSentryInit({ ...options, release });
+  return originalSentryInit({ ...options });
 };

@@ -1,9 +1,24 @@
 {
   "name": "sentry-expo",
-  "version": "2.0.4",
+  "version": "2.1.0",
+  "description": "Catch your Javascript errors for your production Expo apps!",
   "main": "index.js",
   "types": "index.d.ts",
   "license": "MIT",
+  "keywords": [
+    "react-native",
+    "expo",
+    "sentry"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/expo/sentry-expo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/expo/sentry-expo/issues"
+  },
+  "author": "650 Industries, Inc.",
+  "homepage": "https://docs.expo.io/guides/using-sentry/",
   "dependencies": {
     "@expo/spawn-async": "^1.2.8",
     "@sentry/integrations": "^5.5.0",

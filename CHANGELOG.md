@@ -23,3 +23,4 @@
 - Upgrade `@sentry/react-native` to 1.3.9
 - Fixed accidental calls to the native SDK that resulted in:
   `Sentry Logger [Log]: Failed to get device context from native: SentryError: Native Client is not available, can't start on native.`
+- Fixed bug where Android device model name wasn't being added to context.

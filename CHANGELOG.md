@@ -8,6 +8,10 @@
 
 ### 🐛 Bug fixes
 
+## 2.1.2 — 2020-06-05
+
+- pin `@sentry/react-native` to v1.4.2 to prevent native calls
+
 ## 2.1.1 — 2020-06-05
 
 ### 🎉 New features

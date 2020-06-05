@@ -3,6 +3,7 @@ const path = require('path');
 const rimraf = require('rimraf');
 const mkdirp = require('mkdirp');
 const fs = require('fs');
+const propertiesReader = require('properties-reader');
 const sentryCliBinary = require('@sentry/cli');
 
 module.exports = async (options) => {
@@ -34,11 +35,24 @@ module.exports = async (options) => {
     fs.writeFileSync(tmpdir + '/main.ios.map', iosSourceMap, 'utf-8');
     fs.writeFileSync(tmpdir + '/main.android.map', androidSourceMap, 'utf-8');
 
+    const androidPropertiesFile = path.resolve(projectRoot, 'android', 'sentry.properties');
+    const androidPropertiesFileExists = fs.existsSync(androidPropertiesFile);
+
     let organization, project, authToken, url, useGlobalSentryCli;
-    if (!config) {
-      log('No config found in app.json, falling back to environment variables...');
-    } else {
+    if (androidPropertiesFileExists) {
+      const properties = propertiesReader(androidPropertiesFile);
+      organization = properties.get('defaults.org');
+      project = properties.get('defaults.project');
+      authToken = properties.get('auth.token');
+      url = properties.get('defaults.url');
+    }
+    if (config) {
       ({ organization, project, authToken, url, useGlobalSentryCli } = config);
+    }
+    if (!config && !androidPropertiesFileExists) {
+      log(
+        'No config found in app.json or sentry.properties, falling back to environment variables...'
+      );
     }
 
     const childProcessEnv = Object.assign({}, process.env, {

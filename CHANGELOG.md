@@ -8,6 +8,13 @@
 
 ### 🐛 Bug fixes
 
+## 2.1.1 — 2020-06-05
+
+### 🎉 New features
+
+- Added option to configure commits with `SENTRY_SET_COMMITS` env var
+- Added option to configure deploy environment with `SENTRY_DEPLOY_ENV` env var
+
 ## 2.1.0 — 2020-06-04
 
 ### 🛠 Breaking changes

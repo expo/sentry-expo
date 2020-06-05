@@ -91,7 +91,7 @@ module.exports = async (options) => {
     output = uploadResult.stdout.toString();
     log(output);
 
-    if (setCommits || process.env.SENTRY_EXPO_SET_COMMITS) {
+    if (setCommits || process.env.SENTRY_SET_COMMITS) {
       let commitsResult = await spawnAsync(
         sentryCliBinaryPath,
         ['releases', 'set-commits', '--auto', version],
@@ -115,7 +115,7 @@ module.exports = async (options) => {
     output = finalizeReleaseResult.stdout.toString();
     log(output);
 
-    deployEnv = deployEnv || process.env.SENTRY_EXPO_DEPLOY_ENV;
+    deployEnv = deployEnv || process.env.SENTRY_DEPLOY_ENV;
     if (deployEnv) {
       let deployResult = await spawnAsync(
         sentryCliBinaryPath,

@@ -22,7 +22,7 @@
   "dependencies": {
     "@expo/spawn-async": "^1.2.8",
     "@sentry/integrations": "^5.5.0",
-    "@sentry/react-native": "^1.3.9",
+    "@sentry/react-native": "1.4.2",
     "expo-constants": "*",
     "expo-device": "*",
     "mkdirp": "^1.0.3",

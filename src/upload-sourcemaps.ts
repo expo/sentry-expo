@@ -97,6 +97,8 @@ export default async (options: Options) => {
         '--ext',
         'map',
         '--rewrite',
+        '--strip-prefix',
+        projectRoot,
       ],
       {
         cwd: tmpdir,
@@ -107,7 +109,7 @@ export default async (options: Options) => {
     output = uploadResult.stdout.toString();
     log(output);
 
-    if (setCommits || process.env.SENTRY_EXPO_SET_COMMITS) {
+    if (setCommits || process.env.SENTRY_SET_COMMITS) {
       let commitsResult = await spawnAsync(
         sentryCliBinaryPath,
         ['releases', 'set-commits', '--auto', version],
@@ -131,7 +133,7 @@ export default async (options: Options) => {
     output = finalizeReleaseResult.stdout.toString();
     log(output);
 
-    deployEnv = deployEnv || process.env.SENTRY_EXPO_DEPLOY_ENV;
+    deployEnv = deployEnv || process.env.SENTRY_DEPLOY_ENV;
     if (deployEnv) {
       let deployResult = await spawnAsync(
         sentryCliBinaryPath,

@@ -56,19 +56,17 @@ class ExpoIntegration {
     setTags({
       deviceId: Constants.installationId,
       appOwnership: Constants.appOwnership,
-      expoVersion: Constants.expoVersion,
     });
 
+    if (Constants.appOwnership === 'expo' && Constants.expoVersion) {
+      setTag('expoAppVersion', Constants.expoVersion);
+    }
+
     if (!!Constants.manifest) {
-      if (Constants.manifest.releaseChannel) {
-        setTag('expoReleaseChannel', Constants.manifest.releaseChannel);
-      }
-      if (Constants.manifest.version) {
-        setTag('expoAppVersion', Constants.manifest.version);
-      }
-      if (Constants.manifest.publishedTime) {
-        setTag('expoAppPublishedTime', Constants.manifest.publishedTime);
-      }
+      setTag('expoReleaseChannel', Constants.manifest.releaseChannel);
+      setTag('appVersion', Constants.manifest.version ?? '');
+      setTag('appPublishedTime', Constants.manifest.publishedTime);
+      setTag('expoSdkVersion', Constants.manifest.sdkVersion ?? '');
     }
 
     if (Constants.sdkVersion) {
@@ -138,12 +136,12 @@ export const init = (options: ExpoNativeOptions | ExpoWebOptions = {}) => {
     });
   }
 
-  let optionsCopy = { ...options } as ExpoNativeOptions;
+  let nativeOptions = { ...options } as ExpoNativeOptions;
 
-  optionsCopy.integrations = [
-    ...(typeof optionsCopy.integrations === 'object'
-      ? optionsCopy.integrations ?? []
-      : (optionsCopy?.integrations ?? (() => []))([])),
+  nativeOptions.integrations = [
+    ...(typeof nativeOptions.integrations === 'object'
+      ? nativeOptions.integrations ?? []
+      : (nativeOptions?.integrations ?? (() => []))([])),
     new Integrations.ReactNativeErrorHandlers({
       onerror: false,
       onunhandledrejection: true,
@@ -159,22 +157,22 @@ export const init = (options: ExpoNativeOptions | ExpoWebOptions = {}) => {
     }),
   ];
 
-  if (!optionsCopy.release) {
-    optionsCopy.release = !!Constants.manifest
+  if (!nativeOptions.release) {
+    nativeOptions.release = !!Constants.manifest
       ? Constants.manifest.revisionId || 'UNVERSIONED'
       : Date.now().toString();
   }
 
   // Bail out automatically if the app isn't deployed
-  if (optionsCopy.release === 'UNVERSIONED' && !optionsCopy.enableInExpoDevelopment) {
-    optionsCopy.enabled = false;
+  if (nativeOptions.release === 'UNVERSIONED' && !nativeOptions.enableInExpoDevelopment) {
+    nativeOptions.enabled = false;
     console.log(
       '[sentry-expo] Disabled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });'
     );
   }
 
   // We don't want to have the native nagger.
-  optionsCopy.enableNativeNagger = false;
-  optionsCopy.enableNative = false;
-  return initNative({ ...optionsCopy });
+  nativeOptions.enableNativeNagger = false;
+  nativeOptions.enableNative = false;
+  return initNative({ ...nativeOptions });
 };

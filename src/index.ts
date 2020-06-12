@@ -162,7 +162,7 @@ export const init = (options: ExpoNativeOptions | ExpoWebOptions = {}) => {
   if (!optionsCopy.release) {
     optionsCopy.release = !!Constants.manifest
       ? Constants.manifest.revisionId || 'UNVERSIONED'
-      : Date.now();
+      : Date.now().toString();
   }
 
   // Bail out automatically if the app isn't deployed

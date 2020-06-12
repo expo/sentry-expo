@@ -98,7 +98,8 @@ class ExpoIntegration {
 
       const client = getCurrentHub().getClient();
       if (client && !__DEV__) {
-        client.flush(2000).then(() => {
+        // @ts-ignore PR to add this to types: https://github.com/getsentry/sentry-javascript/pull/2669
+        client.flush(client.getOptions().shutdownTimeout || 2000).then(() => {
           defaultHandler(error, isFatal);
         });
       } else {

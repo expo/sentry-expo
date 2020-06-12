@@ -96,6 +96,8 @@ exports.default = (function (options) { return __awaiter(void 0, void 0, void 0,
                         '--ext',
                         'map',
                         '--rewrite',
+                        '--strip-prefix',
+                        projectRoot,
                     ], {
                         cwd: tmpdir,
                         env: childProcessEnv,
@@ -104,7 +106,7 @@ exports.default = (function (options) { return __awaiter(void 0, void 0, void 0,
                 uploadResult = _a.sent();
                 output = uploadResult.stdout.toString();
                 log(output);
-                if (!(setCommits || process.env.SENTRY_EXPO_SET_COMMITS)) return [3 /*break*/, 5];
+                if (!(setCommits || process.env.SENTRY_SET_COMMITS)) return [3 /*break*/, 5];
                 return [4 /*yield*/, spawn_async_1.default(sentryCliBinaryPath, ['releases', 'set-commits', '--auto', version], {
                         env: childProcessEnv,
                     })];
@@ -120,7 +122,7 @@ exports.default = (function (options) { return __awaiter(void 0, void 0, void 0,
                 finalizeReleaseResult = _a.sent();
                 output = finalizeReleaseResult.stdout.toString();
                 log(output);
-                deployEnv = deployEnv || process.env.SENTRY_EXPO_DEPLOY_ENV;
+                deployEnv = deployEnv || process.env.SENTRY_DEPLOY_ENV;
                 if (!deployEnv) return [3 /*break*/, 8];
                 return [4 /*yield*/, spawn_async_1.default(sentryCliBinaryPath, ['releases', 'deploys', version, 'new', '-e', deployEnv], {
                         env: childProcessEnv,

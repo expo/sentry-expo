@@ -4,7 +4,20 @@
 
 ### 🛠 Breaking changes
 
+- Exports from `@sentry/react-native` or `@sentry/browser` are now namespaced.
+
+  ```js
+  import { Native, Browser } from 'sentry-expo';
+
+  const { ReactNativeClient } = Native;
+  const { Transports } = Browser;
+  ```
+
+- `upload-sourcemaps.js` is now exported from `'sentry-expo/dist/upload-sourcemaps'`
+
 ### 🎉 New features
+
+- Expo Web support: no changes needed!
 
 ### 🐛 Bug fixes
 

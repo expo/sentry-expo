@@ -21,6 +21,20 @@
 
 ### 🐛 Bug fixes
 
+- You can now pass a function to the `integrations` option for `init()` which will receive all the default Sentry and sentry-expo integrations, here's an example on how to use it:
+
+  ```js
+  Sentry.init(
+    ...
+    integrations: (integrations) => {
+      let filteredIntegrations = integrations.filter(
+        (i) => i.name !== "SomeIntegrationNameYouDontWant"
+      );
+      return filteredIntegrations;
+    }
+  )
+  ```
+
 ## 2.1.2 — 2020-06-05
 
 - pin `@sentry/react-native` to v1.4.2 to prevent native calls

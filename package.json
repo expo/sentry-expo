@@ -28,6 +28,7 @@
     "@sentry/browser": "^5.15.5",
     "@sentry/integrations": "^5.15.5",
     "@sentry/react-native": "1.4.2",
+    "@sentry/types": "^5.17.0",
     "expo-constants": "*",
     "expo-device": "*",
     "mkdirp": "^1.0.3",

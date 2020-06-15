@@ -14,6 +14,7 @@ import {
 import { RewriteFrames } from '@sentry/integrations';
 import * as Device from 'expo-device';
 import { init as initBrowser, BrowserOptions } from '@sentry/browser';
+import { Integration } from '@sentry/types';
 
 export * as Native from '@sentry/react-native';
 export * as Browser from '@sentry/browser';
@@ -117,8 +118,8 @@ class ExpoIntegration {
             model: Device.modelName,
           },
           os: {
-            name: Platform.OS === 'ios' ? 'iOS' : 'Android',
-            version: `${Platform.Version}`,
+            name: Device.osName,
+            version: Device.osVersion,
           },
         };
       }
@@ -136,12 +137,7 @@ export const init = (options: ExpoNativeOptions | ExpoWebOptions = {}) => {
     });
   }
 
-  let nativeOptions = { ...options } as ExpoNativeOptions;
-
-  nativeOptions.integrations = [
-    ...(typeof nativeOptions.integrations === 'object'
-      ? nativeOptions.integrations ?? []
-      : (nativeOptions?.integrations ?? (() => []))([])),
+  const defaultExpoIntegrations = [
     new Integrations.ReactNativeErrorHandlers({
       onerror: false,
       onunhandledrejection: true,
@@ -156,6 +152,27 @@ export const init = (options: ExpoNativeOptions | ExpoWebOptions = {}) => {
       },
     }),
   ];
+
+  let nativeOptions = { ...options } as ExpoNativeOptions;
+
+  if (Array.isArray(nativeOptions.integrations)) {
+    // Allow users to override Expo defaults...ymmv
+    nativeOptions.integrations = overrideDefaults(
+      defaultExpoIntegrations,
+      nativeOptions.integrations
+    );
+  } else if (typeof nativeOptions.integrations === 'function') {
+    // Need to rewrite the function to take Expo's default integrations
+    let functionWithoutExpoIntegrations = nativeOptions.integrations;
+    const functionWithExpoIntegrations = (integrations: Integration[]) => {
+      return functionWithoutExpoIntegrations(
+        overrideDefaults(integrations, defaultExpoIntegrations)
+      );
+    };
+    nativeOptions.integrations = functionWithExpoIntegrations;
+  } else {
+    nativeOptions.integrations = [...defaultExpoIntegrations];
+  }
 
   if (!nativeOptions.release) {
     nativeOptions.release = !!Constants.manifest
@@ -176,3 +193,16 @@ export const init = (options: ExpoNativeOptions | ExpoWebOptions = {}) => {
   nativeOptions.enableNative = false;
   return initNative({ ...nativeOptions });
 };
+
+function overrideDefaults(defaults: Integration[], overrides: Integration[]): Integration[] {
+  const overrideIntegrationNames: string[] = overrides.map((each) => each.name);
+  const result: Integration[] = [];
+
+  defaults.forEach((each) => {
+    if (!overrideIntegrationNames.includes(each.name)) {
+      result.push(each);
+    }
+  });
+
+  return [...result, ...overrides];
+}

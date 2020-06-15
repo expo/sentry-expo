@@ -25,7 +25,7 @@ type Options = {
   };
 };
 
-export default async (options: Options) => {
+module.exports = async (options: Options) => {
   let {
     config,
     log,

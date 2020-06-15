@@ -45,7 +45,7 @@ var rimraf_1 = __importDefault(require("rimraf"));
 var mkdirp_1 = __importDefault(require("mkdirp"));
 var fs_1 = __importDefault(require("fs"));
 var cli_1 = __importDefault(require("@sentry/cli"));
-exports.default = (function (options) { return __awaiter(void 0, void 0, void 0, function () {
+module.exports = function (options) { return __awaiter(void 0, void 0, void 0, function () {
     var config, log, iosBundle, iosSourceMap, iosManifest, androidBundle, androidSourceMap, projectRoot, tmpdir, organization, project, authToken, url, useGlobalSentryCli, release, setCommits, deployEnv, version, childProcessEnv, sentryCliBinaryPath, output, createReleaseResult, uploadResult, commitsResult, finalizeReleaseResult, deployResult, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -145,7 +145,7 @@ exports.default = (function (options) { return __awaiter(void 0, void 0, void 0,
             case 11: return [2 /*return*/];
         }
     });
-}); });
+}); };
 function messageForError(e) {
     var message = e.stderr ? e.stderr.replace(/^\s+|\s+$/g, '') : e.message;
     if (message) {

@@ -2,8 +2,12 @@
   "name": "sentry-expo",
   "version": "2.1.2",
   "description": "Catch your Javascript errors for your production Expo apps!",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "dist/upload-sourcemaps.js"
+  ],
   "license": "MIT",
   "keywords": [
     "react-native",
@@ -21,11 +25,24 @@
   "homepage": "https://docs.expo.io/guides/using-sentry/",
   "dependencies": {
     "@expo/spawn-async": "^1.2.8",
-    "@sentry/integrations": "^5.5.0",
+    "@sentry/browser": "^5.15.5",
+    "@sentry/integrations": "^5.15.5",
     "@sentry/react-native": "1.4.2",
     "expo-constants": "*",
     "expo-device": "*",
     "mkdirp": "^1.0.3",
     "rimraf": "^2.6.1"
+  },
+  "devDependencies": {
+    "@types/mkdirp": "^1.0.0",
+    "@types/node": "^14.0.1",
+    "@types/react-native": "^0.62.10",
+    "@types/rimraf": "^3.0.0",
+    "typescript": "^3.9.2"
+  },
+  "scripts": {
+    "watch": "tsc -p ./tsconfig.json -w",
+    "build": "tsc -p ./tsconfig.json",
+    "prepare": "npm run build"
   }
 }

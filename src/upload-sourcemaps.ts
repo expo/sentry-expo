@@ -1,11 +1,31 @@
-const spawnAsync = require('@expo/spawn-async');
-const path = require('path');
-const rimraf = require('rimraf');
-const mkdirp = require('mkdirp');
-const fs = require('fs');
-const sentryCliBinary = require('@sentry/cli');
+import spawnAsync from '@expo/spawn-async';
+import path from 'path';
+import rimraf from 'rimraf';
+import mkdirp from 'mkdirp';
+import fs from 'fs';
+import sentryCliBinary from '@sentry/cli';
 
-module.exports = async (options) => {
+type Options = {
+  log: (message: string) => void;
+  projectRoot: string;
+  androidBundle: string;
+  androidSourceMap: string;
+  iosManifest: { revisionId: string };
+  iosSourceMap: string;
+  iosBundle: string;
+  config?: {
+    organization: string;
+    project: string;
+    authToken: string;
+    url: string;
+    release?: string;
+    deployEnv?: string;
+    setCommits?: boolean;
+    useGlobalSentryCli: boolean;
+  };
+};
+
+export default async (options: Options) => {
   let {
     config,
     log,
@@ -14,9 +34,7 @@ module.exports = async (options) => {
     iosManifest,
     androidBundle,
     androidSourceMap,
-    androidManifest,
     projectRoot,
-    exp,
   } = options;
 
   const tmpdir = path.resolve(projectRoot, '.tmp', 'sentry');
@@ -139,7 +157,7 @@ module.exports = async (options) => {
   }
 };
 
-function messageForError(e) {
+function messageForError(e: Error & { stderr?: string }) {
   let message = e.stderr ? e.stderr.replace(/^\s+|\s+$/g, '') : e.message;
   if (message) {
     if (message.indexOf('error: ') === 0) {

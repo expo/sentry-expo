@@ -125,8 +125,8 @@ var ExpoIntegration = /** @class */ (function () {
                         simulator: !Device.isDevice,
                         model: Device.modelName,
                     }, os: {
-                        name: react_native_1.Platform.OS === 'ios' ? 'iOS' : 'Android',
-                        version: "" + react_native_1.Platform.Version,
+                        name: Device.osName,
+                        version: Device.osVersion,
                     } });
             }
             return event;
@@ -136,14 +136,12 @@ var ExpoIntegration = /** @class */ (function () {
     return ExpoIntegration;
 }());
 exports.init = function (options) {
-    var _a, _b, _c;
+    var _a;
     if (options === void 0) { options = {}; }
     if (react_native_1.Platform.OS === 'web') {
         return browser_1.init(__assign(__assign({}, options), { enabled: __DEV__ ? (_a = options.enableInExpoDevelopment) !== null && _a !== void 0 ? _a : false : true }));
     }
-    var nativeOptions = __assign({}, options);
-    nativeOptions.integrations = __spreadArrays((typeof nativeOptions.integrations === 'object'
-        ? (_b = nativeOptions.integrations) !== null && _b !== void 0 ? _b : [] : ((_c = nativeOptions === null || nativeOptions === void 0 ? void 0 : nativeOptions.integrations) !== null && _c !== void 0 ? _c : (function () { return []; }))([])), [
+    var defaultExpoIntegrations = [
         new react_native_2.Integrations.ReactNativeErrorHandlers({
             onerror: false,
             onunhandledrejection: true,
@@ -157,7 +155,23 @@ exports.init = function (options) {
                 return frame;
             },
         }),
-    ]);
+    ];
+    var nativeOptions = __assign({}, options);
+    if (Array.isArray(nativeOptions.integrations)) {
+        // Allow users to override Expo defaults...ymmv
+        nativeOptions.integrations = overrideDefaults(defaultExpoIntegrations, nativeOptions.integrations);
+    }
+    else if (typeof nativeOptions.integrations === 'function') {
+        // Need to rewrite the function to take Expo's default integrations
+        var functionWithoutExpoIntegrations_1 = nativeOptions.integrations;
+        var functionWithExpoIntegrations = function (integrations) {
+            return functionWithoutExpoIntegrations_1(overrideDefaults(integrations, defaultExpoIntegrations));
+        };
+        nativeOptions.integrations = functionWithExpoIntegrations;
+    }
+    else {
+        nativeOptions.integrations = __spreadArrays(defaultExpoIntegrations);
+    }
     if (!nativeOptions.release) {
         nativeOptions.release = !!expo_constants_1.default.manifest
             ? expo_constants_1.default.manifest.revisionId || 'UNVERSIONED'
@@ -173,3 +187,13 @@ exports.init = function (options) {
     nativeOptions.enableNative = false;
     return react_native_2.init(__assign({}, nativeOptions));
 };
+function overrideDefaults(defaults, overrides) {
+    var overrideIntegrationNames = overrides.map(function (each) { return each.name; });
+    var result = [];
+    defaults.forEach(function (each) {
+        if (!overrideIntegrationNames.includes(each.name)) {
+            result.push(each);
+        }
+    });
+    return __spreadArrays(result, overrides);
+}

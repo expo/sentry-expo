@@ -44,12 +44,26 @@ exports.init = void 0;
 var expo_constants_1 = __importDefault(require("expo-constants"));
 var react_native_1 = require("react-native");
 var react_native_2 = require("@sentry/react-native");
-var Updates = __importStar(require("expo-updates"));
 var integrations_1 = require("@sentry/integrations");
 var Device = __importStar(require("expo-device"));
 var browser_1 = require("@sentry/browser");
 exports.Native = __importStar(require("@sentry/react-native"));
 exports.Browser = __importStar(require("@sentry/browser"));
+/**
+ * Expo bundles are hosted on cloudfront. Expo bundle filename will change
+ * at some point in the future in order to be able to delete this code.
+ */
+function isPublishedExpoUrl(url) {
+    return url.includes('https://d1wp6m56sqw74a.cloudfront.net');
+}
+function normalizeUrl(url) {
+    if (isPublishedExpoUrl(url)) {
+        return "app:///main." + react_native_1.Platform.OS + ".bundle";
+    }
+    else {
+        return url;
+    }
+}
 var ExpoIntegration = /** @class */ (function () {
     function ExpoIntegration() {
         this.name = ExpoIntegration.id;
@@ -57,7 +71,7 @@ var ExpoIntegration = /** @class */ (function () {
     ExpoIntegration.prototype.setupOnce = function () {
         var _a, _b;
         react_native_2.setExtras({
-            manifest: Updates.manifest,
+            manifest: expo_constants_1.default.manifest,
             deviceYearClass: expo_constants_1.default.deviceYearClass,
             linkingUri: expo_constants_1.default.linkingUri,
         });
@@ -68,32 +82,19 @@ var ExpoIntegration = /** @class */ (function () {
         if (expo_constants_1.default.appOwnership === 'expo' && expo_constants_1.default.expoVersion) {
             react_native_2.setTag('expoAppVersion', expo_constants_1.default.expoVersion);
         }
-        if (Updates.manifest) {
-            // @ts-ignore
-            react_native_2.setTag('expoReleaseChannel', Updates.manifest.releaseChannel);
-            // @ts-ignore
-            react_native_2.setTag('appVersion', (_a = Updates.manifest.version) !== null && _a !== void 0 ? _a : '');
-            // @ts-ignore
-            react_native_2.setTag('appPublishedTime', Updates.manifest.publishedTime);
-            // @ts-ignore
-            react_native_2.setTag('expoSdkVersion', (_b = Updates.manifest.sdkVersion) !== null && _b !== void 0 ? _b : '');
+        if (!!expo_constants_1.default.manifest) {
+            react_native_2.setTag('expoReleaseChannel', expo_constants_1.default.manifest.releaseChannel);
+            react_native_2.setTag('appVersion', (_a = expo_constants_1.default.manifest.version) !== null && _a !== void 0 ? _a : '');
+            react_native_2.setTag('appPublishedTime', expo_constants_1.default.manifest.publishedTime);
+            react_native_2.setTag('expoSdkVersion', (_b = expo_constants_1.default.manifest.sdkVersion) !== null && _b !== void 0 ? _b : '');
         }
         var defaultHandler = ErrorUtils.getGlobalHandler();
         ErrorUtils.setGlobalHandler(function (error, isFatal) {
-            // Updates bundle names are not predictable in advance, so we replace them with the names
-            // Sentry expects to be in the stacktrace.
-            // The name of the sourcemap file in Sentry is different depending on whether it was uploaded
-            // by the upload-sourcemaps script in this package (in which case it will have a revisionId)
-            // or by the default @sentry/react-native script.
-            var sentryFilename;
-            // @ts-ignore
-            if (Updates.manifest.revisionId) {
-                sentryFilename = "main." + react_native_1.Platform.OS + ".bundle";
+            // On Android, the Expo bundle filepath cannot be handled by TraceKit,
+            // so we normalize it to use the same filepath that we use on Expo iOS.
+            if (react_native_1.Platform.OS === 'android') {
+                error.stack = error.stack.replace(/\/.*\/\d+\.\d+.\d+\/cached\-bundle\-experience\-/g, 'https://d1wp6m56sqw74a.cloudfront.net:443/');
             }
-            else {
-                sentryFilename = react_native_1.Platform.OS === 'android' ? 'index.android.bundle' : 'main.jsbundle';
-            }
-            error.stack = error.stack.replace(/\/(bundle\-\d+|[\dabcdef]+\.bundle)/g, "/" + sentryFilename);
             react_native_2.getCurrentHub().withScope(function (scope) {
                 if (isFatal) {
                     scope.setLevel(react_native_2.Severity.Fatal);
@@ -103,8 +104,6 @@ var ExpoIntegration = /** @class */ (function () {
                 });
             });
             var client = react_native_2.getCurrentHub().getClient();
-            // If in dev, we call the default handler anyway and hope the error will be sent
-            // Just for a better dev experience
             if (client && !__DEV__) {
                 // @ts-ignore PR to add this to types: https://github.com/getsentry/sentry-javascript/pull/2669
                 client.flush(client.getOptions().shutdownTimeout || 2000).then(function () {
@@ -117,7 +116,6 @@ var ExpoIntegration = /** @class */ (function () {
             }
         });
         react_native_2.addGlobalEventProcessor(function (event, _hint) {
-            console.log(JSON.stringify(event, null, 2));
             var that = react_native_2.getCurrentHub().getIntegration(ExpoIntegration);
             if (that) {
                 event.contexts = __assign(__assign({}, (event.contexts || {})), { device: {
@@ -128,7 +126,6 @@ var ExpoIntegration = /** @class */ (function () {
                         version: Device.osVersion,
                     } });
             }
-            console.log(JSON.stringify(event, null, 2));
             return event;
         });
     };
@@ -150,14 +147,7 @@ exports.init = function (options) {
         new integrations_1.RewriteFrames({
             iteratee: function (frame) {
                 if (frame.filename) {
-                    // @ts-ignore
-                    if (Updates.manifest.revisionId) {
-                        frame.filename = "app:///main." + react_native_1.Platform.OS + ".bundle";
-                    }
-                    else {
-                        frame.filename =
-                            react_native_1.Platform.OS === 'android' ? '~/index.android.bundle' : '~/main.jsbundle';
-                    }
+                    frame.filename = normalizeUrl(frame.filename);
                 }
                 return frame;
             },
@@ -179,26 +169,20 @@ exports.init = function (options) {
     else {
         nativeOptions.integrations = __spreadArrays(defaultExpoIntegrations);
     }
-    // @ts-ignore
-    if (!nativeOptions.release && Updates.manifest.revisionId) {
-        // @ts-ignore
-        nativeOptions.release = Updates.manifest.revisionId;
+    if (!nativeOptions.release) {
+        nativeOptions.release = !!expo_constants_1.default.manifest
+            ? expo_constants_1.default.manifest.revisionId || 'UNVERSIONED'
+            : Date.now().toString();
     }
     // Bail out automatically if the app isn't deployed
-    // @ts-ignore
-    if (!Updates.manifest.revisionId && !nativeOptions.enableInExpoDevelopment) {
+    if (nativeOptions.release === 'UNVERSIONED' && !nativeOptions.enableInExpoDevelopment) {
         nativeOptions.enabled = false;
         console.log('[sentry-expo] Disabled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });');
     }
     // We don't want to have the native nagger.
     nativeOptions.enableNativeNagger = false;
+    nativeOptions.enableNative = false;
     return react_native_2.init(__assign({}, nativeOptions));
-    // NOTE(2020-05-27): Sentry currently has an issue where the native iOS SDK and the JS SDK expect
-    // `options.integrations` to be in different formats -- the iOS SDK expects an array of strings,
-    // while the JS SDK expects an array of `Integration` objects. To avoid this catch-22 for now,
-    // we're not creating an `ExpoIntegration` and instead just running all of the setup in this
-    // `init` method.
-    //setupSentryExpo();
 };
 function overrideDefaults(defaults, overrides) {
     var overrideIntegrationNames = overrides.map(function (each) { return each.name; });

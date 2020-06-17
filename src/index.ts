@@ -33,8 +33,9 @@ class ExpoIntegration {
   name = ExpoIntegration.id;
 
   setupOnce() {
+    let manifest = Updates.manifest as any;
     setExtras({
-      manifest: Updates.manifest,
+      manifest: manifest,
       deviceYearClass: Constants.deviceYearClass,
       linkingUri: Constants.linkingUri,
     });
@@ -48,15 +49,11 @@ class ExpoIntegration {
       setTag('expoAppVersion', Constants.expoVersion);
     }
 
-    if (Updates.manifest) {
-      // @ts-ignore
-      setTag('expoReleaseChannel', Updates.manifest.releaseChannel);
-      // @ts-ignore
-      setTag('appVersion', Updates.manifest.version ?? '');
-      // @ts-ignore
-      setTag('appPublishedTime', Updates.manifest.publishedTime);
-      // @ts-ignore
-      setTag('expoSdkVersion', Updates.manifest.sdkVersion ?? '');
+    if (manifest) {
+      setTag('expoReleaseChannel', manifest.releaseChannel);
+      setTag('appVersion', manifest.version ?? '');
+      setTag('appPublishedTime', manifest.publishedTime);
+      setTag('expoSdkVersion', manifest.sdkVersion ?? '');
     }
 
     const defaultHandler = ErrorUtils.getGlobalHandler();
@@ -68,8 +65,8 @@ class ExpoIntegration {
       // by the upload-sourcemaps script in this package (in which case it will have a revisionId)
       // or by the default @sentry/react-native script.
       let sentryFilename;
-      // @ts-ignore
-      if (Updates.manifest.revisionId) {
+
+      if (manifest.revisionId) {
         sentryFilename = `main.${Platform.OS}.bundle`;
       } else {
         sentryFilename = Platform.OS === 'android' ? 'index.android.bundle' : 'main.jsbundle';
@@ -103,7 +100,6 @@ class ExpoIntegration {
     });
 
     addGlobalEventProcessor(function (event, _hint) {
-      console.log(JSON.stringify(event, null, 2));
       const that = getCurrentHub().getIntegration(ExpoIntegration);
 
       if (that) {
@@ -119,7 +115,7 @@ class ExpoIntegration {
           },
         };
       }
-      console.log(JSON.stringify(event, null, 2));
+
       return event;
     });
   }
@@ -133,6 +129,7 @@ export const init = (options: ExpoNativeOptions | ExpoWebOptions = {}) => {
     });
   }
 
+  let manifest = Updates.manifest as any;
   const defaultExpoIntegrations = [
     new Integrations.ReactNativeErrorHandlers({
       onerror: false,
@@ -142,8 +139,7 @@ export const init = (options: ExpoNativeOptions | ExpoWebOptions = {}) => {
     new RewriteFrames({
       iteratee: (frame) => {
         if (frame.filename) {
-          // @ts-ignore
-          if (Updates.manifest.revisionId) {
+          if (manifest.revisionId) {
             frame.filename = `app:///main.${Platform.OS}.bundle`;
           } else {
             frame.filename =
@@ -176,15 +172,12 @@ export const init = (options: ExpoNativeOptions | ExpoWebOptions = {}) => {
     nativeOptions.integrations = [...defaultExpoIntegrations];
   }
 
-  // @ts-ignore
-  if (!nativeOptions.release && Updates.manifest.revisionId) {
-    // @ts-ignore
-    nativeOptions.release = Updates.manifest.revisionId;
+  if (!nativeOptions.release && manifest.revisionId) {
+    nativeOptions.release = manifest.revisionId;
   }
 
   // Bail out automatically if the app isn't deployed
-  // @ts-ignore
-  if (!Updates.manifest.revisionId && !nativeOptions.enableInExpoDevelopment) {
+  if (!manifest.revisionId && !nativeOptions.enableInExpoDevelopment) {
     nativeOptions.enabled = false;
     console.log(
       '[sentry-expo] Disabled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });'

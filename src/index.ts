@@ -184,16 +184,7 @@ export const init = (options: ExpoNativeOptions | ExpoWebOptions = {}) => {
     );
   }
 
-  // We don't want to have the native nagger.
-  nativeOptions.enableNativeNagger = false;
   return initNative({ ...nativeOptions });
-
-  // NOTE(2020-05-27): Sentry currently has an issue where the native iOS SDK and the JS SDK expect
-  // `options.integrations` to be in different formats -- the iOS SDK expects an array of strings,
-  // while the JS SDK expects an array of `Integration` objects. To avoid this catch-22 for now,
-  // we're not creating an `ExpoIntegration` and instead just running all of the setup in this
-  // `init` method.
-  //setupSentryExpo();
 };
 
 function overrideDefaults(defaults: Integration[], overrides: Integration[]): Integration[] {

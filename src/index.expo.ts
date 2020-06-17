@@ -48,8 +48,9 @@ class ExpoIntegration {
   name = ExpoIntegration.id;
 
   setupOnce() {
+    let manifest = Constants.manifest;
     setExtras({
-      manifest: Constants.manifest,
+      manifest: manifest,
       deviceYearClass: Constants.deviceYearClass,
       linkingUri: Constants.linkingUri,
     });
@@ -63,11 +64,11 @@ class ExpoIntegration {
       setTag('expoAppVersion', Constants.expoVersion);
     }
 
-    if (!!Constants.manifest) {
-      setTag('expoReleaseChannel', Constants.manifest.releaseChannel);
-      setTag('appVersion', Constants.manifest.version ?? '');
-      setTag('appPublishedTime', Constants.manifest.publishedTime);
-      setTag('expoSdkVersion', Constants.manifest.sdkVersion ?? '');
+    if (!!manifest) {
+      setTag('expoReleaseChannel', manifest.releaseChannel);
+      setTag('appVersion', manifest.version ?? '');
+      setTag('appPublishedTime', manifest.publishedTime);
+      setTag('expoSdkVersion', manifest.sdkVersion ?? '');
     }
 
     const defaultHandler = ErrorUtils.getGlobalHandler();
@@ -133,6 +134,7 @@ export const init = (options: ExpoNativeOptions | ExpoWebOptions = {}) => {
     });
   }
 
+  let manifest = Constants.manifest;
   const defaultExpoIntegrations = [
     new Integrations.ReactNativeErrorHandlers({
       onerror: false,
@@ -171,8 +173,8 @@ export const init = (options: ExpoNativeOptions | ExpoWebOptions = {}) => {
   }
 
   if (!nativeOptions.release) {
-    nativeOptions.release = !!Constants.manifest
-      ? Constants.manifest.revisionId || 'UNVERSIONED'
+    nativeOptions.release = !!manifest
+      ? manifest.revisionId || 'UNVERSIONED'
       : Date.now().toString();
   }
 

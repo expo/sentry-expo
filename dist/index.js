@@ -181,15 +181,7 @@ exports.init = function (options) {
         nativeOptions.enabled = false;
         console.log('[sentry-expo] Disabled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });');
     }
-    // We don't want to have the native nagger.
-    nativeOptions.enableNativeNagger = false;
     return react_native_2.init(__assign({}, nativeOptions));
-    // NOTE(2020-05-27): Sentry currently has an issue where the native iOS SDK and the JS SDK expect
-    // `options.integrations` to be in different formats -- the iOS SDK expects an array of strings,
-    // while the JS SDK expects an array of `Integration` objects. To avoid this catch-22 for now,
-    // we're not creating an `ExpoIntegration` and instead just running all of the setup in this
-    // `init` method.
-    //setupSentryExpo();
 };
 function overrideDefaults(defaults, overrides) {
     var overrideIntegrationNames = overrides.map(function (each) { return each.name; });

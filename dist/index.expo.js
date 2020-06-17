@@ -70,8 +70,9 @@ var ExpoIntegration = /** @class */ (function () {
     }
     ExpoIntegration.prototype.setupOnce = function () {
         var _a, _b;
+        var manifest = expo_constants_1.default.manifest;
         react_native_2.setExtras({
-            manifest: expo_constants_1.default.manifest,
+            manifest: manifest,
             deviceYearClass: expo_constants_1.default.deviceYearClass,
             linkingUri: expo_constants_1.default.linkingUri,
         });
@@ -82,11 +83,11 @@ var ExpoIntegration = /** @class */ (function () {
         if (expo_constants_1.default.appOwnership === 'expo' && expo_constants_1.default.expoVersion) {
             react_native_2.setTag('expoAppVersion', expo_constants_1.default.expoVersion);
         }
-        if (!!expo_constants_1.default.manifest) {
-            react_native_2.setTag('expoReleaseChannel', expo_constants_1.default.manifest.releaseChannel);
-            react_native_2.setTag('appVersion', (_a = expo_constants_1.default.manifest.version) !== null && _a !== void 0 ? _a : '');
-            react_native_2.setTag('appPublishedTime', expo_constants_1.default.manifest.publishedTime);
-            react_native_2.setTag('expoSdkVersion', (_b = expo_constants_1.default.manifest.sdkVersion) !== null && _b !== void 0 ? _b : '');
+        if (!!manifest) {
+            react_native_2.setTag('expoReleaseChannel', manifest.releaseChannel);
+            react_native_2.setTag('appVersion', (_a = manifest.version) !== null && _a !== void 0 ? _a : '');
+            react_native_2.setTag('appPublishedTime', manifest.publishedTime);
+            react_native_2.setTag('expoSdkVersion', (_b = manifest.sdkVersion) !== null && _b !== void 0 ? _b : '');
         }
         var defaultHandler = ErrorUtils.getGlobalHandler();
         ErrorUtils.setGlobalHandler(function (error, isFatal) {
@@ -138,6 +139,7 @@ exports.init = function (options) {
     if (react_native_1.Platform.OS === 'web') {
         return browser_1.init(__assign(__assign({}, options), { enabled: __DEV__ ? (_a = options.enableInExpoDevelopment) !== null && _a !== void 0 ? _a : false : true }));
     }
+    var manifest = expo_constants_1.default.manifest;
     var defaultExpoIntegrations = [
         new react_native_2.Integrations.ReactNativeErrorHandlers({
             onerror: false,
@@ -170,8 +172,8 @@ exports.init = function (options) {
         nativeOptions.integrations = __spreadArrays(defaultExpoIntegrations);
     }
     if (!nativeOptions.release) {
-        nativeOptions.release = !!expo_constants_1.default.manifest
-            ? expo_constants_1.default.manifest.revisionId || 'UNVERSIONED'
+        nativeOptions.release = !!manifest
+            ? manifest.revisionId || 'UNVERSIONED'
             : Date.now().toString();
     }
     // Bail out automatically if the app isn't deployed

@@ -56,8 +56,9 @@ var ExpoIntegration = /** @class */ (function () {
     }
     ExpoIntegration.prototype.setupOnce = function () {
         var _a, _b;
+        var manifest = Updates.manifest;
         react_native_2.setExtras({
-            manifest: Updates.manifest,
+            manifest: manifest,
             deviceYearClass: expo_constants_1.default.deviceYearClass,
             linkingUri: expo_constants_1.default.linkingUri,
         });
@@ -68,15 +69,11 @@ var ExpoIntegration = /** @class */ (function () {
         if (expo_constants_1.default.appOwnership === 'expo' && expo_constants_1.default.expoVersion) {
             react_native_2.setTag('expoAppVersion', expo_constants_1.default.expoVersion);
         }
-        if (Updates.manifest) {
-            // @ts-ignore
-            react_native_2.setTag('expoReleaseChannel', Updates.manifest.releaseChannel);
-            // @ts-ignore
-            react_native_2.setTag('appVersion', (_a = Updates.manifest.version) !== null && _a !== void 0 ? _a : '');
-            // @ts-ignore
-            react_native_2.setTag('appPublishedTime', Updates.manifest.publishedTime);
-            // @ts-ignore
-            react_native_2.setTag('expoSdkVersion', (_b = Updates.manifest.sdkVersion) !== null && _b !== void 0 ? _b : '');
+        if (manifest) {
+            react_native_2.setTag('expoReleaseChannel', manifest.releaseChannel);
+            react_native_2.setTag('appVersion', (_a = manifest.version) !== null && _a !== void 0 ? _a : '');
+            react_native_2.setTag('appPublishedTime', manifest.publishedTime);
+            react_native_2.setTag('expoSdkVersion', (_b = manifest.sdkVersion) !== null && _b !== void 0 ? _b : '');
         }
         var defaultHandler = ErrorUtils.getGlobalHandler();
         ErrorUtils.setGlobalHandler(function (error, isFatal) {
@@ -86,8 +83,7 @@ var ExpoIntegration = /** @class */ (function () {
             // by the upload-sourcemaps script in this package (in which case it will have a revisionId)
             // or by the default @sentry/react-native script.
             var sentryFilename;
-            // @ts-ignore
-            if (Updates.manifest.revisionId) {
+            if (manifest.revisionId) {
                 sentryFilename = "main." + react_native_1.Platform.OS + ".bundle";
             }
             else {
@@ -117,7 +113,6 @@ var ExpoIntegration = /** @class */ (function () {
             }
         });
         react_native_2.addGlobalEventProcessor(function (event, _hint) {
-            console.log(JSON.stringify(event, null, 2));
             var that = react_native_2.getCurrentHub().getIntegration(ExpoIntegration);
             if (that) {
                 event.contexts = __assign(__assign({}, (event.contexts || {})), { device: {
@@ -128,7 +123,6 @@ var ExpoIntegration = /** @class */ (function () {
                         version: Device.osVersion,
                     } });
             }
-            console.log(JSON.stringify(event, null, 2));
             return event;
         });
     };
@@ -141,6 +135,7 @@ exports.init = function (options) {
     if (react_native_1.Platform.OS === 'web') {
         return browser_1.init(__assign(__assign({}, options), { enabled: __DEV__ ? (_a = options.enableInExpoDevelopment) !== null && _a !== void 0 ? _a : false : true }));
     }
+    var manifest = Updates.manifest;
     var defaultExpoIntegrations = [
         new react_native_2.Integrations.ReactNativeErrorHandlers({
             onerror: false,
@@ -150,8 +145,7 @@ exports.init = function (options) {
         new integrations_1.RewriteFrames({
             iteratee: function (frame) {
                 if (frame.filename) {
-                    // @ts-ignore
-                    if (Updates.manifest.revisionId) {
+                    if (manifest.revisionId) {
                         frame.filename = "app:///main." + react_native_1.Platform.OS + ".bundle";
                     }
                     else {
@@ -179,14 +173,11 @@ exports.init = function (options) {
     else {
         nativeOptions.integrations = __spreadArrays(defaultExpoIntegrations);
     }
-    // @ts-ignore
-    if (!nativeOptions.release && Updates.manifest.revisionId) {
-        // @ts-ignore
-        nativeOptions.release = Updates.manifest.revisionId;
+    if (!nativeOptions.release && manifest.revisionId) {
+        nativeOptions.release = manifest.revisionId;
     }
     // Bail out automatically if the app isn't deployed
-    // @ts-ignore
-    if (!Updates.manifest.revisionId && !nativeOptions.enableInExpoDevelopment) {
+    if (!manifest.revisionId && !nativeOptions.enableInExpoDevelopment) {
         nativeOptions.enabled = false;
         console.log('[sentry-expo] Disabled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });');
     }

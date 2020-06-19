@@ -60,7 +60,7 @@ Add the `expo.hooks` object to your project's `app.json` (or `app.config`) file:
     "hooks": {
       "postPublish": [
         {
-          "file": "sentry-expo/dist/upload-sourcemaps",
+          "file": "sentry-expo/upload-sourcemaps",
           "config": {
             "organization": "your sentry organization's short name here",
             "project": "your sentry project's name here",

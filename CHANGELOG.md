@@ -13,8 +13,6 @@
   const { Transports } = Browser;
   ```
 
-- `upload-sourcemaps.js` is now exported from `'sentry-expo/dist/upload-sourcemaps'`
-
 ### 🎉 New features
 
 - Expo Web support: no changes needed!

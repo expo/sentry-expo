@@ -32,4 +32,4 @@ jobs:
       - name: Build package
         run: yarn build
       - name: Build up-to-date
-        run: git diff --exit-code dist
+        run: git diff --stat --exit-code dist

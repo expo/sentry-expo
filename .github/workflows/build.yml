@@ -27,5 +27,9 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install dependencies
         run: yarn install --frozen-lockfile --check-files --ignore-scripts
+      - name: Clean build
+        run: rm -rf dist
       - name: Build package
         run: yarn build
+      - name: Build up-to-date
+        run: git diff --exit-code dist

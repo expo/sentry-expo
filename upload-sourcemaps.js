@@ -1,1 +1,1 @@
-module.exports = require('./dist/upload-sourcemaps');
+module.exports = require('./dist/hooks/upload-sourcemaps');

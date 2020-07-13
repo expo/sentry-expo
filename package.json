@@ -5,8 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist",
-    "dist/upload-sourcemaps.js"
+    "dist"
   ],
   "license": "MIT",
   "keywords": [
@@ -31,6 +30,7 @@
     "@sentry/types": "^5.17.0",
     "expo-constants": "*",
     "expo-device": "*",
+    "expo-updates": "^0.2.4",
     "mkdirp": "^1.0.3",
     "rimraf": "^2.6.1"
   },

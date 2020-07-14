@@ -95,12 +95,15 @@ Setting up `sentry-expo` in the bare workflow requires just a few extra steps in
 
 to your root project file (usually `App.js`), so make sure you remove it (but keep the `sentry-expo` import and original `Sentry.init` call!)
 
-If you don't rely on `expo-updates`, you're all done! If you do, read on...
+#### Configure "no publish builds"
 
-With `expo-updates`, release builds of both iOS and Android apps will create and embed a new update from your JavaScript source at build-time. This new update will not be published automatically and will exist only in the binary with which it was bundled. Since it isn't published, the sourcemaps aren't uploaded in the usual way like they are when you run `expo publish` (actually, we are relying on Sentry's native scripts to handle that). Because of this you have some extra things to add:
+With `expo-updates`, release builds of both iOS and Android apps will create and embed a new update from your JavaScript source at build-time. **This new update will not be published automatically** and will exist only in the binary with which it was bundled. Since it isn't published, the sourcemaps aren't uploaded in the usual way like they are when you run `expo publish` (actually, we are relying on Sentry's native scripts to handle that). Because of this you have some extra things to add:
 
 - Set your `release` in `Sentry.init()` to Sentry's expected value- `${bundleIdentifier}@${version}+${buildNumber}` (iOS) or `${androidPackage}@${version}+${versionCode}` (Android).
 - Set your `dist` in Sentry.init()` to Sentry's expected value: your buildNumber (iOS) or versionCode (Android).
+- The configuration for build time sourcemaps comes from the `ios/sentry.properties` and `android/sentry.properties` files. For more information, refer to [Sentry's documentation](https://docs.sentry.io/clients/java/config/#configuration-via-properties-file).
+
+> Please note that configuration for `expo publish` and `expo export` is still done via `app.json`.
 
 Skipping or misconfiguring either of these will result in sourcemaps not working, and thus you won't see proper stacktraces in your errors.
 

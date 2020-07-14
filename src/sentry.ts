@@ -1,5 +1,7 @@
 import { Platform } from 'react-native';
 import * as Updates from 'expo-updates';
+import Constants from 'expo-constants';
+import * as Application from 'expo-application';
 import { init as initBrowser } from '@sentry/browser';
 import { RewriteFrames } from '@sentry/integrations';
 import { init as initNative, Integrations } from '@sentry/react-native';
@@ -57,8 +59,9 @@ export const init = (options: SentryExpoNativeOptions | SentryExpoWebOptions = {
     nativeOptions.integrations = [...defaultExpoIntegrations];
   }
 
-  if (!nativeOptions.release && manifest.revisionId) {
-    nativeOptions.release = manifest.revisionId;
+  if (!nativeOptions.release) {
+    const defaultSentryReleaseName = `${Application.applicationId}@${Application.nativeApplicationVersion}+${Application.nativeBuildVersion}`;
+    nativeOptions.release = manifest.revisionId ? manifest.revisionId : defaultSentryReleaseName;
   }
 
   // Bail out automatically if the app isn't deployed
@@ -67,6 +70,11 @@ export const init = (options: SentryExpoNativeOptions | SentryExpoWebOptions = {
     console.log(
       '[sentry-expo] Disabled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });'
     );
+  }
+
+  // Check if build-time update
+  if (!nativeOptions.dist && !manifest.revisionId) {
+    nativeOptions.dist = Constants.nativeBuildVersion || '';
   }
 
   return initNative({ ...nativeOptions });

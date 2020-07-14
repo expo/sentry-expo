@@ -25,12 +25,7 @@ export class ExpoIntegration {
 
     setTags({
       deviceId: Constants.installationId,
-      appOwnership: Constants.appOwnership,
     });
-
-    if (Constants.appOwnership === 'expo' && Constants.expoVersion) {
-      setTag('expoAppVersion', Constants.expoVersion);
-    }
 
     if (manifest) {
       setTag('expoReleaseChannel', manifest.releaseChannel);
@@ -49,11 +44,8 @@ export class ExpoIntegration {
       // or by the default @sentry/react-native script.
       let sentryFilename;
 
-      if (manifest.revisionId) {
-        sentryFilename = `main.${Platform.OS}.bundle`;
-      } else {
-        sentryFilename = Platform.OS === 'android' ? 'index.android.bundle' : 'main.jsbundle';
-      }
+      sentryFilename = Platform.OS === 'android' ? 'index.android.bundle' : 'main.jsbundle';
+
       error.stack = error.stack.replace(
         /\/(bundle\-\d+|[\dabcdef]+\.bundle)/g,
         `/${sentryFilename}`

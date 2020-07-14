@@ -91,7 +91,7 @@ function isPublishedExpoUrl(url) {
 }
 function normalizeUrl(url) {
     if (isPublishedExpoUrl(url)) {
-        return "app:///main." + react_native_1.Platform.OS + ".bundle";
+        return react_native_1.Platform.OS === 'android' ? 'app:///index.android.bundle' : 'app:///main.jsbundle';
     }
     else {
         return url;

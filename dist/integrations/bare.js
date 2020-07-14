@@ -53,11 +53,7 @@ var ExpoIntegration = /** @class */ (function () {
         });
         react_native_2.setTags({
             deviceId: expo_constants_1.default.installationId,
-            appOwnership: expo_constants_1.default.appOwnership,
         });
-        if (expo_constants_1.default.appOwnership === 'expo' && expo_constants_1.default.expoVersion) {
-            react_native_2.setTag('expoAppVersion', expo_constants_1.default.expoVersion);
-        }
         if (manifest) {
             react_native_2.setTag('expoReleaseChannel', manifest.releaseChannel);
             react_native_2.setTag('appVersion', (_a = manifest.version) !== null && _a !== void 0 ? _a : '');
@@ -72,12 +68,7 @@ var ExpoIntegration = /** @class */ (function () {
             // by the upload-sourcemaps script in this package (in which case it will have a revisionId)
             // or by the default @sentry/react-native script.
             var sentryFilename;
-            if (manifest.revisionId) {
-                sentryFilename = "main." + react_native_1.Platform.OS + ".bundle";
-            }
-            else {
-                sentryFilename = react_native_1.Platform.OS === 'android' ? 'index.android.bundle' : 'main.jsbundle';
-            }
+            sentryFilename = react_native_1.Platform.OS === 'android' ? 'index.android.bundle' : 'main.jsbundle';
             error.stack = error.stack.replace(/\/(bundle\-\d+|[\dabcdef]+\.bundle)/g, "/" + sentryFilename);
             react_native_2.getCurrentHub().withScope(function (scope) {
                 if (isFatal) {

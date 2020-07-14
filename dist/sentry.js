@@ -36,10 +36,15 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
             r[k] = a[j];
     return r;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.init = void 0;
 var react_native_1 = require("react-native");
 var Updates = __importStar(require("expo-updates"));
+var expo_constants_1 = __importDefault(require("expo-constants"));
+var Application = __importStar(require("expo-application"));
 var browser_1 = require("@sentry/browser");
 var integrations_1 = require("@sentry/integrations");
 var react_native_2 = require("@sentry/react-native");
@@ -83,13 +88,18 @@ exports.init = function (options) {
     else {
         nativeOptions.integrations = __spreadArrays(defaultExpoIntegrations);
     }
-    if (!nativeOptions.release && manifest.revisionId) {
-        nativeOptions.release = manifest.revisionId;
+    if (!nativeOptions.release) {
+        var defaultSentryReleaseName = Application.applicationId + "@" + Application.nativeApplicationVersion + "+" + Application.nativeBuildVersion;
+        nativeOptions.release = manifest.revisionId ? manifest.revisionId : defaultSentryReleaseName;
     }
     // Bail out automatically if the app isn't deployed
     if (!manifest.revisionId && !nativeOptions.enableInExpoDevelopment) {
         nativeOptions.enabled = false;
         console.log('[sentry-expo] Disabled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });');
+    }
+    // Check if build-time update
+    if (!nativeOptions.dist && !manifest.revisionId) {
+        nativeOptions.dist = expo_constants_1.default.nativeBuildVersion || '';
     }
     return react_native_2.init(__assign({}, nativeOptions));
 };

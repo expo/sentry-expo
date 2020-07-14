@@ -14,7 +14,6 @@ import {
 } from './utils';
 
 export const init = (options: SentryExpoNativeOptions | SentryExpoWebOptions = {}) => {
-  alert('sentry.ts file');
   if (Platform.OS === 'web') {
     return initBrowser({
       ...(options as SentryExpoWebOptions),

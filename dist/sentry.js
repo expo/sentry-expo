@@ -53,7 +53,6 @@ var utils_1 = require("./utils");
 exports.init = function (options) {
     var _a;
     if (options === void 0) { options = {}; }
-    alert('sentry.ts file');
     if (react_native_1.Platform.OS === 'web') {
         return browser_1.init(__assign(__assign({}, options), { enabled: __DEV__ ? (_a = options.enableInExpoDevelopment) !== null && _a !== void 0 ? _a : false : true }));
     }

@@ -61,13 +61,7 @@ exports.init = function (options) {
         new integrations_1.RewriteFrames({
             iteratee: function (frame) {
                 if (frame.filename) {
-                    if (manifest.revisionId) {
-                        frame.filename = "app:///main." + react_native_1.Platform.OS + ".bundle";
-                    }
-                    else {
-                        frame.filename =
-                            react_native_1.Platform.OS === 'android' ? '~/index.android.bundle' : '~/main.jsbundle';
-                    }
+                    frame.filename = react_native_1.Platform.OS === 'android' ? '~/index.android.bundle' : '~/main.jsbundle';
                 }
                 return frame;
             },

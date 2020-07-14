@@ -43,9 +43,10 @@ module.exports = async (options: Options) => {
   mkdirp.sync(tmpdir);
 
   try {
-    fs.writeFileSync(tmpdir + '/main.ios.bundle', iosBundle, 'utf-8');
+    // We use the same filenames for sourcemaps as Sentry does (even though the naming is unfortunate)
+    fs.writeFileSync(tmpdir + '/main.jsbundle', iosBundle, 'utf-8');
+    fs.writeFileSync(tmpdir + '/main.jsbundle.map', iosSourceMap, 'utf-8');
     fs.writeFileSync(tmpdir + '/main.android.bundle', androidBundle, 'utf-8');
-    fs.writeFileSync(tmpdir + '/main.ios.map', iosSourceMap, 'utf-8');
     fs.writeFileSync(tmpdir + '/main.android.map', androidSourceMap, 'utf-8');
 
     let organization, project, authToken, url, useGlobalSentryCli, release, setCommits, deployEnv;
@@ -92,6 +93,8 @@ module.exports = async (options: Options) => {
         version,
         'upload-sourcemaps',
         '.',
+        '--ext',
+        'jsbundle',
         '--ext',
         'bundle',
         '--ext',

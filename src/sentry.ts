@@ -5,7 +5,11 @@ import { RewriteFrames } from '@sentry/integrations';
 import { init as initNative, Integrations } from '@sentry/react-native';
 import { Integration } from '@sentry/types';
 import { ExpoIntegration } from './integrations/bare';
-import { SentryExpoNativeOptions, SentryExpoWebOptions, overrideDefaultIntegrations } from './utils';
+import {
+  SentryExpoNativeOptions,
+  SentryExpoWebOptions,
+  overrideDefaultIntegrations,
+} from './utils';
 
 export const init = (options: SentryExpoNativeOptions | SentryExpoWebOptions = {}) => {
   if (Platform.OS === 'web') {
@@ -25,12 +29,7 @@ export const init = (options: SentryExpoNativeOptions | SentryExpoWebOptions = {
     new RewriteFrames({
       iteratee: (frame) => {
         if (frame.filename) {
-          if (manifest.revisionId) {
-            frame.filename = `app:///main.${Platform.OS}.bundle`;
-          } else {
-            frame.filename =
-              Platform.OS === 'android' ? '~/index.android.bundle' : '~/main.jsbundle';
-          }
+          frame.filename = Platform.OS === 'android' ? '~/index.android.bundle' : '~/main.jsbundle';
         }
         return frame;
       },

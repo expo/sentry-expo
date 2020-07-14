@@ -53,7 +53,7 @@ Sentry.init({
 
 Add the `expo.hooks` object to your project's `app.json` (or `app.config`) file:
 
-```json
+```json5
 {
   "expo": {
     // ... your existing configuration

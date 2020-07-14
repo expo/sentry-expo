@@ -73,8 +73,36 @@ Add the `expo.hooks` object to your project's `app.json` (or `app.config`) file:
 }
 ```
 
+> If you're using the bare workflow, or using a plain React Native app, you should also follow [these quick steps](#bare-workflow-setup) to finish up your setup
+
 All done! For more information on customization and additional features, read the full guide on using Sentry in Expo apps in our docs ➡️ ["Using
 Sentry"](https://docs.expo.io/guides/using-sentry/).
+
+### Bare workflow setup
+
+Setting up `sentry-expo` in the bare workflow requires just a few extra steps in addition to those listed above:
+
+1. Run `yarn sentry-wizard -i reactNative -p ios android`. This will automatically configure your native Android & iOS projects
+2. The previous step will add an extra
+
+   ```
+   import * as Sentry from '@sentry/react-native';
+
+   Sentry.init({
+     dsn: 'YOUR DSN',
+   });
+   ```
+
+to your root project file (usually `App.js`), so make sure you remove it (but keep the `sentry-expo` import and original `Sentry.init` call!)
+
+If you don't rely on `expo-updates`, you're all done! If you do, read on...
+
+With `expo-updates`, release builds of both iOS and Android apps will create and embed a new update from your JavaScript source at build-time. This new update will not be published automatically and will exist only in the binary with which it was bundled. Since it isn't published, the sourcemaps aren't uploaded in the usual way like they are when you run `expo publish` (actually, we are relying on Sentry's native scripts to handle that). Because of this you have some extra things to add:
+
+- Set your `release` in `Sentry.init()` to Sentry's expected value- `${bundleIdentifier}@${version}+${buildNumber}` (iOS) or `${androidPackage}@${version}+${versionCode}` (Android).
+- Set your `dist` in Sentry.init()` to Sentry's expected value: your buildNumber (iOS) or versionCode (Android).
+
+Skipping or misconfiguring either of these will result in sourcemaps not working, and thus you won't see proper stacktraces in your errors.
 
 ## 👏 Contributing
 

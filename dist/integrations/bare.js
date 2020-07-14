@@ -72,12 +72,7 @@ var ExpoIntegration = /** @class */ (function () {
             // by the upload-sourcemaps script in this package (in which case it will have a revisionId)
             // or by the default @sentry/react-native script.
             var sentryFilename;
-            if (manifest.revisionId) {
-                sentryFilename = "main." + react_native_1.Platform.OS + ".bundle";
-            }
-            else {
-                sentryFilename = react_native_1.Platform.OS === 'android' ? 'index.android.bundle' : 'main.jsbundle';
-            }
+            sentryFilename = react_native_1.Platform.OS === 'android' ? 'index.android.bundle' : 'main.jsbundle';
             error.stack = error.stack.replace(/\/(bundle\-\d+|[\dabcdef]+\.bundle)/g, "/" + sentryFilename);
             react_native_2.getCurrentHub().withScope(function (scope) {
                 if (isFatal) {

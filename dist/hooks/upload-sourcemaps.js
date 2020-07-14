@@ -60,8 +60,8 @@ module.exports = function (options) { return __awaiter(void 0, void 0, void 0, f
                 // We use the same filenames for sourcemaps as Sentry does (even though the naming is unfortunate)
                 fs_1.default.writeFileSync(tmpdir + '/main.jsbundle', iosBundle, 'utf-8');
                 fs_1.default.writeFileSync(tmpdir + '/main.jsbundle.map', iosSourceMap, 'utf-8');
-                fs_1.default.writeFileSync(tmpdir + '/main.android.bundle', androidBundle, 'utf-8');
-                fs_1.default.writeFileSync(tmpdir + '/main.android.map', androidSourceMap, 'utf-8');
+                fs_1.default.writeFileSync(tmpdir + '/index.android.bundle', androidBundle, 'utf-8');
+                fs_1.default.writeFileSync(tmpdir + '/index.android.bundle.map', androidSourceMap, 'utf-8');
                 organization = void 0, project = void 0, authToken = void 0, url = void 0, useGlobalSentryCli = void 0, release = void 0, setCommits = void 0, deployEnv = void 0;
                 if (!config) {
                     log('No config found in app.json, falling back to environment variables...');

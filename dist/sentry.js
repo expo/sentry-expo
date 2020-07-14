@@ -36,10 +36,15 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
             r[k] = a[j];
     return r;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.init = void 0;
 var react_native_1 = require("react-native");
 var Updates = __importStar(require("expo-updates"));
+var expo_constants_1 = __importDefault(require("expo-constants"));
+var Application = __importStar(require("expo-application"));
 var browser_1 = require("@sentry/browser");
 var integrations_1 = require("@sentry/integrations");
 var react_native_2 = require("@sentry/react-native");
@@ -48,6 +53,7 @@ var utils_1 = require("./utils");
 exports.init = function (options) {
     var _a;
     if (options === void 0) { options = {}; }
+    alert('sentry.ts file');
     if (react_native_1.Platform.OS === 'web') {
         return browser_1.init(__assign(__assign({}, options), { enabled: __DEV__ ? (_a = options.enableInExpoDevelopment) !== null && _a !== void 0 ? _a : false : true }));
     }
@@ -61,7 +67,8 @@ exports.init = function (options) {
         new integrations_1.RewriteFrames({
             iteratee: function (frame) {
                 if (frame.filename) {
-                    frame.filename = react_native_1.Platform.OS === 'android' ? '~/index.android.bundle' : '~/main.jsbundle';
+                    frame.filename =
+                        react_native_1.Platform.OS === 'android' ? 'app:///index.android.bundle' : 'app:///main.jsbundle';
                 }
                 return frame;
             },
@@ -83,13 +90,17 @@ exports.init = function (options) {
     else {
         nativeOptions.integrations = __spreadArrays(defaultExpoIntegrations);
     }
-    if (!nativeOptions.release && manifest.revisionId) {
-        nativeOptions.release = manifest.revisionId;
+    if (!nativeOptions.release) {
+        var defaultSentryReleaseName = Application.applicationId + "@" + Application.nativeApplicationVersion + "+" + Application.nativeBuildVersion;
+        nativeOptions.release = manifest.revisionId ? manifest.revisionId : defaultSentryReleaseName;
     }
     // Bail out automatically if the app isn't deployed
     if (!manifest.revisionId && !nativeOptions.enableInExpoDevelopment) {
         nativeOptions.enabled = false;
         console.log('[sentry-expo] Disabled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });');
+    }
+    if (!nativeOptions.dist) {
+        nativeOptions.dist = expo_constants_1.default.nativeBuildVersion || '';
     }
     return react_native_2.init(__assign({}, nativeOptions));
 };

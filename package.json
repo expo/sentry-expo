@@ -28,6 +28,7 @@
     "@sentry/integrations": "^5.15.5",
     "@sentry/react-native": "1.4.2",
     "@sentry/types": "^5.17.0",
+    "expo-application": "^2.2.1",
     "expo-constants": "*",
     "expo-device": "*",
     "expo-updates": "^0.2.4",

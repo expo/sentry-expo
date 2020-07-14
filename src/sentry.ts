@@ -1,5 +1,7 @@
 import { Platform } from 'react-native';
 import * as Updates from 'expo-updates';
+import Constants from 'expo-constants';
+import * as Application from 'expo-application';
 import { init as initBrowser } from '@sentry/browser';
 import { RewriteFrames } from '@sentry/integrations';
 import { init as initNative, Integrations } from '@sentry/react-native';
@@ -12,6 +14,7 @@ import {
 } from './utils';
 
 export const init = (options: SentryExpoNativeOptions | SentryExpoWebOptions = {}) => {
+  alert('sentry.ts file');
   if (Platform.OS === 'web') {
     return initBrowser({
       ...(options as SentryExpoWebOptions),
@@ -29,7 +32,8 @@ export const init = (options: SentryExpoNativeOptions | SentryExpoWebOptions = {
     new RewriteFrames({
       iteratee: (frame) => {
         if (frame.filename) {
-          frame.filename = Platform.OS === 'android' ? '~/index.android.bundle' : '~/main.jsbundle';
+          frame.filename =
+            Platform.OS === 'android' ? 'app:///index.android.bundle' : 'app:///main.jsbundle';
         }
         return frame;
       },
@@ -57,8 +61,9 @@ export const init = (options: SentryExpoNativeOptions | SentryExpoWebOptions = {
     nativeOptions.integrations = [...defaultExpoIntegrations];
   }
 
-  if (!nativeOptions.release && manifest.revisionId) {
-    nativeOptions.release = manifest.revisionId;
+  if (!nativeOptions.release) {
+    const defaultSentryReleaseName = `${Application.applicationId}@${Application.nativeApplicationVersion}+${Application.nativeBuildVersion}`;
+    nativeOptions.release = manifest.revisionId ? manifest.revisionId : defaultSentryReleaseName;
   }
 
   // Bail out automatically if the app isn't deployed
@@ -67,6 +72,10 @@ export const init = (options: SentryExpoNativeOptions | SentryExpoWebOptions = {
     console.log(
       '[sentry-expo] Disabled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });'
     );
+  }
+
+  if (!nativeOptions.dist) {
+    nativeOptions.dist = Constants.nativeBuildVersion || '';
   }
 
   return initNative({ ...nativeOptions });

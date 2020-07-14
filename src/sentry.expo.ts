@@ -5,7 +5,11 @@ import { RewriteFrames } from '@sentry/integrations';
 import { init as initNative, Integrations } from '@sentry/react-native';
 import { Integration } from '@sentry/types';
 import { ExpoIntegration } from './integrations/managed';
-import { overrideDefaultIntegrations, SentryExpoNativeOptions, SentryExpoWebOptions } from './utils';
+import {
+  overrideDefaultIntegrations,
+  SentryExpoNativeOptions,
+  SentryExpoWebOptions,
+} from './utils';
 
 export const init = (options: SentryExpoNativeOptions | SentryExpoWebOptions = {}) => {
   if (Platform.OS === 'web') {
@@ -83,7 +87,7 @@ function isPublishedExpoUrl(url: string) {
 
 function normalizeUrl(url: string) {
   if (isPublishedExpoUrl(url)) {
-    return `app:///main.${Platform.OS}.bundle`;
+    return Platform.OS === 'android' ? 'app:///index.android.bundle' : 'app:///main.jsbundle';
   } else {
     return url;
   }

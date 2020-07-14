@@ -49,11 +49,8 @@ export class ExpoIntegration {
       // or by the default @sentry/react-native script.
       let sentryFilename;
 
-      if (manifest.revisionId) {
-        sentryFilename = `main.${Platform.OS}.bundle`;
-      } else {
-        sentryFilename = Platform.OS === 'android' ? 'index.android.bundle' : 'main.jsbundle';
-      }
+      sentryFilename = Platform.OS === 'android' ? 'index.android.bundle' : 'main.jsbundle';
+
       error.stack = error.stack.replace(
         /\/(bundle\-\d+|[\dabcdef]+\.bundle)/g,
         `/${sentryFilename}`

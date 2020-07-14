@@ -107,6 +107,8 @@ With `expo-updates`, release builds of both iOS and Android apps will create and
 
 Skipping or misconfiguring either of these will result in sourcemaps not working, and thus you won't see proper stacktraces in your errors.
 
+> **Note**: There seems to be a [possible bug with `sentry-react-native`](https://github.com/getsentry/sentry-react-native/issues/761) which results in Android sourcemaps not working appropriately. If you run into this issue in the bare workflow, something that seems to help remedy the issue is setting the release (using `Sentry.Native.setRelease`) _after_ running `Sentry.init`.
+
 ## 👏 Contributing
 
 If you like `sentry-expo` and want to help make it better then please feel free to open a PR! Make sure you request a review from one of our maintainers 😎

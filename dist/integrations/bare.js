@@ -53,11 +53,7 @@ var ExpoIntegration = /** @class */ (function () {
         });
         react_native_2.setTags({
             deviceId: expo_constants_1.default.installationId,
-            appOwnership: expo_constants_1.default.appOwnership,
         });
-        if (expo_constants_1.default.appOwnership === 'expo' && expo_constants_1.default.expoVersion) {
-            react_native_2.setTag('expoAppVersion', expo_constants_1.default.expoVersion);
-        }
         if (manifest) {
             react_native_2.setTag('expoReleaseChannel', manifest.releaseChannel);
             react_native_2.setTag('appVersion', (_a = manifest.version) !== null && _a !== void 0 ? _a : '');

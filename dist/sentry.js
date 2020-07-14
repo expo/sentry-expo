@@ -66,8 +66,7 @@ exports.init = function (options) {
         new integrations_1.RewriteFrames({
             iteratee: function (frame) {
                 if (frame.filename) {
-                    frame.filename =
-                        react_native_1.Platform.OS === 'android' ? 'app:///index.android.bundle' : 'app:///main.jsbundle';
+                    frame.filename = react_native_1.Platform.OS === 'android' ? '~/index.android.bundle' : '~/main.jsbundle';
                 }
                 return frame;
             },
@@ -98,7 +97,8 @@ exports.init = function (options) {
         nativeOptions.enabled = false;
         console.log('[sentry-expo] Disabled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });');
     }
-    if (!nativeOptions.dist) {
+    // Check if build-time update
+    if (!nativeOptions.dist && !manifest.revisionId) {
         nativeOptions.dist = expo_constants_1.default.nativeBuildVersion || '';
     }
     return react_native_2.init(__assign({}, nativeOptions));

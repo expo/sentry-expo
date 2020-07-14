@@ -25,12 +25,7 @@ export class ExpoIntegration {
 
     setTags({
       deviceId: Constants.installationId,
-      appOwnership: Constants.appOwnership,
     });
-
-    if (Constants.appOwnership === 'expo' && Constants.expoVersion) {
-      setTag('expoAppVersion', Constants.expoVersion);
-    }
 
     if (manifest) {
       setTag('expoReleaseChannel', manifest.releaseChannel);

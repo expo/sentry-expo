@@ -82,8 +82,9 @@ Sentry"](https://docs.expo.io/guides/using-sentry/).
 
 Setting up `sentry-expo` in the bare workflow requires just a few extra steps in addition to those listed above:
 
-1. Run `yarn sentry-wizard -i reactNative -p ios android`. This will automatically configure your native Android & iOS projects
-2. The previous step will add an extra
+1. Run `yarn add @sentry/react-native`, followed by `npx pod-install`.
+2. Run `yarn sentry-wizard -i reactNative -p ios android`. This will automatically configure your native Android & iOS projects
+3. The previous step will add an extra
 
    ```
    import * as Sentry from '@sentry/react-native';

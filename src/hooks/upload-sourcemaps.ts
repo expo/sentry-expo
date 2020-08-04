@@ -10,7 +10,7 @@ type Options = {
   projectRoot: string;
   androidBundle: string;
   androidSourceMap: string;
-  iosManifest: { revisionId: string };
+  iosManifest: { revisionId: string; version: string };
   iosSourceMap: string;
   iosBundle: string;
   config?: {
@@ -22,6 +22,7 @@ type Options = {
     deployEnv?: string;
     setCommits?: boolean;
     useGlobalSentryCli: boolean;
+    distribution?: string;
   };
 };
 
@@ -49,7 +50,15 @@ module.exports = async (options: Options) => {
     fs.writeFileSync(tmpdir + '/index.android.bundle', androidBundle, 'utf-8');
     fs.writeFileSync(tmpdir + '/index.android.bundle.map', androidSourceMap, 'utf-8');
 
-    let organization, project, authToken, url, useGlobalSentryCli, release, setCommits, deployEnv;
+    let organization,
+      project,
+      authToken,
+      url,
+      useGlobalSentryCli,
+      release,
+      setCommits,
+      deployEnv,
+      distribution;
     if (!config) {
       log('No config found in app.json, falling back to environment variables...');
     } else {
@@ -62,10 +71,12 @@ module.exports = async (options: Options) => {
         release,
         setCommits,
         deployEnv,
+        distribution,
       } = config);
     }
 
-    const version = release || process.env.SENTRY_RELEASE || iosManifest.revisionId;
+    release = release || process.env.SENTRY_RELEASE || iosManifest.revisionId;
+    distribution = distribution || process.env.SENTRY_DIST || iosManifest.version;
 
     const childProcessEnv = Object.assign({}, process.env, {
       SENTRY_ORG: organization || process.env.SENTRY_ORG,
@@ -77,7 +88,7 @@ module.exports = async (options: Options) => {
     const sentryCliBinaryPath = useGlobalSentryCli ? 'sentry-cli' : sentryCliBinary.getPath();
 
     let output;
-    let createReleaseResult = await spawnAsync(sentryCliBinaryPath, ['releases', 'new', version], {
+    let createReleaseResult = await spawnAsync(sentryCliBinaryPath, ['releases', 'new', release], {
       cwd: tmpdir,
       env: childProcessEnv,
     });
@@ -90,7 +101,7 @@ module.exports = async (options: Options) => {
       [
         'releases',
         'files',
-        version,
+        release,
         'upload-sourcemaps',
         '.',
         '--ext',
@@ -100,6 +111,8 @@ module.exports = async (options: Options) => {
         '--ext',
         'map',
         '--rewrite',
+        '--dist',
+        distribution,
         '--strip-prefix',
         projectRoot,
       ],
@@ -115,7 +128,7 @@ module.exports = async (options: Options) => {
     if (setCommits || process.env.SENTRY_SET_COMMITS) {
       let commitsResult = await spawnAsync(
         sentryCliBinaryPath,
-        ['releases', 'set-commits', '--auto', version],
+        ['releases', 'set-commits', '--auto', release],
         {
           env: childProcessEnv,
         }
@@ -127,7 +140,7 @@ module.exports = async (options: Options) => {
 
     let finalizeReleaseResult = await spawnAsync(
       sentryCliBinaryPath,
-      ['releases', 'finalize', version],
+      ['releases', 'finalize', release],
       {
         env: childProcessEnv,
       }
@@ -140,7 +153,7 @@ module.exports = async (options: Options) => {
     if (deployEnv) {
       let deployResult = await spawnAsync(
         sentryCliBinaryPath,
-        ['releases', 'deploys', version, 'new', '-e', deployEnv],
+        ['releases', 'deploys', release, 'new', '-e', deployEnv],
         {
           env: childProcessEnv,
         }

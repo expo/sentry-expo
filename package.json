@@ -1,11 +1,12 @@
 {
   "name": "sentry-expo",
-  "version": "3.0.0-rc1",
+  "version": "3.0.0-rc2",
   "description": "Catch your Javascript errors for your production Expo apps!",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "upload-sourcemaps.js"
   ],
   "license": "MIT",
   "keywords": [
@@ -26,7 +27,7 @@
     "@expo/spawn-async": "^1.2.8",
     "@sentry/browser": "^5.15.5",
     "@sentry/integrations": "^5.15.5",
-    "@sentry/react-native": "1.4.2",
+    "@sentry/react-native": "1.7.1",
     "@sentry/types": "^5.17.0",
     "expo-application": "^2.2.1",
     "expo-constants": "*",

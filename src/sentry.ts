@@ -31,7 +31,8 @@ export const init = (options: SentryExpoNativeOptions | SentryExpoWebOptions = {
     new RewriteFrames({
       iteratee: (frame) => {
         if (frame.filename) {
-          frame.filename = Platform.OS === 'android' ? '~/index.android.bundle' : '~/main.jsbundle';
+          frame.filename =
+            Platform.OS === 'android' ? 'app:///index.android.bundle' : 'app:///main.jsbundle';
         }
         return frame;
       },
@@ -73,9 +74,10 @@ export const init = (options: SentryExpoNativeOptions | SentryExpoWebOptions = {
   }
 
   // Check if build-time update
-  if (!nativeOptions.dist && !manifest.revisionId) {
-    nativeOptions.dist = Constants.nativeBuildVersion || '';
-  }
+  nativeOptions.dist =
+    nativeOptions.dist || manifest.revisionId
+      ? manifest.version
+      : `${Constants.nativeBuildVersion}`;
 
   return initNative({ ...nativeOptions });
 };

@@ -71,9 +71,12 @@ export const init = (options: SentryExpoNativeOptions | SentryExpoWebOptions = {
     );
   }
 
+  nativeOptions.dist = nativeOptions.dist || manifest.version;
+
   // We don't want to have the native nagger.
   nativeOptions.enableNativeNagger = false;
   nativeOptions.enableNative = false;
+  nativeOptions.enableNativeCrashHandling = false;
   return initNative({ ...nativeOptions });
 };
 

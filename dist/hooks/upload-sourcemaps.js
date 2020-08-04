@@ -46,7 +46,7 @@ var mkdirp_1 = __importDefault(require("mkdirp"));
 var fs_1 = __importDefault(require("fs"));
 var cli_1 = __importDefault(require("@sentry/cli"));
 module.exports = function (options) { return __awaiter(void 0, void 0, void 0, function () {
-    var config, log, iosBundle, iosSourceMap, iosManifest, androidBundle, androidSourceMap, projectRoot, tmpdir, organization, project, authToken, url, useGlobalSentryCli, release, setCommits, deployEnv, version, childProcessEnv, sentryCliBinaryPath, output, createReleaseResult, uploadResult, commitsResult, finalizeReleaseResult, deployResult, e_1;
+    var config, log, iosBundle, iosSourceMap, iosManifest, androidBundle, androidSourceMap, projectRoot, tmpdir, organization, project, authToken, url, useGlobalSentryCli, release, setCommits, deployEnv, distribution, childProcessEnv, sentryCliBinaryPath, output, createReleaseResult, uploadResult, commitsResult, finalizeReleaseResult, deployResult, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -62,14 +62,15 @@ module.exports = function (options) { return __awaiter(void 0, void 0, void 0, f
                 fs_1.default.writeFileSync(tmpdir + '/main.jsbundle.map', iosSourceMap, 'utf-8');
                 fs_1.default.writeFileSync(tmpdir + '/index.android.bundle', androidBundle, 'utf-8');
                 fs_1.default.writeFileSync(tmpdir + '/index.android.bundle.map', androidSourceMap, 'utf-8');
-                organization = void 0, project = void 0, authToken = void 0, url = void 0, useGlobalSentryCli = void 0, release = void 0, setCommits = void 0, deployEnv = void 0;
+                organization = void 0, project = void 0, authToken = void 0, url = void 0, useGlobalSentryCli = void 0, release = void 0, setCommits = void 0, deployEnv = void 0, distribution = void 0;
                 if (!config) {
                     log('No config found in app.json, falling back to environment variables...');
                 }
                 else {
-                    (organization = config.organization, project = config.project, authToken = config.authToken, url = config.url, useGlobalSentryCli = config.useGlobalSentryCli, release = config.release, setCommits = config.setCommits, deployEnv = config.deployEnv);
+                    (organization = config.organization, project = config.project, authToken = config.authToken, url = config.url, useGlobalSentryCli = config.useGlobalSentryCli, release = config.release, setCommits = config.setCommits, deployEnv = config.deployEnv, distribution = config.distribution);
                 }
-                version = release || process.env.SENTRY_RELEASE || iosManifest.revisionId;
+                release = release || process.env.SENTRY_RELEASE || iosManifest.revisionId;
+                distribution = distribution || process.env.SENTRY_DIST || iosManifest.version;
                 childProcessEnv = Object.assign({}, process.env, {
                     SENTRY_ORG: organization || process.env.SENTRY_ORG,
                     SENTRY_PROJECT: project || process.env.SENTRY_PROJECT,
@@ -78,7 +79,7 @@ module.exports = function (options) { return __awaiter(void 0, void 0, void 0, f
                 });
                 sentryCliBinaryPath = useGlobalSentryCli ? 'sentry-cli' : cli_1.default.getPath();
                 output = void 0;
-                return [4 /*yield*/, spawn_async_1.default(sentryCliBinaryPath, ['releases', 'new', version], {
+                return [4 /*yield*/, spawn_async_1.default(sentryCliBinaryPath, ['releases', 'new', release], {
                         cwd: tmpdir,
                         env: childProcessEnv,
                     })];
@@ -89,7 +90,7 @@ module.exports = function (options) { return __awaiter(void 0, void 0, void 0, f
                 return [4 /*yield*/, spawn_async_1.default(sentryCliBinaryPath, [
                         'releases',
                         'files',
-                        version,
+                        release,
                         'upload-sourcemaps',
                         '.',
                         '--ext',
@@ -99,6 +100,8 @@ module.exports = function (options) { return __awaiter(void 0, void 0, void 0, f
                         '--ext',
                         'map',
                         '--rewrite',
+                        '--dist',
+                        distribution,
                         '--strip-prefix',
                         projectRoot,
                     ], {
@@ -110,7 +113,7 @@ module.exports = function (options) { return __awaiter(void 0, void 0, void 0, f
                 output = uploadResult.stdout.toString();
                 log(output);
                 if (!(setCommits || process.env.SENTRY_SET_COMMITS)) return [3 /*break*/, 5];
-                return [4 /*yield*/, spawn_async_1.default(sentryCliBinaryPath, ['releases', 'set-commits', '--auto', version], {
+                return [4 /*yield*/, spawn_async_1.default(sentryCliBinaryPath, ['releases', 'set-commits', '--auto', release], {
                         env: childProcessEnv,
                     })];
             case 4:
@@ -118,7 +121,7 @@ module.exports = function (options) { return __awaiter(void 0, void 0, void 0, f
                 output = commitsResult.stdout.toString();
                 log(output);
                 _a.label = 5;
-            case 5: return [4 /*yield*/, spawn_async_1.default(sentryCliBinaryPath, ['releases', 'finalize', version], {
+            case 5: return [4 /*yield*/, spawn_async_1.default(sentryCliBinaryPath, ['releases', 'finalize', release], {
                     env: childProcessEnv,
                 })];
             case 6:
@@ -127,7 +130,7 @@ module.exports = function (options) { return __awaiter(void 0, void 0, void 0, f
                 log(output);
                 deployEnv = deployEnv || process.env.SENTRY_DEPLOY_ENV;
                 if (!deployEnv) return [3 /*break*/, 8];
-                return [4 /*yield*/, spawn_async_1.default(sentryCliBinaryPath, ['releases', 'deploys', version, 'new', '-e', deployEnv], {
+                return [4 /*yield*/, spawn_async_1.default(sentryCliBinaryPath, ['releases', 'deploys', release, 'new', '-e', deployEnv], {
                         env: childProcessEnv,
                     })];
             case 7:

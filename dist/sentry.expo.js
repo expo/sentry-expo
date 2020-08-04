@@ -77,9 +77,11 @@ exports.init = function (options) {
         nativeOptions.enabled = false;
         console.log('[sentry-expo] Disabled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });');
     }
+    nativeOptions.dist = nativeOptions.dist || manifest.version;
     // We don't want to have the native nagger.
     nativeOptions.enableNativeNagger = false;
     nativeOptions.enableNative = false;
+    nativeOptions.enableNativeCrashHandling = false;
     return react_native_2.init(__assign({}, nativeOptions));
 };
 /**

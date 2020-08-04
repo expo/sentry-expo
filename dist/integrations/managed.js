@@ -52,13 +52,13 @@ var ExpoIntegration = /** @class */ (function () {
         });
         react_native_2.setTags({
             deviceId: expo_constants_1.default.installationId,
-            appOwnership: expo_constants_1.default.appOwnership,
+            appOwnership: expo_constants_1.default.appOwnership || 'N/A',
         });
         if (expo_constants_1.default.appOwnership === 'expo' && expo_constants_1.default.expoVersion) {
             react_native_2.setTag('expoAppVersion', expo_constants_1.default.expoVersion);
         }
         if (!!manifest) {
-            react_native_2.setTag('expoReleaseChannel', manifest.releaseChannel);
+            react_native_2.setTag('expoReleaseChannel', manifest.releaseChannel || 'N/A');
             react_native_2.setTag('appVersion', (_a = manifest.version) !== null && _a !== void 0 ? _a : '');
             react_native_2.setTag('appPublishedTime', manifest.publishedTime);
             react_native_2.setTag('expoSdkVersion', (_b = manifest.sdkVersion) !== null && _b !== void 0 ? _b : '');

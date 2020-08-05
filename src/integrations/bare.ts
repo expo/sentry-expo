@@ -27,7 +27,7 @@ export class ExpoIntegration {
       deviceId: Constants.installationId,
     });
 
-    if (manifest) {
+    if (!!manifest && Object.keys(manifest).length > 0) {
       setTag('expoReleaseChannel', manifest.releaseChannel);
       setTag('appVersion', manifest.version ?? '');
       setTag('appPublishedTime', manifest.publishedTime);

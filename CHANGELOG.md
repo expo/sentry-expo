@@ -41,6 +41,8 @@
   )
   ```
 
+- Fixed tags with invalid values. ([#137](https://github.com/expo/sentry-expo/pull/137) by [@RodolfoGS](https://github.com/RodolfoGS))
+
 ## 2.1.2 — 2020-06-05
 
 - pin `@sentry/react-native` to v1.4.2 to prevent native calls

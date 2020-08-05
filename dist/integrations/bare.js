@@ -54,7 +54,7 @@ var ExpoIntegration = /** @class */ (function () {
         react_native_2.setTags({
             deviceId: expo_constants_1.default.installationId,
         });
-        if (manifest) {
+        if (!!manifest && Object.keys(manifest).length > 0) {
             react_native_2.setTag('expoReleaseChannel', manifest.releaseChannel);
             react_native_2.setTag('appVersion', (_a = manifest.version) !== null && _a !== void 0 ? _a : '');
             react_native_2.setTag('appPublishedTime', manifest.publishedTime);

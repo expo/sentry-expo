@@ -57,7 +57,7 @@ var ExpoIntegration = /** @class */ (function () {
         if (expo_constants_1.default.appOwnership === 'expo' && expo_constants_1.default.expoVersion) {
             react_native_2.setTag('expoAppVersion', expo_constants_1.default.expoVersion);
         }
-        if (!!manifest) {
+        if (!!manifest && Object.keys(manifest).length > 0) {
             react_native_2.setTag('expoReleaseChannel', manifest.releaseChannel || 'N/A');
             react_native_2.setTag('appVersion', (_a = manifest.version) !== null && _a !== void 0 ? _a : '');
             react_native_2.setTag('appPublishedTime', manifest.publishedTime);

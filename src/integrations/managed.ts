@@ -6,20 +6,47 @@ import {
   setTags,
   getCurrentHub,
   Severity,
+  setExtra,
   setTag,
   addGlobalEventProcessor,
 } from '@sentry/react-native';
+
+const DEFAULT_EXTRAS = ['deviceYearClass', 'linkingUri'];
+
+const DEFAULT_TAGS = [
+  {
+    tagName: 'expoReleaseChannel',
+    manifestName: 'releaseChannel',
+  },
+  {
+    tagName: 'appVersion',
+    manifestName: 'version',
+  },
+  {
+    tagName: 'appPublishedTime',
+    manifestName: 'publishedTime',
+  },
+  {
+    tagName: 'expoSdkVersion',
+    manifestName: 'sdkVersion',
+  },
+];
 
 export class ExpoIntegration {
   static id = 'ExpoIntegration';
   name = ExpoIntegration.id;
 
   setupOnce() {
-    let manifest = Constants.manifest;
+    const manifest = Constants.manifest;
+
     setExtras({
-      manifest: manifest,
-      deviceYearClass: Constants.deviceYearClass,
-      linkingUri: Constants.linkingUri,
+      manifest,
+    });
+
+    DEFAULT_EXTRAS.forEach(extra => {
+      if (Constants.hasOwnProperty(extra)) {
+        setExtra(extra, Constants[extra]);
+      }
     });
 
     setTags({
@@ -31,11 +58,12 @@ export class ExpoIntegration {
       setTag('expoAppVersion', Constants.expoVersion);
     }
 
-    if (!!manifest && Object.keys(manifest).length > 0) {
-      setTag('expoReleaseChannel', manifest.releaseChannel || 'N/A');
-      setTag('appVersion', manifest.version ?? '');
-      setTag('appPublishedTime', manifest.publishedTime);
-      setTag('expoSdkVersion', manifest.sdkVersion ?? '');
+    if (typeof manifest === 'object') {
+      DEFAULT_TAGS.forEach(tag => {
+        if (manifest.hasOwnProperty(tag.manifestName)) {
+          setTag(tag.tagName, manifest[tag.manifestName]);
+        }
+      });
     }
 
     const defaultHandler = ErrorUtils.getGlobalHandler();

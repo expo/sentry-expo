@@ -39,26 +39,48 @@ var expo_constants_1 = __importDefault(require("expo-constants"));
 var Device = __importStar(require("expo-device"));
 var Updates = __importStar(require("expo-updates"));
 var react_native_2 = require("@sentry/react-native");
+var DEFAULT_EXTRAS = ['deviceYearClass', 'linkingUri'];
+var DEFAULT_TAGS = [
+    {
+        tagName: 'expoReleaseChannel',
+        manifestName: 'releaseChannel',
+    },
+    {
+        tagName: 'appVersion',
+        manifestName: 'version',
+    },
+    {
+        tagName: 'appPublishedTime',
+        manifestName: 'publishedTime',
+    },
+    {
+        tagName: 'expoSdkVersion',
+        manifestName: 'sdkVersion',
+    },
+];
 var ExpoIntegration = /** @class */ (function () {
     function ExpoIntegration() {
         this.name = ExpoIntegration.id;
     }
     ExpoIntegration.prototype.setupOnce = function () {
-        var _a, _b;
         var manifest = Updates.manifest;
         react_native_2.setExtras({
             manifest: manifest,
-            deviceYearClass: expo_constants_1.default.deviceYearClass,
-            linkingUri: expo_constants_1.default.linkingUri,
+        });
+        DEFAULT_EXTRAS.forEach(function (extra) {
+            if (expo_constants_1.default.hasOwnProperty(extra)) {
+                react_native_2.setExtra(extra, expo_constants_1.default[extra]);
+            }
         });
         react_native_2.setTags({
             deviceId: expo_constants_1.default.installationId,
         });
-        if (manifest) {
-            react_native_2.setTag('expoReleaseChannel', manifest.releaseChannel);
-            react_native_2.setTag('appVersion', (_a = manifest.version) !== null && _a !== void 0 ? _a : '');
-            react_native_2.setTag('appPublishedTime', manifest.publishedTime);
-            react_native_2.setTag('expoSdkVersion', (_b = manifest.sdkVersion) !== null && _b !== void 0 ? _b : '');
+        if (typeof manifest === 'object') {
+            DEFAULT_TAGS.forEach(function (tag) {
+                if (manifest.hasOwnProperty(tag.manifestName)) {
+                    react_native_2.setTag(tag.tagName, manifest[tag.manifestName]);
+                }
+            });
         }
         var defaultHandler = ErrorUtils.getGlobalHandler();
         ErrorUtils.setGlobalHandler(function (error, isFatal) {

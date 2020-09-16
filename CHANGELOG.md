@@ -2,6 +2,8 @@
 
 ## Unpublished
 
+## 3.0.0 — 2020-09-16
+
 ### 🛠 Breaking changes
 
 - Exports from `@sentry/react-native` or `@sentry/browser` are now namespaced.

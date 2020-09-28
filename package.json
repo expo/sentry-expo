@@ -35,8 +35,6 @@
     "expo-device": "*",
     "expo-updates": "^0.2.4",
     "mkdirp": "^1.0.3",
-    "patch-package": "^6.2.2",
-    "postinstall-postinstall": "^2.1.0",
     "rimraf": "^2.6.1"
   },
   "devDependencies": {
@@ -49,7 +47,6 @@
   "scripts": {
     "watch": "tsc -p ./tsconfig.json -w",
     "build": "tsc -p ./tsconfig.json",
-    "prepare": "npm run build",
-    "postinstall": "patch-package"
+    "prepare": "npm run build"
   }
 }

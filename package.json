@@ -6,7 +6,8 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist",
-    "upload-sourcemaps.js"
+    "upload-sourcemaps.js",
+    "patches"
   ],
   "license": "MIT",
   "keywords": [

@@ -1,0 +1,13 @@
+diff --git a/node_modules/@sentry/react-native/dist/js/wrapper.js b/node_modules/@sentry/react-native/dist/js/wrapper.js
+index 93e8baf..6fe80c0 100644
+--- a/node_modules/@sentry/react-native/dist/js/wrapper.js
++++ b/node_modules/@sentry/react-native/dist/js/wrapper.js
+@@ -59,7 +59,7 @@ export const NATIVE = {
+                 return false;
+             }
+             if (!options.enableNative) {
+-                if (!options.enableNativeNagger) {
++                if (options.enableNativeNagger) {
+                     logger.warn("Note: Native Sentry SDK is disabled.");
+                 }
+                 this.enableNative = false;

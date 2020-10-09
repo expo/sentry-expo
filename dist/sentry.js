@@ -45,17 +45,13 @@ var react_native_1 = require("react-native");
 var Updates = __importStar(require("expo-updates"));
 var expo_constants_1 = __importDefault(require("expo-constants"));
 var Application = __importStar(require("expo-application"));
-var browser_1 = require("@sentry/browser");
 var integrations_1 = require("@sentry/integrations");
 var react_native_2 = require("@sentry/react-native");
 var bare_1 = require("./integrations/bare");
 var utils_1 = require("./utils");
+exports.Native = __importStar(require("@sentry/react-native"));
 exports.init = function (options) {
-    var _a;
     if (options === void 0) { options = {}; }
-    if (react_native_1.Platform.OS === 'web') {
-        return browser_1.init(__assign(__assign({}, options), { enabled: __DEV__ ? (_a = options.enableInExpoDevelopment) !== null && _a !== void 0 ? _a : false : true }));
-    }
     var manifest = Updates.manifest;
     var defaultExpoIntegrations = [
         new react_native_2.Integrations.ReactNativeErrorHandlers({

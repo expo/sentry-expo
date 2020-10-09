@@ -10,6 +10,25 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __spreadArrays = (this && this.__spreadArrays) || function () {
     for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
     for (var r = Array(s), k = 0, i = 0; i < il; i++)
@@ -24,17 +43,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.init = void 0;
 var react_native_1 = require("react-native");
 var expo_constants_1 = __importDefault(require("expo-constants"));
-var browser_1 = require("@sentry/browser");
 var integrations_1 = require("@sentry/integrations");
 var react_native_2 = require("@sentry/react-native");
 var managed_1 = require("./integrations/managed");
 var utils_1 = require("./utils");
+exports.Native = __importStar(require("@sentry/react-native"));
 exports.init = function (options) {
-    var _a;
     if (options === void 0) { options = {}; }
-    if (react_native_1.Platform.OS === 'web') {
-        return browser_1.init(__assign(__assign({}, options), { enabled: __DEV__ ? (_a = options.enableInExpoDevelopment) !== null && _a !== void 0 ? _a : false : true }));
-    }
     var manifest = expo_constants_1.default.manifest;
     var defaultExpoIntegrations = [
         new react_native_2.Integrations.ReactNativeErrorHandlers({

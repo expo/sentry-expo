@@ -1,2 +1,3 @@
-import { SentryExpoNativeOptions, SentryExpoWebOptions } from './utils';
-export declare const init: (options?: SentryExpoNativeOptions | SentryExpoWebOptions) => void;
+import { SentryExpoNativeOptions } from './utils';
+export * as Native from '@sentry/react-native';
+export declare const init: (options?: SentryExpoNativeOptions) => void;

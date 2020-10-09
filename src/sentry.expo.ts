@@ -1,24 +1,14 @@
 import { Platform } from 'react-native';
 import Constants from 'expo-constants';
-import { init as initBrowser } from '@sentry/browser';
 import { RewriteFrames } from '@sentry/integrations';
 import { init as initNative, Integrations } from '@sentry/react-native';
 import { Integration } from '@sentry/types';
 import { ExpoIntegration } from './integrations/managed';
-import {
-  overrideDefaultIntegrations,
-  SentryExpoNativeOptions,
-  SentryExpoWebOptions,
-} from './utils';
+import { overrideDefaultIntegrations, SentryExpoNativeOptions } from './utils';
 
-export const init = (options: SentryExpoNativeOptions | SentryExpoWebOptions = {}) => {
-  if (Platform.OS === 'web') {
-    return initBrowser({
-      ...(options as SentryExpoWebOptions),
-      enabled: __DEV__ ? options.enableInExpoDevelopment ?? false : true,
-    });
-  }
+export * as Native from '@sentry/react-native';
 
+export const init = (options: SentryExpoNativeOptions = {}) => {
   let manifest = Constants.manifest;
   const defaultExpoIntegrations = [
     new Integrations.ReactNativeErrorHandlers({

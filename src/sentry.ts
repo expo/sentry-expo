@@ -66,10 +66,12 @@ export const init = (options: SentryExpoNativeOptions = {}) => {
   }
 
   // Check if build-time update
-  nativeOptions.dist =
-    nativeOptions.dist || manifest.revisionId
-      ? manifest.version
-      : `${Constants.nativeBuildVersion}`;
-
+  if (!nativeOptions.dist) {
+    if (manifest.revisionId) {
+      nativeOptions.dist = manifest.version;
+    } else {
+      nativeOptions.dist = `${Constants.nativeBuildVersion}`;
+    }
+  }
   return initNative({ ...nativeOptions });
 };

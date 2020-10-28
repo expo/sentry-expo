@@ -96,7 +96,6 @@ exports.init = function (options) {
     }
     // Check if build-time update
     if (!nativeOptions.dist) {
-        // if the dist is already explicitly passed in, use that, otherwise:
         if (manifest.revisionId) {
             nativeOptions.dist = manifest.version;
         }

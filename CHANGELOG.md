@@ -2,6 +2,8 @@
 
 ## Unpublished
 
+## 3.0.3 — 2020-10-28
+
 ### 🐛 Bug fixes
 
 - Fixed an issue in the bare workflow where Sentry would be disabled if the app hadn't received an OTA Update yet - [#155](https://github.com/expo/sentry-expo/pull/155)

@@ -95,9 +95,14 @@ exports.init = function (options) {
         console.log('[sentry-expo] Disabled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });');
     }
     // Check if build-time update
-    nativeOptions.dist =
-        nativeOptions.dist || manifest.revisionId
-            ? manifest.version
-            : "" + expo_constants_1.default.nativeBuildVersion;
+    if (!nativeOptions.dist) {
+        // if the dist is already explicitly passed in, use that, otherwise:
+        if (manifest.revisionId) {
+            nativeOptions.dist = manifest.version;
+        }
+        else {
+            nativeOptions.dist = "" + expo_constants_1.default.nativeBuildVersion;
+        }
+    }
     return react_native_2.init(__assign({}, nativeOptions));
 };

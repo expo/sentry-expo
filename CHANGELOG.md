@@ -2,6 +2,12 @@
 
 ## Unpublished
 
+### 🐛 Bug fixes
+
+- Fixed an issue in the bare workflow where Sentry would be disabled if the app hadn't received an OTA Update yet - [#155](https://github.com/expo/sentry-expo/pull/155)
+- Fixed an issue in the bare workflow where `dist` option wouldn't be used when you explicitly passed it in - [#154](https://github.com/expo/sentry-expo/pull/154)
+- Upgrade `expo-updates` to v0.3.5 - [#153](https://github.com/expo/sentry-expo/pull/153)
+
 ## 3.0.0 — 2020-09-16
 
 ### 🛠 Breaking changes

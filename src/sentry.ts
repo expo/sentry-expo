@@ -55,8 +55,10 @@ export const init = (options: SentryExpoNativeOptions = {}) => {
     nativeOptions.release = manifest.revisionId ? manifest.revisionId : defaultSentryReleaseName;
   }
 
+  
+
   // Bail out automatically if the app isn't deployed
-  if (!manifest.revisionId && !nativeOptions.enableInExpoDevelopment) {
+  if (__DEV__ && !nativeOptions.enableInExpoDevelopment) {
     nativeOptions.enabled = false;
     console.log(
       '[sentry-expo] Disabled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });'

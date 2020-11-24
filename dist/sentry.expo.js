@@ -106,8 +106,15 @@ exports.init = function (options) {
 function isPublishedExpoUrl(url) {
     return url.includes('https://d1wp6m56sqw74a.cloudfront.net');
 }
+/**
+ * Filenames such as
+ * `/data/user/0/host.exp.exponent/files/.expo-internal/bundle-AD3BEBE4AD9CFD8AF700EE807D2762758B2A1DA0D7FAA79A285D9BF25CC3A361`
+ */
+function isLocalBundleFile(url) {
+    return !url.endsWith('.js') && url !== '[native code]';
+}
 function normalizeUrl(url) {
-    if (isPublishedExpoUrl(url)) {
+    if (isPublishedExpoUrl(url) || isLocalBundleFile(url)) {
         return react_native_1.Platform.OS === 'android' ? 'app:///index.android.bundle' : 'app:///main.jsbundle';
     }
     else {

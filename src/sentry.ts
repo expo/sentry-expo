@@ -20,7 +20,7 @@ export const init = (options: SentryExpoNativeOptions = {}) => {
     new ExpoIntegration(),
     new RewriteFrames({
       iteratee: (frame) => {
-        if (frame.filename) {
+        if (frame.filename && frame.filename !== '[native code]') {
           frame.filename =
             Platform.OS === 'android' ? 'app:///index.android.bundle' : 'app:///main.jsbundle';
         }

@@ -61,7 +61,7 @@ exports.init = function (options) {
         new bare_1.ExpoIntegration(),
         new integrations_1.RewriteFrames({
             iteratee: function (frame) {
-                if (frame.filename) {
+                if (frame.filename && frame.filename !== '[native code]') {
                     frame.filename =
                         react_native_1.Platform.OS === 'android' ? 'app:///index.android.bundle' : 'app:///main.jsbundle';
                 }

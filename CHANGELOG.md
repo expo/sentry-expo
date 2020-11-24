@@ -2,6 +2,10 @@
 
 ## Unpublished
 
+### 🐛 Bug fixes
+
+- Fixed an issue in the bare workflow where sourcemaps were not unobfuscated after an over the air update - [#157](https://github.com/expo/sentry-expo/pull/157)
+
 ## 3.0.3 — 2020-10-28
 
 ### 🐛 Bug fixes

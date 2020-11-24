@@ -110,6 +110,31 @@ Skipping or misconfiguring either of these will result in sourcemaps not working
 
 > **Note**: There seems to be a [possible bug with `sentry-react-native`](https://github.com/getsentry/sentry-react-native/issues/761) which results in Android sourcemaps not working appropriately. If you run into this issue in the bare workflow, something that seems to help remedy the issue is setting the release (using `Sentry.Native.setRelease`) _after_ running `Sentry.init`.
 
+### Self-hosting OTA?
+
+If you're self-hosting your Over the Air Updates (this means you run `expo export` instead of `expo publish`, you need to:
+
+- replace `hooks.postPublish` in Step 3 above with `hooks.postExport` (everything else stays the same)
+- add the `RewriteFrames` integration to your `Sentry.init` call like so:
+
+```js
+Sentry.init({
+  dsn: SENTRY_DSN,
+  enableInExpoDevelopment: true,
+  integrations: [
+    new RewriteFrames({
+      iteratee: (frame) => {
+        if (frame.filename) {
+          // the values depend on what names you give the bundle files you are uploading to Sentry
+          frame.filename =  Platform.OS === 'android' ? 'app:///index.android.bundle' : 'app:///main.jsbundle';
+        }
+        return frame
+      },
+    }),
+  ],
+})
+```
+
 ## 👏 Contributing
 
 If you like `sentry-expo` and want to help make it better then please feel free to open a PR! Make sure you request a review from one of our maintainers 😎

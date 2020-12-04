@@ -4,6 +4,8 @@
 
 ### 🐛 Bug fixes
 
+## 3.0.4 — 2020-12-04
+
 - Upgraded underlying `@sentry/react-native` library from 1.9.0 to 2.1.0
 - Fixed an issue in the bare workflow where sourcemaps were not unobfuscated after an over the air update - [#157](https://github.com/expo/sentry-expo/pull/157)
 

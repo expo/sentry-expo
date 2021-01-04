@@ -1,0 +1,46 @@
+name: \U0001F41B Bug Report
+about: Create a bug report for sentry-expo
+title: ''
+labels: ''
+issue_body: true
+inputs:
+  - type: description
+    attributes:
+      value: Thanks for taking the time to file a bug report! Please fill out this form as completely as possible.
+  - type: description
+    attributes:
+      value: If you leave out sections there is a high likelihood your issue will be closed. If you have a question, not a bug report, please post it on our [forums](https://forums.expo.io/) instead.
+  - type: input
+    attributes:
+      label: Summary
+      description: 'Describe the issue in 1 or 2 sentences'
+      required: true
+  - type: input
+    attributes:
+      label: What version of the Expo SDK and relevant Expo packages are you using?
+      description: 'For example: SDK 40 & sentry-expo 3.0.1'
+      required: true
+- type: input
+    attributes:
+      label: Managed or Bare workflow?
+      required: true
+  - type: textarea
+    attributes:
+      label: Environment- output of `expo diagnostics` & the platform(s) you're targeting
+      required: true
+  - type: textarea
+    attributes:
+      label: Reproducible demo or steps to reproduce from a blank project
+      description: This should include as little code as possible, do not simply link your entire project. Sharing a link to a [Snack](https://snack.expo.io/) is a GREAT way to provide a reproducible demo :) If a reproducible demo, or a complete list of steps from blank project to bug, are not provided, it is very likely your issue will be closed. Read [here more guidance](https://stackoverflow.com/help/mcve).
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected Behavior vs Actual Behavior
+      description: A clear and concise description of what you expected to happen and what actually happened.
+      required: true
+  - type: description
+    attributes:
+      value: Before posting the issue go through the steps you've written down to make sure the steps provided are detailed and clear.
+  - type: description
+    attributes:
+      value: Contributors should be able to follow the steps provided in order to reproduce the bug.

@@ -4,7 +4,15 @@
 
 ### 🐛 Bug fixes
 
+## 3.0.5 — 2021-01-27
+
+### 🐛 Bug fixes
+
+- Fixed an issue for iOS on `pod install`- 'CocoaPods could not find compatible versions for pod "EXDevice" and "EXConstants"' by pinning `expo-constants`to v^9, and `expo-device` to v^2
+
 ## 3.0.4 — 2020-12-04
+
+### 🐛 Bug fixes
 
 - Upgraded underlying `@sentry/react-native` library from 1.9.0 to 2.1.0
 - Fixed an issue in the bare workflow where sourcemaps were not unobfuscated after an over the air update - [#157](https://github.com/expo/sentry-expo/pull/157)

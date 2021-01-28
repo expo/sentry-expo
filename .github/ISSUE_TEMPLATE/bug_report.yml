@@ -1,6 +1,5 @@
-name: "\U0001F41B SDK Bug Report"
-about: "Report a reproducible bug in the Expo SDK"
-labels: "needs review"
+name: "\U0001F41B Bug Report"
+about: "Report a reproducible bug"
 issue_body: true
 inputs:
 - type: description
@@ -8,7 +7,7 @@ inputs:
     value: Thanks for taking the time to file a bug report! Please fill out this form as completely as possible.
 - type: description
   attributes:
-    value: If you leave out sections there is a high likelihood your issue will be closed. If you have a question, not a bug report, please post it on our [forums](https://forums.expo.io/) instead.
+    value: If you leave out sections there is a high likelihood your issue will be closed.
 - type: textarea
   attributes:
     label: Summary

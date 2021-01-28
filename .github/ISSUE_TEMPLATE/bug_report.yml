@@ -1,5 +1,5 @@
-name: Bug Report
-about: Create a bug report for sentry-expo
+name: "Bug Report"
+about: "Create a bug report for sentry-expo"
 title: ''
 issue_body: true
 inputs:

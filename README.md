@@ -40,7 +40,7 @@ expo install sentry-expo
 Add the following to your app's main file (usually `App.js`):
 
 ```js
-import { Sentry } from 'sentry-expo';
+import * as Sentry from 'sentry-expo';
 
 Sentry.init({
   dsn: 'YOUR DSN HERE',

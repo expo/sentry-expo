@@ -19,7 +19,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SentryBrowser = exports.Sentry = void 0;
+exports.Native = exports.Browser = exports.SentryBrowser = exports.Sentry = void 0;
 exports.Sentry = __importStar(require("./sentry"));
 exports.SentryBrowser = __importStar(require("./sentry.web"));
+/* @deprecated The following are deprecated in favor of the above imports. */
+exports.Browser = __importStar(require("./sentry.web"));
+exports.Native = __importStar(require("./sentry"));
 //# sourceMappingURL=index.js.map

@@ -4,6 +4,7 @@
 
 ### 🐛 Bug fixes
 
+- Rewrite all frame filenames that are not `[native code]` in managed workflow
 - Removed the `.expo` extension in favor of `Constants.executionEnvironment`
 
 ## 3.0.5 — 2021-01-27

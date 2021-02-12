@@ -58,27 +58,15 @@ exports.init = function (options) {
             onunhandledrejection: true,
         }),
         isBareWorkflow ? new bare_1.ExpoIntegration() : new managed_1.ExpoIntegration(),
-        new integrations_1.RewriteFrames(isBareWorkflow
-            ? {
-                iteratee: function (frame) {
-                    if (frame.filename && frame.filename !== '[native code]') {
-                        frame.filename =
-                            react_native_1.Platform.OS === 'android'
-                                ? 'app:///index.android.bundle'
-                                : 'app:///main.jsbundle';
-                    }
-                    return frame;
-                },
-            }
-            : {
-                iteratee: function (frame) {
-                    // TODO: can we just rely on the same check as bare workflow?
-                    if (frame.filename) {
-                        frame.filename = utils_1.normalizeUrl(frame.filename);
-                    }
-                    return frame;
-                },
-            }),
+        new integrations_1.RewriteFrames({
+            iteratee: function (frame) {
+                if (frame.filename && frame.filename !== '[native code]') {
+                    frame.filename =
+                        react_native_1.Platform.OS === 'android' ? 'app:///index.android.bundle' : 'app:///main.jsbundle';
+                }
+                return frame;
+            },
+        }),
     ];
     var nativeOptions = __assign({}, options);
     if (Array.isArray(nativeOptions.integrations)) {

@@ -8,7 +8,7 @@ import { Integration } from '@sentry/types';
 
 import { ExpoIntegration as ExpoBareIntegration } from './integrations/bare';
 import { ExpoIntegration as ExpoManagedIntegration } from './integrations/managed';
-import { SentryExpoNativeOptions, overrideDefaultIntegrations, normalizeUrl } from './utils';
+import { SentryExpoNativeOptions, overrideDefaultIntegrations } from './utils';
 
 export * as Native from '@sentry/react-native';
 
@@ -22,29 +22,15 @@ export const init = (options: SentryExpoNativeOptions = {}) => {
       onunhandledrejection: true,
     }),
     isBareWorkflow ? new ExpoBareIntegration() : new ExpoManagedIntegration(),
-    new RewriteFrames(
-      isBareWorkflow
-        ? {
-            iteratee: (frame) => {
-              if (frame.filename && frame.filename !== '[native code]') {
-                frame.filename =
-                  Platform.OS === 'android'
-                    ? 'app:///index.android.bundle'
-                    : 'app:///main.jsbundle';
-              }
-              return frame;
-            },
-          }
-        : {
-            iteratee: (frame) => {
-              // TODO: can we just rely on the same check as bare workflow?
-              if (frame.filename) {
-                frame.filename = normalizeUrl(frame.filename);
-              }
-              return frame;
-            },
-          }
-    ),
+    new RewriteFrames({
+      iteratee: (frame) => {
+        if (frame.filename && frame.filename !== '[native code]') {
+          frame.filename =
+            Platform.OS === 'android' ? 'app:///index.android.bundle' : 'app:///main.jsbundle';
+        }
+        return frame;
+      },
+    }),
   ];
 
   let nativeOptions = { ...options } as SentryExpoNativeOptions;

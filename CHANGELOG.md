@@ -4,6 +4,8 @@
 
 ### 🐛 Bug fixes
 
+- Removed the `.expo` extension in favor of `Constants.executionEnvironment`
+
 ## 3.0.5 — 2021-01-27
 
 ### 🐛 Bug fixes

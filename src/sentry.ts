@@ -1,14 +1,18 @@
 import { Platform } from 'react-native';
 import * as Updates from 'expo-updates';
-import Constants from 'expo-constants';
+import Constants, { ExecutionEnvironment } from 'expo-constants';
 import * as Application from 'expo-application';
 import { RewriteFrames } from '@sentry/integrations';
 import { init as initNative, Integrations } from '@sentry/react-native';
 import { Integration } from '@sentry/types';
-import { ExpoIntegration } from './integrations/bare';
-import { SentryExpoNativeOptions, overrideDefaultIntegrations } from './utils';
+
+import { ExpoIntegration as ExpoBareIntegration } from './integrations/bare';
+import { ExpoIntegration as ExpoManagedIntegration } from './integrations/managed';
+import { SentryExpoNativeOptions, overrideDefaultIntegrations, normalizeUrl } from './utils';
 
 export * as Native from '@sentry/react-native';
+
+const isBareWorkflow = Constants.executionEnvironment === ExecutionEnvironment.Bare;
 
 export const init = (options: SentryExpoNativeOptions = {}) => {
   let manifest = Updates.manifest as any;
@@ -17,16 +21,30 @@ export const init = (options: SentryExpoNativeOptions = {}) => {
       onerror: false,
       onunhandledrejection: true,
     }),
-    new ExpoIntegration(),
-    new RewriteFrames({
-      iteratee: (frame) => {
-        if (frame.filename && frame.filename !== '[native code]') {
-          frame.filename =
-            Platform.OS === 'android' ? 'app:///index.android.bundle' : 'app:///main.jsbundle';
-        }
-        return frame;
-      },
-    }),
+    isBareWorkflow ? new ExpoBareIntegration() : new ExpoManagedIntegration(),
+    new RewriteFrames(
+      isBareWorkflow
+        ? {
+            iteratee: (frame) => {
+              if (frame.filename && frame.filename !== '[native code]') {
+                frame.filename =
+                  Platform.OS === 'android'
+                    ? 'app:///index.android.bundle'
+                    : 'app:///main.jsbundle';
+              }
+              return frame;
+            },
+          }
+        : {
+            iteratee: (frame) => {
+              // TODO: can we just rely on the same check as bare workflow?
+              if (frame.filename) {
+                frame.filename = normalizeUrl(frame.filename);
+              }
+              return frame;
+            },
+          }
+    ),
   ];
 
   let nativeOptions = { ...options } as SentryExpoNativeOptions;
@@ -51,11 +69,15 @@ export const init = (options: SentryExpoNativeOptions = {}) => {
   }
 
   if (!nativeOptions.release) {
-    const defaultSentryReleaseName = `${Application.applicationId}@${Application.nativeApplicationVersion}+${Application.nativeBuildVersion}`;
-    nativeOptions.release = manifest.revisionId ? manifest.revisionId : defaultSentryReleaseName;
+    if (isBareWorkflow) {
+      const defaultSentryReleaseName = `${Application.applicationId}@${Application.nativeApplicationVersion}+${Application.nativeBuildVersion}`;
+      nativeOptions.release = manifest.revisionId ? manifest.revisionId : defaultSentryReleaseName;
+    } else {
+      nativeOptions.release = !!manifest
+        ? manifest.revisionId || 'UNVERSIONED'
+        : Date.now().toString();
+    }
   }
-
-  
 
   // Bail out automatically if the app isn't deployed
   if (__DEV__ && !nativeOptions.enableInExpoDevelopment) {
@@ -66,6 +88,7 @@ export const init = (options: SentryExpoNativeOptions = {}) => {
   }
 
   // Check if build-time update
+  // TODO: can we just rely on manifest.version (always present)
   if (!nativeOptions.dist) {
     if (manifest.revisionId) {
       nativeOptions.dist = manifest.version;
@@ -73,5 +96,12 @@ export const init = (options: SentryExpoNativeOptions = {}) => {
       nativeOptions.dist = `${Constants.nativeBuildVersion}`;
     }
   }
+
+  if (!isBareWorkflow) {
+    nativeOptions.enableNativeNagger = false;
+    nativeOptions.enableNative = false;
+    nativeOptions.enableNativeCrashHandling = false;
+  }
+
   return initNative({ ...nativeOptions });
 };

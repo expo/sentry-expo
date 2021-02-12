@@ -36,20 +36,19 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
             r[k] = a[j];
     return r;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.init = void 0;
 var react_native_1 = require("react-native");
 var Updates = __importStar(require("expo-updates"));
-var expo_constants_1 = __importDefault(require("expo-constants"));
+var expo_constants_1 = __importStar(require("expo-constants"));
 var Application = __importStar(require("expo-application"));
 var integrations_1 = require("@sentry/integrations");
 var react_native_2 = require("@sentry/react-native");
 var bare_1 = require("./integrations/bare");
+var managed_1 = require("./integrations/managed");
 var utils_1 = require("./utils");
 exports.Native = __importStar(require("@sentry/react-native"));
+var isBareWorkflow = expo_constants_1.default.executionEnvironment === expo_constants_1.ExecutionEnvironment.Bare;
 exports.init = function (options) {
     if (options === void 0) { options = {}; }
     var manifest = Updates.manifest;
@@ -58,16 +57,28 @@ exports.init = function (options) {
             onerror: false,
             onunhandledrejection: true,
         }),
-        new bare_1.ExpoIntegration(),
-        new integrations_1.RewriteFrames({
-            iteratee: function (frame) {
-                if (frame.filename && frame.filename !== '[native code]') {
-                    frame.filename =
-                        react_native_1.Platform.OS === 'android' ? 'app:///index.android.bundle' : 'app:///main.jsbundle';
-                }
-                return frame;
-            },
-        }),
+        isBareWorkflow ? new bare_1.ExpoIntegration() : new managed_1.ExpoIntegration(),
+        new integrations_1.RewriteFrames(isBareWorkflow
+            ? {
+                iteratee: function (frame) {
+                    if (frame.filename && frame.filename !== '[native code]') {
+                        frame.filename =
+                            react_native_1.Platform.OS === 'android'
+                                ? 'app:///index.android.bundle'
+                                : 'app:///main.jsbundle';
+                    }
+                    return frame;
+                },
+            }
+            : {
+                iteratee: function (frame) {
+                    // TODO: can we just rely on the same check as bare workflow?
+                    if (frame.filename) {
+                        frame.filename = utils_1.normalizeUrl(frame.filename);
+                    }
+                    return frame;
+                },
+            }),
     ];
     var nativeOptions = __assign({}, options);
     if (Array.isArray(nativeOptions.integrations)) {
@@ -86,8 +97,15 @@ exports.init = function (options) {
         nativeOptions.integrations = __spreadArrays(defaultExpoIntegrations);
     }
     if (!nativeOptions.release) {
-        var defaultSentryReleaseName = Application.applicationId + "@" + Application.nativeApplicationVersion + "+" + Application.nativeBuildVersion;
-        nativeOptions.release = manifest.revisionId ? manifest.revisionId : defaultSentryReleaseName;
+        if (isBareWorkflow) {
+            var defaultSentryReleaseName = Application.applicationId + "@" + Application.nativeApplicationVersion + "+" + Application.nativeBuildVersion;
+            nativeOptions.release = manifest.revisionId ? manifest.revisionId : defaultSentryReleaseName;
+        }
+        else {
+            nativeOptions.release = !!manifest
+                ? manifest.revisionId || 'UNVERSIONED'
+                : Date.now().toString();
+        }
     }
     // Bail out automatically if the app isn't deployed
     if (__DEV__ && !nativeOptions.enableInExpoDevelopment) {
@@ -95,6 +113,7 @@ exports.init = function (options) {
         console.log('[sentry-expo] Disabled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });');
     }
     // Check if build-time update
+    // TODO: can we just rely on manifest.version (always present)
     if (!nativeOptions.dist) {
         if (manifest.revisionId) {
             nativeOptions.dist = manifest.version;
@@ -102,6 +121,11 @@ exports.init = function (options) {
         else {
             nativeOptions.dist = "" + expo_constants_1.default.nativeBuildVersion;
         }
+    }
+    if (!isBareWorkflow) {
+        nativeOptions.enableNativeNagger = false;
+        nativeOptions.enableNative = false;
+        nativeOptions.enableNativeCrashHandling = false;
     }
     return react_native_2.init(__assign({}, nativeOptions));
 };

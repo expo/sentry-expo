@@ -6,8 +6,8 @@ import { RewriteFrames } from '@sentry/integrations';
 import { init as initNative, Integrations } from '@sentry/react-native';
 import { Integration } from '@sentry/types';
 
-import { ExpoIntegration as ExpoBareIntegration } from './integrations/bare';
-import { ExpoIntegration as ExpoManagedIntegration } from './integrations/managed';
+import { ExpoBareIntegration } from './integrations/bare';
+import { ExpoManagedIntegration } from './integrations/managed';
 import { SentryExpoNativeOptions, overrideDefaultIntegrations } from './utils';
 
 export * as Native from '@sentry/react-native';
@@ -55,13 +55,13 @@ export const init = (options: SentryExpoNativeOptions = {}) => {
   }
 
   if (!nativeOptions.release) {
-    if (isBareWorkflow) {
-      const defaultSentryReleaseName = `${Application.applicationId}@${Application.nativeApplicationVersion}+${Application.nativeBuildVersion}`;
-      nativeOptions.release = manifest.revisionId ? manifest.revisionId : defaultSentryReleaseName;
+    if (__DEV__) {
+      nativeOptions.release = 'DEVELOPMENT';
+    } else if (manifest.revisionId && Updates.updateId) {
+      nativeOptions.release = Updates.updateId;
     } else {
-      nativeOptions.release = !!manifest
-        ? manifest.revisionId || 'UNVERSIONED'
-        : Date.now().toString();
+      // This is the default set by Sentry's native Xcode & Gradle scripts
+      nativeOptions.release = `${Application.applicationId}@${Application.nativeApplicationVersion}+${Application.nativeBuildVersion}`;
     }
   }
 
@@ -73,13 +73,12 @@ export const init = (options: SentryExpoNativeOptions = {}) => {
     );
   }
 
-  // Check if build-time update
-  // TODO: can we just rely on manifest.version (always present)
   if (!nativeOptions.dist) {
     if (manifest.revisionId) {
       nativeOptions.dist = manifest.version;
     } else {
-      nativeOptions.dist = `${Constants.nativeBuildVersion}`;
+      // This is the default set by Sentry's native Xcode & Gradle scripts
+      nativeOptions.dist = `${Application.nativeBuildVersion}`;
     }
   }
 

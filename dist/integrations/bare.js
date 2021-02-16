@@ -33,7 +33,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ExpoIntegration = void 0;
+exports.ExpoBareIntegration = void 0;
 var react_native_1 = require("react-native");
 var expo_constants_1 = __importDefault(require("expo-constants"));
 var Device = __importStar(require("expo-device"));
@@ -58,11 +58,11 @@ var DEFAULT_TAGS = [
         manifestName: 'sdkVersion',
     },
 ];
-var ExpoIntegration = /** @class */ (function () {
-    function ExpoIntegration() {
-        this.name = ExpoIntegration.id;
+var ExpoBareIntegration = /** @class */ (function () {
+    function ExpoBareIntegration() {
+        this.name = ExpoBareIntegration.id;
     }
-    ExpoIntegration.prototype.setupOnce = function () {
+    ExpoBareIntegration.prototype.setupOnce = function () {
         var manifest = Updates.manifest;
         react_native_2.setExtras({
             manifest: manifest,
@@ -115,7 +115,7 @@ var ExpoIntegration = /** @class */ (function () {
             }
         });
         react_native_2.addGlobalEventProcessor(function (event, _hint) {
-            var that = react_native_2.getCurrentHub().getIntegration(ExpoIntegration);
+            var that = react_native_2.getCurrentHub().getIntegration(ExpoBareIntegration);
             if (that) {
                 event.contexts = __assign(__assign({}, (event.contexts || {})), { device: {
                         simulator: !Device.isDevice,
@@ -128,7 +128,7 @@ var ExpoIntegration = /** @class */ (function () {
             return event;
         });
     };
-    ExpoIntegration.id = 'ExpoIntegration';
-    return ExpoIntegration;
+    ExpoBareIntegration.id = 'ExpoBareIntegration';
+    return ExpoBareIntegration;
 }());
-exports.ExpoIntegration = ExpoIntegration;
+exports.ExpoBareIntegration = ExpoBareIntegration;

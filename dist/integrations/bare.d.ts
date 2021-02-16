@@ -1,4 +1,4 @@
-export declare class ExpoIntegration {
+export declare class ExpoBareIntegration {
     static id: string;
     name: string;
     setupOnce(): void;

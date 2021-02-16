@@ -57,7 +57,7 @@ exports.init = function (options) {
             onerror: false,
             onunhandledrejection: true,
         }),
-        isBareWorkflow ? new bare_1.ExpoIntegration() : new managed_1.ExpoIntegration(),
+        isBareWorkflow ? new bare_1.ExpoBareIntegration() : new managed_1.ExpoManagedIntegration(),
         new integrations_1.RewriteFrames({
             iteratee: function (frame) {
                 if (frame.filename && frame.filename !== '[native code]') {
@@ -85,14 +85,15 @@ exports.init = function (options) {
         nativeOptions.integrations = __spreadArrays(defaultExpoIntegrations);
     }
     if (!nativeOptions.release) {
-        if (isBareWorkflow) {
-            var defaultSentryReleaseName = Application.applicationId + "@" + Application.nativeApplicationVersion + "+" + Application.nativeBuildVersion;
-            nativeOptions.release = manifest.revisionId ? manifest.revisionId : defaultSentryReleaseName;
+        if (__DEV__) {
+            nativeOptions.release = 'DEVELOPMENT';
+        }
+        else if (manifest.revisionId && Updates.updateId) {
+            nativeOptions.release = Updates.updateId;
         }
         else {
-            nativeOptions.release = !!manifest
-                ? manifest.revisionId || 'UNVERSIONED'
-                : Date.now().toString();
+            // This is the default set by Sentry's native Xcode & Gradle scripts
+            nativeOptions.release = Application.applicationId + "@" + Application.nativeApplicationVersion + "+" + Application.nativeBuildVersion;
         }
     }
     // Bail out automatically if the app isn't deployed
@@ -100,14 +101,13 @@ exports.init = function (options) {
         nativeOptions.enabled = false;
         console.log('[sentry-expo] Disabled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });');
     }
-    // Check if build-time update
-    // TODO: can we just rely on manifest.version (always present)
     if (!nativeOptions.dist) {
         if (manifest.revisionId) {
             nativeOptions.dist = manifest.version;
         }
         else {
-            nativeOptions.dist = "" + expo_constants_1.default.nativeBuildVersion;
+            // This is the default set by Sentry's native Xcode & Gradle scripts
+            nativeOptions.dist = "" + Application.nativeBuildVersion;
         }
     }
     if (!isBareWorkflow) {

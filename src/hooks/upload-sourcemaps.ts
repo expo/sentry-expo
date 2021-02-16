@@ -10,7 +10,7 @@ type Options = {
   projectRoot: string;
   androidBundle: string;
   androidSourceMap: string;
-  iosManifest: { revisionId: string; version: string };
+  iosManifest: { releaseId: string; version: string };
   iosSourceMap: string;
   iosBundle: string;
   config?: {
@@ -75,7 +75,7 @@ module.exports = async (options: Options) => {
       } = config);
     }
 
-    release = release || process.env.SENTRY_RELEASE || iosManifest.revisionId;
+    release = release || process.env.SENTRY_RELEASE || iosManifest.releaseId;
     distribution = distribution || process.env.SENTRY_DIST || iosManifest.version;
 
     const childProcessEnv = Object.assign({}, process.env, {

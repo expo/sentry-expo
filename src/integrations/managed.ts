@@ -1,6 +1,7 @@
 import { Platform } from 'react-native';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
+import * as Updates from 'expo-updates';
 import {
   setExtras,
   setTags,
@@ -32,18 +33,18 @@ const DEFAULT_TAGS = [
   },
 ];
 
-export class ExpoIntegration {
-  static id = 'ExpoIntegration';
-  name = ExpoIntegration.id;
+export class ExpoManagedIntegration {
+  static id = 'ExpoManagedIntegration';
+  name = ExpoManagedIntegration.id;
 
   setupOnce() {
-    const manifest = Constants.manifest;
+    const manifest = Updates.manifest as any;
 
     setExtras({
       manifest,
     });
 
-    DEFAULT_EXTRAS.forEach(extra => {
+    DEFAULT_EXTRAS.forEach((extra) => {
       if (Constants.hasOwnProperty(extra)) {
         setExtra(extra, Constants[extra]);
       }
@@ -59,7 +60,7 @@ export class ExpoIntegration {
     }
 
     if (typeof manifest === 'object') {
-      DEFAULT_TAGS.forEach(tag => {
+      DEFAULT_TAGS.forEach((tag) => {
         if (manifest.hasOwnProperty(tag.manifestName)) {
           setTag(tag.tagName, manifest[tag.manifestName]);
         }
@@ -100,7 +101,7 @@ export class ExpoIntegration {
     });
 
     addGlobalEventProcessor(function (event, _hint) {
-      const that = getCurrentHub().getIntegration(ExpoIntegration);
+      const that = getCurrentHub().getIntegration(ExpoManagedIntegration);
 
       if (that) {
         event.contexts = {

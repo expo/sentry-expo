@@ -33,10 +33,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ExpoIntegration = void 0;
+exports.ExpoManagedIntegration = void 0;
 var react_native_1 = require("react-native");
 var expo_constants_1 = __importDefault(require("expo-constants"));
 var Device = __importStar(require("expo-device"));
+var Updates = __importStar(require("expo-updates"));
 var react_native_2 = require("@sentry/react-native");
 var DEFAULT_EXTRAS = ['deviceYearClass', 'linkingUri'];
 var DEFAULT_TAGS = [
@@ -57,12 +58,12 @@ var DEFAULT_TAGS = [
         manifestName: 'sdkVersion',
     },
 ];
-var ExpoIntegration = /** @class */ (function () {
-    function ExpoIntegration() {
-        this.name = ExpoIntegration.id;
+var ExpoManagedIntegration = /** @class */ (function () {
+    function ExpoManagedIntegration() {
+        this.name = ExpoManagedIntegration.id;
     }
-    ExpoIntegration.prototype.setupOnce = function () {
-        var manifest = expo_constants_1.default.manifest;
+    ExpoManagedIntegration.prototype.setupOnce = function () {
+        var manifest = Updates.manifest;
         react_native_2.setExtras({
             manifest: manifest,
         });
@@ -113,7 +114,7 @@ var ExpoIntegration = /** @class */ (function () {
             }
         });
         react_native_2.addGlobalEventProcessor(function (event, _hint) {
-            var that = react_native_2.getCurrentHub().getIntegration(ExpoIntegration);
+            var that = react_native_2.getCurrentHub().getIntegration(ExpoManagedIntegration);
             if (that) {
                 event.contexts = __assign(__assign({}, (event.contexts || {})), { device: {
                         simulator: !Device.isDevice,
@@ -126,7 +127,7 @@ var ExpoIntegration = /** @class */ (function () {
             return event;
         });
     };
-    ExpoIntegration.id = 'ExpoIntegration';
-    return ExpoIntegration;
+    ExpoManagedIntegration.id = 'ExpoManagedIntegration';
+    return ExpoManagedIntegration;
 }());
-exports.ExpoIntegration = ExpoIntegration;
+exports.ExpoManagedIntegration = ExpoManagedIntegration;

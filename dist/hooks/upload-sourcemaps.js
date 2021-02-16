@@ -69,7 +69,7 @@ module.exports = function (options) { return __awaiter(void 0, void 0, void 0, f
                 else {
                     (organization = config.organization, project = config.project, authToken = config.authToken, url = config.url, useGlobalSentryCli = config.useGlobalSentryCli, release = config.release, setCommits = config.setCommits, deployEnv = config.deployEnv, distribution = config.distribution);
                 }
-                release = release || process.env.SENTRY_RELEASE || iosManifest.revisionId;
+                release = release || process.env.SENTRY_RELEASE || iosManifest.releaseId;
                 distribution = distribution || process.env.SENTRY_DIST || iosManifest.version;
                 childProcessEnv = Object.assign({}, process.env, {
                     SENTRY_ORG: organization || process.env.SENTRY_ORG,

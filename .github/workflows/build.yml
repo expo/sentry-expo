@@ -28,8 +28,8 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile --check-files --ignore-scripts
       - name: Clean build
-        run: rm -rf dist
+        run: rm -rf build
       - name: Build package
         run: yarn build
       - name: Build up-to-date
-        run: git diff --stat --exit-code dist
+        run: git diff --stat --exit-code build

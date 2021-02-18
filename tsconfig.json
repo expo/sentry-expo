@@ -2,10 +2,7 @@
 {
   "extends": "expo-module-scripts/tsconfig.base",
   "compilerOptions": {
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "forceConsistentCasingInFileNames": true,
-    "strict": true
+    "outDir": "./build"
   },
   "include": ["./src"],
   "exclude": ["**/__mocks__/*", "**/__tests__/*"]

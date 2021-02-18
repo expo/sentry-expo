@@ -2,10 +2,10 @@
   "name": "sentry-expo",
   "version": "3.0.5",
   "description": "Catch your Javascript errors for your production Expo apps!",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
   "files": [
-    "dist",
+    "build",
     "upload-sourcemaps.js"
   ],
   "license": "MIT",

@@ -45,8 +45,11 @@
     "typescript": "^3.9.2"
   },
   "scripts": {
-    "watch": "tsc -p ./tsconfig.json -w",
-    "build": "tsc -p ./tsconfig.json",
-    "prepare": "npm run build"
+    "build": "expo-module build",
+    "clean": "expo-module clean",
+    "test": "expo-module test",
+    "prepare": "expo-module prepare",
+    "prepublishOnly": "expo-module prepublishOnly",
+    "expo-module": "expo-module"
   }
 }

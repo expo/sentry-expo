@@ -1,6 +1,6 @@
 node_modules/**/*
 .vscode
-
+/.expo
 # Logs
 npm-debug.log*
 yarn-debug.log*

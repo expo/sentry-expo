@@ -41,6 +41,7 @@
     "@types/node": "^14.0.1",
     "@types/react-native": "^0.62.10",
     "@types/rimraf": "^3.0.0",
+    "expo-module-scripts": "^1.2.0",
     "typescript": "^3.9.2"
   },
   "scripts": {

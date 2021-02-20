@@ -6,7 +6,7 @@ import { writeSentryPropertiesTo } from './withSentryIOS';
 export const withSentryAndroid: ConfigPlugin<string> = (config, sentryProperties: string) => {
   config = withAppBuildGradle(config, (config) => {
     if (config.modResults.language === 'groovy') {
-      config.modResults.contents = modifyBuildGradle(config.modResults.contents);
+      config.modResults.contents = modifyAppBuildGradle(config.modResults.contents);
     } else {
       throw new Error(
         'Cannot configure Sentry in the app gradle because the build.gradle is not groovy'
@@ -26,7 +26,13 @@ export const withSentryAndroid: ConfigPlugin<string> = (config, sentryProperties
   ]);
 };
 
-function modifyBuildGradle(buildGradle: string) {
+/**
+ * Writes to projectDirectory/android/app/build.gradle,
+ * adding the relevant @sentry/react-native script.
+ *
+ * We can be confident that the react-native/react.gradle script will be there.
+ */
+function modifyAppBuildGradle(buildGradle: string) {
   if (buildGradle.includes('apply from: "../../node_modules/@sentry/react-native/sentry.gradle"')) {
     return buildGradle;
   }
@@ -34,7 +40,7 @@ function modifyBuildGradle(buildGradle: string) {
   return buildGradle.replace(
     pattern,
     `
-  apply from: "../../node_modules/react-native/react.gradle"
-  apply from: "../../node_modules/@sentry/react-native/sentry.gradle"`
+apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/@sentry/react-native/sentry.gradle"`
   );
 }

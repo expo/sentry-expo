@@ -1,6 +1,8 @@
 import { ConfigPlugin, withDangerousMod, withXcodeProject } from '@expo/config-plugins';
+import * as PackageManager from '@expo/package-manager';
 import * as fs from 'fs';
 import * as path from 'path';
+import { spawn } from 'child_process';
 
 export const withSentryIOS: ConfigPlugin<string> = (config, sentryProperties: string) => {
   config = withXcodeProject(config, (config) => {

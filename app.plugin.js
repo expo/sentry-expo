@@ -1,1 +1,1 @@
-module.exports = require('./dist/plugin/withSentry.js');
+module.exports = require('./plugin/build/withSentry.js');

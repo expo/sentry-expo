@@ -1,6 +1,6 @@
-import { BrowserOptions } from '@sentry/browser';
-import { ReactNativeOptions } from '@sentry/react-native';
-import { Integration } from '@sentry/types';
+import type { BrowserOptions } from '@sentry/browser';
+import type { Integration } from '@sentry/types';
+import type { ReactNativeOptions } from '@sentry/react-native';
 
 export interface SentryExpoWebOptions extends BrowserOptions {
   enableInExpoDevelopment?: boolean;

@@ -3,25 +3,48 @@ import * as Updates from 'expo-updates';
 import Constants, { ExecutionEnvironment } from 'expo-constants';
 import * as Application from 'expo-application';
 import { RewriteFrames } from '@sentry/integrations';
-import { init as initNative, Integrations } from '@sentry/react-native';
 import { Integration } from '@sentry/types';
 
 import { ExpoBareIntegration } from './integrations/bare';
 import { ExpoManagedIntegration } from './integrations/managed';
 import { SentryExpoNativeOptions, overrideDefaultIntegrations } from './utils';
 
-export * as Native from '@sentry/react-native';
+import { init as initNative, Integrations } from '@sentry/react-native';
+import { AppManifest } from 'expo-constants/build/Constants.types';
 
-const isBareWorkflow = Constants.executionEnvironment === ExecutionEnvironment.Bare;
+const MANIFEST = Updates.manifest as AppManifest;
+const IS_BARE_WORKFLOW = Constants.executionEnvironment === ExecutionEnvironment.Bare;
+
+const DEFAULT_OPTIONS = {
+  enableNativeNagger: false, // Otherwise this will trigger an Alert(), let's rely on the logs instead
+  release: getDefaultRelease(),
+  dist: MANIFEST?.revisionId ? MANIFEST.version : `${Application.nativeBuildVersion}`,
+  ...(IS_BARE_WORKFLOW ? {} : { enableNative: false, enableNativeCrashHandling: false }),
+};
+
+/**
+ * We assign the appropriate release based on if the app is running in development,
+ * on an OTA Update, or on a no-publish build.
+ */
+function getDefaultRelease(): string {
+  if (__DEV__) {
+    return 'DEVELOPMENT';
+  } else if (MANIFEST.revisionId) {
+    // Want to make sure this still exists in EAS update: equal on iOS & Android
+    return MANIFEST.revisionId;
+  } else {
+    // This is the default set by Sentry's native Xcode & Gradle scripts
+    return `${Application.applicationId}@${Application.nativeApplicationVersion}+${Application.nativeBuildVersion}`;
+  }
+}
 
 export const init = (options: SentryExpoNativeOptions = {}) => {
-  let manifest = Updates.manifest as any;
   const defaultExpoIntegrations = [
     new Integrations.ReactNativeErrorHandlers({
       onerror: false,
       onunhandledrejection: true,
     }),
-    isBareWorkflow ? new ExpoBareIntegration() : new ExpoManagedIntegration(),
+    IS_BARE_WORKFLOW ? new ExpoBareIntegration() : new ExpoManagedIntegration(),
     new RewriteFrames({
       iteratee: (frame) => {
         if (frame.filename && frame.filename !== '[native code]') {
@@ -33,7 +56,7 @@ export const init = (options: SentryExpoNativeOptions = {}) => {
     }),
   ];
 
-  let nativeOptions = { ...options } as SentryExpoNativeOptions;
+  let nativeOptions = { ...DEFAULT_OPTIONS, ...options } as SentryExpoNativeOptions;
 
   if (Array.isArray(nativeOptions.integrations)) {
     // Allow users to override Expo defaults...ymmv
@@ -54,18 +77,6 @@ export const init = (options: SentryExpoNativeOptions = {}) => {
     nativeOptions.integrations = [...defaultExpoIntegrations];
   }
 
-  if (!nativeOptions.release) {
-    if (__DEV__) {
-      nativeOptions.release = 'DEVELOPMENT';
-    } else if (manifest.revisionId && Updates.updateId) {
-      nativeOptions.release = Updates.updateId;
-    } else {
-      // This is the default set by Sentry's native Xcode & Gradle scripts
-      nativeOptions.release = `${Application.applicationId}@${Application.nativeApplicationVersion}+${Application.nativeBuildVersion}`;
-    }
-  }
-
-  // Bail out automatically if the app isn't deployed
   if (__DEV__ && !nativeOptions.enableInExpoDevelopment) {
     nativeOptions.enabled = false;
     console.log(
@@ -73,20 +84,21 @@ export const init = (options: SentryExpoNativeOptions = {}) => {
     );
   }
 
-  if (!nativeOptions.dist) {
-    if (manifest.revisionId) {
-      nativeOptions.dist = manifest.version;
+  try {
+    return initNative({ ...nativeOptions });
+  } catch (e) {
+    if (IS_BARE_WORKFLOW) {
+      // Native projects have not been linked, try to continue with no native capability
+      console.warn(
+        `[sentry-expo] Disabling the Sentry Native SDK (all JS errors will still be reported).\nTo enable it, run 'yarn add @sentry/react native' or 'npm install @sentry/react-native' in your project directory. To silence this warning, pass 'enableNative: false' to Sentry.init().`
+      );
+      return initNative({
+        ...nativeOptions,
+        enableNative: false,
+        enableNativeCrashHandling: false,
+      });
     } else {
-      // This is the default set by Sentry's native Xcode & Gradle scripts
-      nativeOptions.dist = `${Application.nativeBuildVersion}`;
+      throw e;
     }
   }
-
-  if (!isBareWorkflow) {
-    nativeOptions.enableNativeNagger = false;
-    nativeOptions.enableNative = false;
-    nativeOptions.enableNativeCrashHandling = false;
-  }
-
-  return initNative({ ...nativeOptions });
 };

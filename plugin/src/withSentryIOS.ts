@@ -1,8 +1,11 @@
-import { ConfigPlugin, withDangerousMod, withXcodeProject } from '@expo/config-plugins';
-import * as PackageManager from '@expo/package-manager';
+import {
+  ConfigPlugin,
+  withDangerousMod,
+  withXcodeProject,
+  WarningAggregator,
+} from '@expo/config-plugins';
 import * as fs from 'fs';
 import * as path from 'path';
-import { spawn } from 'child_process';
 
 export const withSentryIOS: ConfigPlugin<string> = (config, sentryProperties: string) => {
   config = withXcodeProject(config, (config) => {
@@ -45,11 +48,15 @@ export const withSentryIOS: ConfigPlugin<string> = (config, sentryProperties: st
   ]);
 };
 
-function modifyExistingXcodeBuildScript(script: any): void {
+export function modifyExistingXcodeBuildScript(script: any): void {
   if (
     !script.shellScript.match(/(packager|scripts)\/react-native-xcode\.sh\b/) ||
     script.shellScript.match(/sentry-cli\s+react-native[\s-]xcode/)
   ) {
+    WarningAggregator.addWarningIOS(
+      'sentry-expo',
+      `Unable to modify build script 'Bundle React Native code and images'. Please open a bug report at https://github.com/expo/sentry-expo.`
+    );
     return;
   }
   let code = JSON.parse(script.shellScript);

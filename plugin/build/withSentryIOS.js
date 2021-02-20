@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.writeSentryPropertiesTo = exports.withSentryIOS = void 0;
+exports.writeSentryPropertiesTo = exports.modifyExistingXcodeBuildScript = exports.withSentryIOS = void 0;
 const config_plugins_1 = require("@expo/config-plugins");
 const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
@@ -50,6 +50,7 @@ exports.withSentryIOS = withSentryIOS;
 function modifyExistingXcodeBuildScript(script) {
     if (!script.shellScript.match(/(packager|scripts)\/react-native-xcode\.sh\b/) ||
         script.shellScript.match(/sentry-cli\s+react-native[\s-]xcode/)) {
+        config_plugins_1.WarningAggregator.addWarningIOS('sentry-expo', `Unable to modify build script 'Bundle React Native code and images'. Please open a bug report at https://github.com/expo/sentry-expo.`);
         return;
     }
     let code = JSON.parse(script.shellScript);
@@ -59,6 +60,7 @@ function modifyExistingXcodeBuildScript(script) {
             code.replace(/^.*?\/(packager|scripts)\/react-native-xcode\.sh\s*/m, (match) => `../node_modules/@sentry/cli/bin/sentry-cli react-native xcode ${match}`);
     script.shellScript = JSON.stringify(code);
 }
+exports.modifyExistingXcodeBuildScript = modifyExistingXcodeBuildScript;
 function writeSentryPropertiesTo(filepath, sentryProperties) {
     if (!fs.existsSync(filepath)) {
         throw new Error("Directory '" + filepath + "' does not exist.");

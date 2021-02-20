@@ -29,7 +29,7 @@ const withSentry: ConfigPlugin = (config) => {
   return config;
 };
 
-function getSentryProperties(config: ExpoConfig): string | null {
+export function getSentryProperties(config: ExpoConfig): string | null {
   const sentryHook = [
     ...(config.hooks?.postPublish ?? []),
     ...(config.hooks?.postExport ?? []),
@@ -50,6 +50,18 @@ function getSentryProperties(config: ExpoConfig): string | null {
     return '';
   } else {
     const { organization, project, authToken, url = 'https://sentry.io/' } = sentryHook.config;
+    const missingProperties = ['organization', 'project', 'authToken'].map((each) => {
+      if (!sentryHook?.config?.hasOwnProperty(each)) {
+        return each;
+      }
+    });
+    if (missingProperties.length) {
+      const warningMessage = `Missing Sentry configuration properties: ${missingProperties.join(
+        ', '
+      )} from app.json. Builds will fall back to environment variables. Refer to @sentry/react-native docs for how to configure this.`;
+      WarningAggregator.addWarningAndroid('sentry-expo', warningMessage);
+      WarningAggregator.addWarningIOS('sentry-expo', warningMessage);
+    }
     return `defaults.url=${url}
 defaults.org=${organization}
 defaults.project=${project}

@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.withSentryAndroid = void 0;
+exports.modifyAppBuildGradle = exports.withSentryAndroid = void 0;
 const config_plugins_1 = require("@expo/config-plugins");
 const path = __importStar(require("path"));
 const withSentryIOS_1 = require("./withSentryIOS");
@@ -53,7 +53,11 @@ function modifyAppBuildGradle(buildGradle) {
         return buildGradle;
     }
     const pattern = /\n\s*apply from: "\.\.\/\.\.\/node_modules\/react-native\/react\.gradle"/;
+    if (!buildGradle.match(pattern)) {
+        config_plugins_1.WarningAggregator.addWarningAndroid('sentry-expo', 'Could not find react.gradle script in android/app/build.gradle. Please open a bug report at https://github.com/expo/sentry-expo.');
+    }
     return buildGradle.replace(pattern, `
 apply from: "../../node_modules/react-native/react.gradle"
 apply from: "../../node_modules/@sentry/react-native/sentry.gradle"`);
 }
+exports.modifyAppBuildGradle = modifyAppBuildGradle;

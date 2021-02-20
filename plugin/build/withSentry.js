@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getSentryProperties = void 0;
 const config_plugins_1 = require("@expo/config-plugins");
 const withSentryAndroid_1 = require("./withSentryAndroid");
 const withSentryIOS_1 = require("./withSentryIOS");
@@ -38,6 +39,17 @@ function getSentryProperties(config) {
     }
     else {
         const { organization, project, authToken, url = 'https://sentry.io/' } = sentryHook.config;
+        const missingProperties = ['organization', 'project', 'authToken'].map((each) => {
+            var _a;
+            if (!((_a = sentryHook === null || sentryHook === void 0 ? void 0 : sentryHook.config) === null || _a === void 0 ? void 0 : _a.hasOwnProperty(each))) {
+                return each;
+            }
+        });
+        if (missingProperties.length) {
+            const warningMessage = `Missing Sentry configuration properties: ${missingProperties.join(', ')} from app.json. Builds will fall back to environment variables. Refer to @sentry/react-native docs for how to configure this.`;
+            config_plugins_1.WarningAggregator.addWarningAndroid('sentry-expo', warningMessage);
+            config_plugins_1.WarningAggregator.addWarningIOS('sentry-expo', warningMessage);
+        }
         return `defaults.url=${url}
 defaults.org=${organization}
 defaults.project=${project}
@@ -45,4 +57,5 @@ auth.token=${authToken}
 `;
     }
 }
+exports.getSentryProperties = getSentryProperties;
 exports.default = config_plugins_1.createRunOncePlugin(withSentry, pkg.name, pkg.version);

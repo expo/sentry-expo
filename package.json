@@ -6,8 +6,18 @@
   "types": "build/index.d.ts",
   "files": [
     "build",
-    "upload-sourcemaps.js"
+    "upload-sourcemaps.js",
+    "plugin/build",
+    "app.plugin.js"
   ],
+  "scripts": {
+    "build": "expo-module build",
+    "clean": "expo-module clean",
+    "test": "expo-module test",
+    "prepare": "expo-module prepare",
+    "prepublishOnly": "expo-module prepublishOnly",
+    "expo-module": "expo-module"
+  },
   "license": "MIT",
   "keywords": [
     "react-native",
@@ -29,6 +39,7 @@
   "dependencies": {
     "@expo/config-plugins": "~1.0.13",
     "@expo/config-types": "^40.0.0-beta.2",
+    "@expo/package-manager": "^0.0.38",
     "@expo/spawn-async": "^1.2.8",
     "@sentry/browser": "^5.28.0",
     "@sentry/integrations": "^5.28.0",
@@ -46,18 +57,10 @@
     "@types/node": "^14.0.1",
     "@types/react-native": "^0.62.10",
     "@types/rimraf": "^3.0.0",
-    "expo-module-scripts": "^1.2.0",
+    "expo-module-scripts": "^2.0.0-alpha.0",
     "jest-expo": "^34.0.1",
     "react": "^16.9.0",
     "react-native": "^0.60.5",
     "react-native-web": "~0.13.7"
-  },
-  "scripts": {
-    "build": "expo-module build",
-    "clean": "expo-module clean",
-    "test": "expo-module test",
-    "prepare": "expo-module prepare",
-    "prepublishOnly": "expo-module prepublishOnly",
-    "expo-module": "expo-module"
   }
 }

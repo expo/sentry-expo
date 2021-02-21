@@ -61,5 +61,8 @@
     "react": "^16.9.0",
     "react-native": "^0.60.5",
     "react-native-web": "~0.13.7"
+  },
+  "resolutions": {
+    "jest-expo-enzyme": "^1.0.4"
   }
 }

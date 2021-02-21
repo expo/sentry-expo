@@ -28,8 +28,12 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile --check-files --ignore-scripts
       - name: Clean build
-        run: rm -rf build
+        run: rm -rf build plugin/build
       - name: Build package
         run: yarn build
       - name: Build up-to-date
         run: git diff --stat --exit-code build
+      - name: Build plugin package
+        run: yarn build plugin
+      - name: Plugin up-to-date
+        run: git diff --stat --exit-code plugin/build

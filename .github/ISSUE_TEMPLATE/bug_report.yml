@@ -29,7 +29,7 @@ body:
   attributes:
     label: What platform(s) does this occur on?
     multiple: true
-    choices:
+    options:
       - Android
       - iOS
       - Web

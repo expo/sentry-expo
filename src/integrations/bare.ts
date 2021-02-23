@@ -70,7 +70,7 @@ export class ExpoBareIntegration {
       // The name of the sourcemap file in Sentry is different depending on whether it was uploaded
       // by the upload-sourcemaps script in this package (in which case it will have a revisionId)
       // or by the default @sentry/react-native script.
-      let sentryFilename;
+      let sentryFilename: string;
 
       sentryFilename = Platform.OS === 'android' ? 'index.android.bundle' : 'main.jsbundle';
 

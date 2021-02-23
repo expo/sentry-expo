@@ -2,6 +2,10 @@
 
 ## Unpublished
 
+### 🎉 New features
+
+- Auto-configure native projects via `expo/config-plugins`
+
 ### 🐛 Bug fixes
 
 - Rewrite all frame filenames that are not `[native code]` in managed workflow

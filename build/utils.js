@@ -1,4 +1,7 @@
-export function overrideDefaultIntegrations(defaults, overrides) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.overrideDefaultIntegrations = void 0;
+function overrideDefaultIntegrations(defaults, overrides) {
     const overrideIntegrationNames = overrides.map((each) => each.name);
     const result = [];
     defaults.forEach((each) => {
@@ -8,4 +11,5 @@ export function overrideDefaultIntegrations(defaults, overrides) {
     });
     return [...result, ...overrides];
 }
+exports.overrideDefaultIntegrations = overrideDefaultIntegrations;
 //# sourceMappingURL=utils.js.map

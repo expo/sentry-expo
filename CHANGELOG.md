@@ -4,7 +4,15 @@
 
 ### 🎉 New features
 
-- Auto-configure native projects via `expo/config-plugins`
+- Auto-configure native projects via `expo/config-plugins`, and EAS Build managed support! You will need to add:
+
+```json
+"plugins": ["sentry-expo"]
+```
+
+to your app.json or app.config.js. This will also auto-configure Sentry for bare workflow projects.
+
+- `sentry-expo` now supports sending sessions data. See Sentry's [Release Health docs to learn more](https://docs.sentry.io/product/releases/health/).
 
 ### 🐛 Bug fixes
 

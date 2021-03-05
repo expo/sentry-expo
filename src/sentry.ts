@@ -2,17 +2,23 @@ import { Platform } from 'react-native';
 import * as Updates from 'expo-updates';
 import Constants, { ExecutionEnvironment } from 'expo-constants';
 import * as Application from 'expo-application';
+import { init as initBrowser } from '@sentry/browser';
 import { RewriteFrames } from '@sentry/integrations';
 import { Integration } from '@sentry/types';
 
 import { ExpoBareIntegration } from './integrations/bare';
 import { ExpoManagedIntegration } from './integrations/managed';
-import { SentryExpoNativeOptions, overrideDefaultIntegrations } from './utils';
+import {
+  SentryExpoNativeOptions,
+  SentryExpoWebOptions,
+  overrideDefaultIntegrations,
+} from './utils';
 
 import { init as initNative, Integrations } from '@sentry/react-native';
 import { AppManifest } from 'expo-constants/build/Constants.types';
 
 export * as Native from '@sentry/react-native';
+export * as Browser from '@sentry/browser';
 
 const MANIFEST = Updates.manifest as AppManifest;
 const IS_BARE_WORKFLOW = Constants.executionEnvironment === ExecutionEnvironment.Bare;
@@ -41,6 +47,13 @@ function getDefaultRelease(): string {
 }
 
 export const init = (options: SentryExpoNativeOptions = {}) => {
+  if (Platform.OS === 'web') {
+    return initBrowser({
+      ...(options as SentryExpoWebOptions),
+      enabled: __DEV__ ? options.enableInExpoDevelopment ?? false : true,
+    });
+  }
+
   const defaultExpoIntegrations = [
     new Integrations.ReactNativeErrorHandlers({
       onerror: false,

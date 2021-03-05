@@ -12,6 +12,8 @@ import { SentryExpoNativeOptions, overrideDefaultIntegrations } from './utils';
 import { init as initNative, Integrations } from '@sentry/react-native';
 import { AppManifest } from 'expo-constants/build/Constants.types';
 
+export * as Native from '@sentry/react-native';
+
 const MANIFEST = Updates.manifest as AppManifest;
 const IS_BARE_WORKFLOW = Constants.executionEnvironment === ExecutionEnvironment.Bare;
 

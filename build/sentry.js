@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.init = void 0;
+exports.init = exports.Native = void 0;
 const react_native_1 = require("react-native");
 const Updates = __importStar(require("expo-updates"));
 const expo_constants_1 = __importStar(require("expo-constants"));
@@ -29,6 +29,7 @@ const bare_1 = require("./integrations/bare");
 const managed_1 = require("./integrations/managed");
 const utils_1 = require("./utils");
 const react_native_2 = require("@sentry/react-native");
+exports.Native = __importStar(require("@sentry/react-native"));
 const MANIFEST = Updates.manifest;
 const IS_BARE_WORKFLOW = expo_constants_1.default.executionEnvironment === expo_constants_1.ExecutionEnvironment.Bare;
 const DEFAULT_OPTIONS = {

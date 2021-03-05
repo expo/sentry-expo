@@ -2,6 +2,12 @@
 
 ## Unpublished
 
+### 🐛 Bug fixes
+
+- Export `Browser` for Typescript
+- Removed `.web` file in favor of one single `Sentry.ts` file
+- Fixed Node 12 support for upload sourcmap hook
+
 ## 3.1.0 — 2021-02-25
 
 ### 🎉 New features

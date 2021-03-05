@@ -24,10 +24,10 @@ module.exports = async (options) => {
             log('No config found in app.json, falling back to environment variables...');
         }
         const childProcessEnv = Object.assign({}, process.env, {
-            SENTRY_ORG: config?.organization || process.env.SENTRY_ORG,
-            SENTRY_PROJECT: config?.project || process.env.SENTRY_PROJECT,
-            SENTRY_AUTH_TOKEN: config?.authToken || process.env.SENTRY_AUTH_TOKEN,
-            SENTRY_URL: config?.url || process.env.SENTRY_URL || 'https://sentry.io/',
+            SENTRY_ORG: (config && config.organization) || process.env.SENTRY_ORG,
+            SENTRY_PROJECT: (config && config.project) || process.env.SENTRY_PROJECT,
+            SENTRY_AUTH_TOKEN: (config && config.authToken) || process.env.SENTRY_AUTH_TOKEN,
+            SENTRY_URL: (config && config.url) || process.env.SENTRY_URL || 'https://sentry.io/',
         });
         const uploadOptions = getUploadOptions(config, process.env, iosManifest);
         await createAndUploadRelease(uploadOptions, childProcessEnv, projectRoot, tmpdir, log);
@@ -41,12 +41,13 @@ module.exports = async (options) => {
     }
 };
 function getUploadOptions(config, env, manifest) {
+    const { release, deployEnv, setCommits, useGlobalSentryCli, distribution } = config || {};
     return {
-        release: config?.release || env.SENTRY_RELEASE || manifest.revisionId,
-        deployEnv: config?.deployEnv || env.SENTRY_DEPLOY_ENV || null,
-        setCommits: config?.setCommits || env.SENTRY_SET_COMMITS || false,
-        useGlobalSentryCli: config?.useGlobalSentryCli ?? false,
-        distribution: config?.distribution || env.SENTRY_DIST || manifest.version,
+        release: release || env.SENTRY_RELEASE || manifest.revisionId,
+        deployEnv: deployEnv || env.SENTRY_DEPLOY_ENV || null,
+        setCommits: setCommits || env.SENTRY_SET_COMMITS || false,
+        useGlobalSentryCli: !!useGlobalSentryCli,
+        distribution: distribution || env.SENTRY_DIST || manifest.version,
     };
 }
 function extensionsForPlatform(platform = '') {

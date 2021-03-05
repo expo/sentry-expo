@@ -2,6 +2,8 @@
 
 ## Unpublished
 
+## 3.1.1 — 2021-03-05
+
 ### 🐛 Bug fixes
 
 - Export `Browser` for Typescript

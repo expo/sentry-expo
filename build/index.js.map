@@ -1,1 +1,1 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../src/index.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,2CAAyB","sourcesContent":["export * from './sentry';\nexport { SentryExpoNativeOptions, SentryExpoWebOptions } from './utils';\n"]}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../src/index.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;AAAA,2CAAyB;AAEzB,2DAA2C","sourcesContent":["export * from './sentry';\nexport { SentryExpoNativeOptions, SentryExpoWebOptions } from './utils';\nexport * as Browser from '@sentry/browser';\n"]}

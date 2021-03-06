@@ -19,19 +19,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.init = exports.Browser = exports.Native = void 0;
+exports.init = exports.Native = void 0;
 const react_native_1 = require("react-native");
 const Updates = __importStar(require("expo-updates"));
 const expo_constants_1 = __importStar(require("expo-constants"));
 const Application = __importStar(require("expo-application"));
-const browser_1 = require("@sentry/browser");
 const integrations_1 = require("@sentry/integrations");
 const bare_1 = require("./integrations/bare");
 const managed_1 = require("./integrations/managed");
 const utils_1 = require("./utils");
 const react_native_2 = require("@sentry/react-native");
 exports.Native = __importStar(require("@sentry/react-native"));
-exports.Browser = __importStar(require("@sentry/browser"));
 const MANIFEST = Updates.manifest;
 const IS_BARE_WORKFLOW = expo_constants_1.default.executionEnvironment === expo_constants_1.ExecutionEnvironment.Bare;
 const DEFAULT_OPTIONS = {
@@ -58,12 +56,6 @@ function getDefaultRelease() {
     }
 }
 const init = (options = {}) => {
-    if (react_native_1.Platform.OS === 'web') {
-        return browser_1.init({
-            ...options,
-            enabled: __DEV__ ? options.enableInExpoDevelopment ?? false : true,
-        });
-    }
     const defaultExpoIntegrations = [
         new react_native_2.Integrations.ReactNativeErrorHandlers({
             onerror: false,

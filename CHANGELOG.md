@@ -2,6 +2,8 @@
 
 ## Unpublished
 
+## 3.1.3 — 2021-03-06
+
 ### 🐛 Bug fixes
 
 - Fixed compilation errors on web

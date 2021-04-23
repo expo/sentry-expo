@@ -51,7 +51,7 @@ export class ExpoManagedIntegration {
     });
 
     setTags({
-      deviceId: Constants.installationId,
+      deviceId: Constants.sessionId,
       appOwnership: Constants.appOwnership || 'N/A',
     });
 

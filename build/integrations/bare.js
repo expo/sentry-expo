@@ -62,7 +62,7 @@ class ExpoBareIntegration {
             }
         });
         react_native_2.setTags({
-            deviceId: expo_constants_1.default.installationId,
+            deviceId: expo_constants_1.default.sessionId,
         });
         if (typeof manifest === 'object') {
             DEFAULT_TAGS.forEach((tag) => {

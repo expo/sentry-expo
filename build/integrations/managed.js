@@ -62,7 +62,7 @@ class ExpoManagedIntegration {
             }
         });
         react_native_2.setTags({
-            deviceId: expo_constants_1.default.installationId,
+            deviceId: expo_constants_1.default.sessionId,
             appOwnership: expo_constants_1.default.appOwnership || 'N/A',
         });
         if (expo_constants_1.default.appOwnership === 'expo' && expo_constants_1.default.expoVersion) {

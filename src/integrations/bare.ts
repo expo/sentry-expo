@@ -51,7 +51,7 @@ export class ExpoBareIntegration {
     });
 
     setTags({
-      deviceId: Constants.installationId,
+      deviceId: Constants.sessionId,
     });
 
     if (typeof manifest === 'object') {

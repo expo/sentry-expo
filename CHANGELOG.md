@@ -2,6 +2,8 @@
 
 ## Unpublished
 
+## 3.1.4 — 2021-04-23
+
 ### 🐛 Bug fixes
 
 - No longer tracking `Constants.installationId` by default. Instead, tracking `Constants.sessionId`.

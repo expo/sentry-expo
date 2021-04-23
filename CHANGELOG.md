@@ -2,6 +2,13 @@
 
 ## Unpublished
 
+### 🐛 Bug fixes
+
+- No longer tracking `Constants.installationId` by default. Instead, tracking `Constants.sessionId`.
+- Upgrades `expo-` dependencies. The new versions have dropped support for iOS 10; if you are bare workflow and haven't already dropped support for iOS 10, you have two options:
+  1. Changing `platform :ios, '10.0'` to `platform :ios, '11.0'` in your Podfile
+  2. Use the `resolutions` key in your package.json file to pin the versions of `expo-application`, `expo-device`, and `expo-constants` to their previous major versions.
+
 ## 3.1.3 — 2021-03-06
 
 ### 🐛 Bug fixes

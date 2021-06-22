@@ -81,9 +81,12 @@ export const init = (options: SentryExpoNativeOptions = {}) => {
 
   if (__DEV__ && !nativeOptions.enableInExpoDevelopment) {
     nativeOptions.enabled = false;
-    console.log(
-      '[sentry-expo] Disabled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });'
-    );
+
+    if (typeof nativeOptions.enableInExpoDevelopment === 'undefined') {
+      console.log(
+        '[sentry-expo] Disabled Sentry in development. Note you can set Sentry.init({ enableInExpoDevelopment: true });'
+      );
+    }
   }
 
   try {

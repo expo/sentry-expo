@@ -33,6 +33,12 @@ In your project directory, run
 expo install sentry-expo
 ```
 
+`sentry-expo` also requires some additional dependencies, so you should also run
+
+```sh
+expo install expo-application expo-constants expo-device expo-updates
+```
+
 > If you don't have `expo-cli` installed, [you should](https://docs.expo.io/workflow/expo-cli/)! But you can also just install with `yarn add sentry-expo`.
 
 ### Step 2

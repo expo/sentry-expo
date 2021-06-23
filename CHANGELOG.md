@@ -6,6 +6,10 @@
 
 - Removed `expo-application`, `expo-constants`, `expo-device`, and `expo-updates` as dependencies. From now on, developers will have to install these packages separately. This avoids a common issue where projects would end up having multiple versions of these libraries installed, but only one linked natively.
 
+### 🐛 Bug fixes
+
+- Only log "enableInExpoDevelopment" warning if `enableInExpoDevelopment` is not defined.
+
 ## 3.1.4 — 2021-04-23
 
 ### 🐛 Bug fixes

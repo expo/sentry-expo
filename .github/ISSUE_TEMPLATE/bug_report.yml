@@ -1,6 +1,5 @@
 name: "\U0001F41B Bug Report"
-about: "Report a reproducible bug"
-issue_body: true
+description: "Report a reproducible bug"
 body:
 - type: markdown
   attributes:

@@ -61,14 +61,10 @@
     "expo-application": "~3.2.0",
     "expo-constants": "~11.0.0",
     "expo-device": "~3.3.0",
-    "expo-module-scripts": "^2.0.0-alpha.0",
+    "expo-module-scripts": "^2.0.0",
     "expo-updates": "~0.7.0",
-    "jest-expo": "^34.0.1",
-    "react": "^16.9.0",
-    "react-native": "^0.60.5",
+    "react": "16.13.1",
+    "react-native": "^0.63.0",
     "react-native-web": "~0.13.7"
-  },
-  "resolutions": {
-    "jest-expo-enzyme": "^1.0.4"
   }
 }

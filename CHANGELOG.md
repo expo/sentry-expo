@@ -2,6 +2,8 @@
 
 ## Unpublished
 
+## 4.0.0 — 2021-06-23
+
 ### 🛠 Breaking changes
 
 - Removed `expo-application`, `expo-constants`, `expo-device`, and `expo-updates` as dependencies. From now on, developers will have to install these packages separately. This avoids a common issue where projects would end up having multiple versions of these libraries installed, but only one linked natively.

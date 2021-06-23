@@ -47,6 +47,12 @@
     "mkdirp": "^1.0.3",
     "rimraf": "^2.6.1"
   },
+  "peerDependencies": {
+    "expo-application": "*",
+    "expo-constants": "*",
+    "expo-device": "*",
+    "expo-updates": "*"
+  },
   "devDependencies": {
     "@types/mkdirp": "^1.0.0",
     "@types/node": "^14.0.1",

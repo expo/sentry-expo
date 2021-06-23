@@ -40,10 +40,10 @@
     "@expo/config-plugins": "^2.0.2",
     "@expo/config-types": "^41.0.0",
     "@expo/spawn-async": "^1.2.8",
-    "@sentry/browser": "^6.2.0",
-    "@sentry/integrations": "^6.2.0",
-    "@sentry/react-native": "^2.2.1",
-    "@sentry/types": "^6.2.0",
+    "@sentry/browser": "^6.7.2",
+    "@sentry/integrations": "^6.7.2",
+    "@sentry/react-native": "^2.5.2",
+    "@sentry/types": "^6.7.2",
     "mkdirp": "^1.0.3",
     "rimraf": "^2.6.1"
   },
@@ -56,7 +56,7 @@
   "devDependencies": {
     "@types/mkdirp": "^1.0.0",
     "@types/node": "^14.0.1",
-    "@types/react-native": "^0.62.10",
+    "@types/react-native": "^0.64.10",
     "@types/rimraf": "^3.0.0",
     "expo-application": "~3.2.0",
     "expo-constants": "~11.0.0",

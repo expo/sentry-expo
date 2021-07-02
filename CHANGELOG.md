@@ -2,6 +2,12 @@
 
 ## Unpublished
 
+## 4.0.1 — 2021-07-02
+
+### 🐛 Bug fixes
+
+- Do not force `@sentry/browser` and `@sentry/integrations` to `v6.7.2`.
+
 ## 4.0.0 — 2021-06-23
 
 ### 🛠 Breaking changes

@@ -80,10 +80,22 @@ Add `expo.plugins` and `expo.hooks` to your project's `app.json` (or `app.config
 }
 ```
 
-> **Using the bare workflow?**: You have just two extra steps:
->
-> 1. Run `yarn add @sentry/react-native`, followed by `npx pod-install`.
-> 2. Ensure you've added `plugins: ['sentry-expo']` to your app.json file, then run `expo eject` again
+**Using the bare workflow?** You have just two extra steps:
+
+1. Run `yarn add @sentry/react-native`, followed by `npx pod-install`.
+2. Run `yarn sentry-wizard -i reactNative -p ios android`. This will automatically configure your native Android & iOS projects.
+
+The previous step will add an extra
+
+```js
+import * as Sentry from '@sentry/react-native';
+
+Sentry.init({
+  dsn: 'YOUR DSN',
+});
+```
+
+to your root project file (usually `App.js`), so make sure you remove it (but keep the `sentry-expo import` and original `Sentry.init` call!)
 
 All done! For more information on customization and additional features, read the full guide on using Sentry in Expo apps in our docs ➡️ ["Using
 Sentry"](https://docs.expo.io/guides/using-sentry/).

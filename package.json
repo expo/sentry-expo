@@ -64,7 +64,7 @@
     "expo-module-scripts": "^2.0.0",
     "expo-updates": "~0.7.0",
     "react": "16.13.1",
-    "react-native": "^0.63.0",
+    "react-native": "^0.64.1",
     "react-native-web": "~0.13.7"
   }
 }

@@ -38,10 +38,10 @@ export const withSentryAndroid: ConfigPlugin<string> = (config, sentryProperties
  * We can be confident that the react-native/react.gradle script will be there.
  */
 export function modifyAppBuildGradle(buildGradle: string) {
-  if (buildGradle.includes('apply from: "../../node_modules/@sentry/react-native/sentry.gradle"')) {
+  if (buildGradle.includes('/sentry.gradle"')) {
     return buildGradle;
   }
-  const pattern = /\n\s*apply from: "\.\.\/\.\.\/node_modules\/react-native\/react\.gradle"/;
+  const pattern = /(.*\/react\.gradle"\)?)(\s|\n|$)/;
 
   if (!buildGradle.match(pattern)) {
     WarningAggregator.addWarningAndroid(
@@ -52,8 +52,8 @@ export function modifyAppBuildGradle(buildGradle: string) {
 
   return buildGradle.replace(
     pattern,
-    `
-apply from: "../../node_modules/react-native/react.gradle"
-apply from: "../../node_modules/@sentry/react-native/sentry.gradle"`
+    `$1
+apply from: new File(["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim(), "../sentry.gradle")
+`
   );
 }

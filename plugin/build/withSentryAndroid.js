@@ -49,15 +49,15 @@ exports.withSentryAndroid = withSentryAndroid;
  * We can be confident that the react-native/react.gradle script will be there.
  */
 function modifyAppBuildGradle(buildGradle) {
-    if (buildGradle.includes('apply from: "../../node_modules/@sentry/react-native/sentry.gradle"')) {
+    if (buildGradle.includes('/sentry.gradle"')) {
         return buildGradle;
     }
-    const pattern = /\n\s*apply from: "\.\.\/\.\.\/node_modules\/react-native\/react\.gradle"/;
+    const pattern = /(.*\/react\.gradle"\)?)(\s|\n|$)/;
     if (!buildGradle.match(pattern)) {
         config_plugins_1.WarningAggregator.addWarningAndroid('sentry-expo', 'Could not find react.gradle script in android/app/build.gradle. Please open a bug report at https://github.com/expo/sentry-expo.');
     }
-    return buildGradle.replace(pattern, `
-apply from: "../../node_modules/react-native/react.gradle"
-apply from: "../../node_modules/@sentry/react-native/sentry.gradle"`);
+    return buildGradle.replace(pattern, `$1
+apply from: new File(["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim(), "../sentry.gradle")
+`);
 }
 exports.modifyAppBuildGradle = modifyAppBuildGradle;

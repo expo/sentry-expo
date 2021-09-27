@@ -2,6 +2,8 @@
 
 ## Unpublished
 
+## 4.0.2 — 2021-09-27
+
 - Upgrade `@sentry/browser`, `@sentry/integrations`, `@sentry/react-native`, `@sentry/types` to support Sentry React Native V3
 - Added monorepo support for Android
 

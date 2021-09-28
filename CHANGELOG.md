@@ -2,13 +2,15 @@
 
 ## Unpublished
 
-- Added monorepo support for iOS
+## 4.0.3 — 2021-09-28
+
+- Fixed monorepo support for iOS
 - Added `--force-foreground` flag to Sentry CLI commands during iOS builds due to an issue with Sentry: https://github.com/getsentry/sentry-react-native/issues/1424
 
 ## 4.0.2 — 2021-09-27
 
 - Upgrade `@sentry/browser`, `@sentry/integrations`, `@sentry/react-native`, `@sentry/types` to support Sentry React Native V3
-- Added monorepo support for Android
+- Fixed monorepo support for Android
 
 ## 4.0.1 — 2021-07-02
 

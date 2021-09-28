@@ -31,7 +31,7 @@ const withSentryIOS = (config, sentryProperties) => {
             xcodeProject.addBuildPhase([], 'PBXShellScriptBuildPhase', 'Upload Debug Symbols to Sentry', null, {
                 shellPath: '/bin/sh',
                 shellScript: 'export SENTRY_PROPERTIES=sentry.properties\\n' +
-                    '../node_modules/@sentry/cli/bin/sentry-cli upload-dsym',
+                    "`node --print \"require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'\"` upload-dsym --force-foreground",
             });
         }
         let bundleReactNativePhase = xcodeProject.pbxItemByComment('Bundle React Native code and images', 'PBXShellScriptBuildPhase');
@@ -49,7 +49,7 @@ const withSentryIOS = (config, sentryProperties) => {
 exports.withSentryIOS = withSentryIOS;
 function modifyExistingXcodeBuildScript(script) {
     if (!script.shellScript.match(/(packager|scripts)\/react-native-xcode\.sh\b/) ||
-        script.shellScript.match(/sentry-cli\s+react-native[\s-]xcode/)) {
+        script.shellScript.match(/bin\/sentry-cli.*react-native[\s-]xcode/)) {
         config_plugins_1.WarningAggregator.addWarningIOS('sentry-expo', `Unable to modify build script 'Bundle React Native code and images'. Please open a bug report at https://github.com/expo/sentry-expo.`);
         return;
     }
@@ -57,7 +57,8 @@ function modifyExistingXcodeBuildScript(script) {
     code =
         'export SENTRY_PROPERTIES=sentry.properties\n' +
             'export EXTRA_PACKAGER_ARGS="--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map"\n' +
-            code.replace(/^.*?\/(packager|scripts)\/react-native-xcode\.sh\s*/m, (match) => `../node_modules/@sentry/cli/bin/sentry-cli react-native xcode ${match}`);
+            code.replace(/^.*?(packager|scripts)\/react-native-xcode\.sh\s*(\\'\\\\")?/m, (match) => "`node --print \"require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'\"` react-native xcode --force-foreground\n" +
+                match);
     script.shellScript = JSON.stringify(code);
 }
 exports.modifyExistingXcodeBuildScript = modifyExistingXcodeBuildScript;

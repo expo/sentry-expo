@@ -25,7 +25,7 @@ export const withSentryIOS: ConfigPlugin<string> = (config, sentryProperties: st
           shellPath: '/bin/sh',
           shellScript:
             'export SENTRY_PROPERTIES=sentry.properties\\n' +
-            '../node_modules/@sentry/cli/bin/sentry-cli upload-dsym',
+            "`node --print \"require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'\"` upload-dsym --force-foreground",
         }
       );
     }
@@ -51,7 +51,7 @@ export const withSentryIOS: ConfigPlugin<string> = (config, sentryProperties: st
 export function modifyExistingXcodeBuildScript(script: any): void {
   if (
     !script.shellScript.match(/(packager|scripts)\/react-native-xcode\.sh\b/) ||
-    script.shellScript.match(/sentry-cli\s+react-native[\s-]xcode/)
+    script.shellScript.match(/bin\/sentry-cli.*react-native[\s-]xcode/)
   ) {
     WarningAggregator.addWarningIOS(
       'sentry-expo',
@@ -64,9 +64,12 @@ export function modifyExistingXcodeBuildScript(script: any): void {
     'export SENTRY_PROPERTIES=sentry.properties\n' +
     'export EXTRA_PACKAGER_ARGS="--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map"\n' +
     code.replace(
-      /^.*?\/(packager|scripts)\/react-native-xcode\.sh\s*/m,
-      (match: any) => `../node_modules/@sentry/cli/bin/sentry-cli react-native xcode ${match}`
+      /^.*?(packager|scripts)\/react-native-xcode\.sh\s*(\\'\\\\")?/m,
+      (match: any) =>
+        "`node --print \"require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'\"` react-native xcode --force-foreground\n" +
+        match
     );
+
   script.shellScript = JSON.stringify(code);
 }
 

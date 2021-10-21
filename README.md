@@ -80,13 +80,13 @@ Add `expo.plugins` and `expo.hooks` to your project's `app.json` (or `app.config
 }
 ```
 
-**Using the bare workflow?**: You have just two extra steps:
+**Are you using [EAS Build](https://docs.expo.dev/build/introduction/)?**: If you plan on running your project outside of Expo Go, you should also perform these steps:
 
->
+1. Run `yarn add @sentry/react-native`
+2. Ensure you've added `plugins: ['sentry-expo']` to your app.json file
+   > If you directly edit your native `ios/` and `android/` directories, you can avoid the config plugin and instead use `yarn sentry-wizard -i reactNative -p ios android` to configure your native projects after ejecting.
 
-1. Run `yarn add @sentry/react-native`, followed by `npx pod-install`.
-2. Ensure you've added `plugins: ['sentry-expo']` to your app.json file, then run `expo prebuild`. You should do this with a clean git tree, so you can make sure the resulting changes are what you want.
-   > You can optionally use `yarn sentry-wizard -i reactNative -p ios android` to configure your native projects after ejecting, instead of `expo prebuild`.
+> Note: You do not need to perform these steps for app's built with the Classic build system (`expo build:[android|ios]`)
 
 All done! For more information on customization and additional features, read the full guide on using Sentry in Expo apps in our docs ➡️ ["Using
 Sentry"](https://docs.expo.io/guides/using-sentry/).

@@ -29,6 +29,11 @@ const withSentry: ConfigPlugin = (config) => {
   return config;
 };
 
+const missingAuthTokenMessage = `# auth.token
+
+# No auth token found in app.json, please use the SENTRY_AUTH_TOKEN environment variable instead.
+# Learn more: https://docs.sentry.io/product/cli/configuration/#to-authenticate-manually`;
+
 export function getSentryProperties(config: ExpoConfig): string | null {
   const sentryHook = [
     ...(config.hooks?.postPublish ?? []),
@@ -65,7 +70,7 @@ export function getSentryProperties(config: ExpoConfig): string | null {
     return `defaults.url=${url}
 defaults.org=${organization}
 defaults.project=${project}
-auth.token=${authToken}
+${!!authToken ? `auth.token=${authToken}` : missingAuthTokenMessage}
 `;
   }
 }

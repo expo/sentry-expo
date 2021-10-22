@@ -3,6 +3,8 @@ import { WarningAggregator } from '@expo/config-plugins';
 
 import { getSentryProperties } from '../withSentry';
 
+type ExpoConfigHook = Pick<ExpoConfig, 'hooks'>;
+
 const expoConfigBase: ExpoConfig = {
   slug: 'testproject',
   version: '1',
@@ -10,7 +12,7 @@ const expoConfigBase: ExpoConfig = {
   platforms: ['ios', 'android'],
 };
 
-const hookWithoutConfig = {
+const hookWithoutConfig: ExpoConfigHook = {
   hooks: {
     postPublish: [
       {
@@ -20,7 +22,7 @@ const hookWithoutConfig = {
   },
 };
 
-const hookWithEmptyConfig = {
+const hookWithEmptyConfig: ExpoConfigHook = {
   hooks: {
     postPublish: [
       {
@@ -31,7 +33,7 @@ const hookWithEmptyConfig = {
   },
 };
 
-const postPublishHook = {
+const postPublishHook: ExpoConfigHook = {
   hooks: {
     postPublish: [
       {
@@ -46,7 +48,7 @@ const postPublishHook = {
   },
 };
 
-const postPublishHookCustomURL = {
+const postPublishHookCustomURL: ExpoConfigHook = {
   hooks: {
     postPublish: [
       {
@@ -62,7 +64,21 @@ const postPublishHookCustomURL = {
   },
 };
 
-const postExportHook = {
+const postPublishHookWithoutToken: ExpoConfigHook = {
+  hooks: {
+    postPublish: [
+      {
+        file: 'sentry-expo/upload-sourcemaps',
+        config: {
+          organization: 'test-org',
+          project: 'myProjectName',
+        }
+      },
+    ],
+  },
+};
+
+const postExportHook: ExpoConfigHook = {
   hooks: {
     postExport: [
       {
@@ -72,6 +88,20 @@ const postExportHook = {
           project: 'myProjectName',
           authToken: '123-abc',
         },
+      },
+    ],
+  },
+};
+
+const postExportHookWithoutToken: ExpoConfigHook = {
+  hooks: {
+    postPublish: [
+      {
+        file: 'sentry-expo/upload-sourcemaps',
+        config: {
+          organization: 'test-org',
+          project: 'myProjectName',
+        }
       },
     ],
   },
@@ -135,6 +165,32 @@ auth.token=123-abc
 defaults.org=test-org
 defaults.project=myProjectName
 auth.token=123-abc
+`
+    );
+  });
+
+  it(`Avoids writing auth.token when undefined in postPublishHook`, () => {
+    expect(getSentryProperties({ ...expoConfigBase, ...postPublishHookWithoutToken })).toBe(
+      `defaults.url=https://sentry.io/
+defaults.org=test-org
+defaults.project=myProjectName
+# auth.token
+
+# No auth token found in app.json, please use the SENTRY_AUTH_TOKEN environment variable instead.
+# Learn more: https://docs.sentry.io/product/cli/configuration/#to-authenticate-manually
+`
+    );
+  });
+
+  it(`Avoids writing auth.token when undefined in postExport`, () => {
+    expect(getSentryProperties({ ...expoConfigBase, ...postExportHookWithoutToken })).toBe(
+      `defaults.url=https://sentry.io/
+defaults.org=test-org
+defaults.project=myProjectName
+# auth.token
+
+# No auth token found in app.json, please use the SENTRY_AUTH_TOKEN environment variable instead.
+# Learn more: https://docs.sentry.io/product/cli/configuration/#to-authenticate-manually
 `
     );
   });

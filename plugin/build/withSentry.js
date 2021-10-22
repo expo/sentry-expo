@@ -23,6 +23,10 @@ const withSentry = (config) => {
     }
     return config;
 };
+const missingAuthTokenMessage = `# auth.token
+
+# No auth token found in app.json, please use the SENTRY_AUTH_TOKEN environment variable instead.
+# Learn more: https://docs.sentry.io/product/cli/configuration/#to-authenticate-manually`;
 function getSentryProperties(config) {
     var _a, _b, _c, _d;
     const sentryHook = [
@@ -53,7 +57,7 @@ function getSentryProperties(config) {
         return `defaults.url=${url}
 defaults.org=${organization}
 defaults.project=${project}
-auth.token=${authToken}
+${!!authToken ? `auth.token=${authToken}` : missingAuthTokenMessage}
 `;
     }
 }

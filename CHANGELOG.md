@@ -2,6 +2,10 @@
 
 ## Unpublished
 
+## 4.0.4 — 2021-10-25
+
+- Fixed writing `undefined` in sentry.properties if using env variables instead of app.json
+
 ## 4.0.3 — 2021-09-28
 
 - Fixed monorepo support for iOS

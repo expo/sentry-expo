@@ -64,15 +64,14 @@ const postPublishHookCustomURL: ExpoConfigHook = {
   },
 };
 
-const postPublishHookWithoutToken: ExpoConfigHook = {
+const postPublishHookWithoutProperties: ExpoConfigHook = {
   hooks: {
     postPublish: [
       {
         file: 'sentry-expo/upload-sourcemaps',
         config: {
-          organization: 'test-org',
-          project: 'myProjectName',
-        }
+          url: 'some-url',
+        },
       },
     ],
   },
@@ -93,15 +92,14 @@ const postExportHook: ExpoConfigHook = {
   },
 };
 
-const postExportHookWithoutToken: ExpoConfigHook = {
+const postExportHookWithoutProperties: ExpoConfigHook = {
   hooks: {
     postPublish: [
       {
         file: 'sentry-expo/upload-sourcemaps',
         config: {
-          organization: 'test-org',
-          project: 'myProjectName',
-        }
+          url: 'some-url',
+        },
       },
     ],
   },
@@ -169,28 +167,22 @@ auth.token=123-abc
     );
   });
 
-  it(`Avoids writing auth.token when undefined in postPublishHook`, () => {
-    expect(getSentryProperties({ ...expoConfigBase, ...postPublishHookWithoutToken })).toBe(
-      `defaults.url=https://sentry.io/
-defaults.org=test-org
-defaults.project=myProjectName
-# auth.token
-
-# No auth token found in app.json, please use the SENTRY_AUTH_TOKEN environment variable instead.
-# Learn more: https://docs.sentry.io/product/cli/configuration/#to-authenticate-manually
+  it(`Avoids writing properties if they are undefined in postPublishHook`, () => {
+    expect(getSentryProperties({ ...expoConfigBase, ...postPublishHookWithoutProperties })).toBe(
+      `defaults.url=some-url
+# no org found, falling back to SENTRY_ORG environment variable
+# no project found, falling back to SENTRY_PROJECT environment variable
+# no auth.token found, falling back to SENTRY_AUTH_TOKEN environment variable
 `
     );
   });
 
-  it(`Avoids writing auth.token when undefined in postExport`, () => {
-    expect(getSentryProperties({ ...expoConfigBase, ...postExportHookWithoutToken })).toBe(
-      `defaults.url=https://sentry.io/
-defaults.org=test-org
-defaults.project=myProjectName
-# auth.token
-
-# No auth token found in app.json, please use the SENTRY_AUTH_TOKEN environment variable instead.
-# Learn more: https://docs.sentry.io/product/cli/configuration/#to-authenticate-manually
+  it(`Avoids writing properties if they are undefined in postExport`, () => {
+    expect(getSentryProperties({ ...expoConfigBase, ...postExportHookWithoutProperties })).toBe(
+      `defaults.url=some-url
+# no org found, falling back to SENTRY_ORG environment variable
+# no project found, falling back to SENTRY_PROJECT environment variable
+# no auth.token found, falling back to SENTRY_AUTH_TOKEN environment variable
 `
     );
   });

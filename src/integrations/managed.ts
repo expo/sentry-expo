@@ -45,7 +45,9 @@ export class ExpoManagedIntegration {
     });
 
     DEFAULT_EXTRAS.forEach((extra) => {
-      if (Constants.hasOwnProperty(extra)) {
+      if (Object.hasOwnProperty.call(Device, extra)) {
+        setExtra(extra, Device[extra]);
+      } else if (Object.hasOwnProperty.call(Constants, extra)) {
         setExtra(extra, Constants[extra]);
       }
     });

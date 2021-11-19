@@ -53,6 +53,12 @@ Sentry.init({
   enableInExpoDevelopment: true,
   debug: true, // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
 });
+
+// Access any @sentry/react-native exports via:
+Sentry.Native.*
+
+// Access any @sentry/browser exports via:
+Sentry.Browser.*
 ```
 
 ### Step 3: App Config
@@ -111,7 +117,6 @@ With `expo-updates`, release builds of both iOS and Android apps will create and
 > Please note that configuration for `expo publish` and `expo export` in bare and managed is still done via `app.json`.
 
 Skipping or misconfiguring either of these will result in sourcemaps not working, and thus you won't see proper stacktraces in your errors.
-`
 
 ### Self-hosting OTA?
 

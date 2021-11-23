@@ -28,7 +28,6 @@ const expo_constants_1 = __importDefault(require("expo-constants"));
 const Device = __importStar(require("expo-device"));
 const Updates = __importStar(require("expo-updates"));
 const react_native_2 = require("@sentry/react-native");
-const DEFAULT_EXTRAS = ['deviceYearClass', 'linkingUri'];
 const DEFAULT_TAGS = [
     {
         tagName: 'expoReleaseChannel',
@@ -55,11 +54,8 @@ class ExpoBareIntegration {
         const manifest = Updates.manifest;
         react_native_2.setExtras({
             manifest,
-        });
-        DEFAULT_EXTRAS.forEach((extra) => {
-            if (expo_constants_1.default.hasOwnProperty(extra)) {
-                react_native_2.setExtra(extra, expo_constants_1.default[extra]);
-            }
+            deviceYearClass: Device.deviceYearClass,
+            linkingUri: expo_constants_1.default.linkingUri,
         });
         react_native_2.setTags({
             deviceId: expo_constants_1.default.sessionId,

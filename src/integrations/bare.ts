@@ -7,12 +7,9 @@ import {
   setTags,
   getCurrentHub,
   Severity,
-  setExtra,
   setTag,
   addGlobalEventProcessor,
 } from '@sentry/react-native';
-
-const DEFAULT_EXTRAS = ['deviceYearClass', 'linkingUri'];
 
 const DEFAULT_TAGS = [
   {
@@ -42,12 +39,8 @@ export class ExpoBareIntegration {
 
     setExtras({
       manifest,
-    });
-
-    DEFAULT_EXTRAS.forEach((extra) => {
-      if (Constants.hasOwnProperty(extra)) {
-        setExtra(extra, Constants[extra]);
-      }
+      deviceYearClass: Device.deviceYearClass,
+      linkingUri: Constants.linkingUri,
     });
 
     setTags({

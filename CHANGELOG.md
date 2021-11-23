@@ -1,6 +1,6 @@
 # Changelog
 
-## Unpublished
+## 4.0.5 — 2021-11-23
 
 - Fixed using `deviceYearClass` from `expo-constants`, which is now deprecated. `deviceYearClass` is now pulled from `expo-device`
 

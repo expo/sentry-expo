@@ -2,6 +2,8 @@
 
 ## Unpublished
 
+- Fixed using `deviceYearClass` from `expo-constants`, which is now deprecated. `deviceYearClass` is now pulled from `expo-device`
+
 ## 4.0.4 — 2021-10-25
 
 - Fixed writing `undefined` in sentry.properties if using env variables instead of app.json

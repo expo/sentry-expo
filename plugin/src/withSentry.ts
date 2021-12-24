@@ -59,10 +59,11 @@ export function getSentryProperties(config: ExpoConfig): string | null {
 
 function buildSentryPropertiesString(sentryHookConfig: PublishHook['config']) {
   const { organization, project, authToken, url = 'https://sentry.io/' } = sentryHookConfig ?? {};
-  const missingProperties = ['organization', 'project', 'authToken'].map((each) => {
+  const missingProperties = ['organization', 'project', 'authToken'].filter((each) => {
     if (!sentryHookConfig?.hasOwnProperty(each)) {
-      return each;
+      return true
     }
+    return false
   });
   if (missingProperties.length) {
     const warningMessage = `Missing Sentry configuration properties: ${missingProperties.join(

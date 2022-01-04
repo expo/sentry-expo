@@ -68,7 +68,7 @@ export class ExpoManagedIntegration {
       if (Platform.OS === 'android') {
         error.stack = error.stack.replace(
           /\/.*\/\d+\.\d+.\d+\/cached\-bundle\-experience\-/g,
-          'https://d1wp6m56sqw74a.cloudfront.net:443/'
+          'https://classic-assets.eascdn.net:443/'
         );
       }
 

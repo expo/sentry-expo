@@ -57,7 +57,7 @@ function modifyExistingXcodeBuildScript(script) {
     code =
         'export SENTRY_PROPERTIES=sentry.properties\n' +
             'export EXTRA_PACKAGER_ARGS="--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map"\n' +
-            code.replace(/^.*?(packager|scripts)\/react-native-xcode\.sh\s*(\\'\\\\")?/m, (match) => "`node --print \"require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'\"` react-native xcode --force-foreground\n" +
+            code.replace(/^.*?(packager|scripts)\/react-native-xcode\.sh\s*(\\'\\\\")?/m, (match) => "`node --print \"require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'\"` react-native xcode --force-foreground " +
                 match);
     script.shellScript = JSON.stringify(code);
 }

@@ -66,7 +66,7 @@ export function modifyExistingXcodeBuildScript(script: any): void {
     code.replace(
       /^.*?(packager|scripts)\/react-native-xcode\.sh\s*(\\'\\\\")?/m,
       (match: any) =>
-        "`node --print \"require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'\"` react-native xcode --force-foreground\n" +
+        "`node --print \"require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'\"` react-native xcode --force-foreground " +
         match
     );
 

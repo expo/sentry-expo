@@ -9,7 +9,7 @@ const buildScriptWithoutSentry = {
 
 const buildScriptWithSentry = {
   shellScript:
-    '"export SENTRY_PROPERTIES=sentry.properties\\nexport EXTRA_PACKAGER_ARGS=\\"--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map\\"\\nexport NODE_BINARY=node\\n`node --print \\"require.resolve(\'@sentry/cli/package.json\').slice(0, -13) + \'/bin/sentry-cli\'\\"` react-native xcode --force-foreground\\n../node_modules/react-native/scripts/react-native-xcode.sh"',
+    '"export SENTRY_PROPERTIES=sentry.properties\\nexport EXTRA_PACKAGER_ARGS=\\"--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map\\"\\nexport NODE_BINARY=node\\n`node --print \\"require.resolve(\'@sentry/cli/package.json\').slice(0, -13) + \'/bin/sentry-cli\'\\"` react-native xcode --force-foreground ../node_modules/react-native/scripts/react-native-xcode.sh"',
 };
 
 const monorepoBuildScriptWithoutSentry = {
@@ -19,7 +19,7 @@ const monorepoBuildScriptWithoutSentry = {
 
 const monorepoBuildScriptWithSentry = {
   shellScript:
-    '"export SENTRY_PROPERTIES=sentry.properties\\nexport EXTRA_PACKAGER_ARGS=\\"--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map\\"\\nexport NODE_BINARY=node\\n`node --print \\"require.resolve(\'@sentry/cli/package.json\').slice(0, -13) + \'/bin/sentry-cli\'\\"` react-native xcode --force-foreground\\n`node --print \\"require.resolve(\'react-native/package.json\').slice(0, -13) + \'/scripts/react-native-xcode.sh\'\\"`"',
+    '"export SENTRY_PROPERTIES=sentry.properties\\nexport EXTRA_PACKAGER_ARGS=\\"--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map\\"\\nexport NODE_BINARY=node\\n`node --print \\"require.resolve(\'@sentry/cli/package.json\').slice(0, -13) + \'/bin/sentry-cli\'\\"` react-native xcode --force-foreground `node --print \\"require.resolve(\'react-native/package.json\').slice(0, -13) + \'/scripts/react-native-xcode.sh\'\\"`"',
 };
 
 const buildScriptWeDontExpect = {

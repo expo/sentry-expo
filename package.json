@@ -37,9 +37,9 @@
   "author": "650 Industries, Inc.",
   "homepage": "https://docs.expo.io/guides/using-sentry/",
   "dependencies": {
-    "@expo/config-plugins": "^2.0.2",
-    "@expo/config-types": "^41.0.0",
-    "@expo/spawn-async": "^1.2.8",
+    "@expo/config-plugins": "^4.1.4",
+    "@expo/config-types": "^45.0.0",
+    "@expo/spawn-async": "^1.6.0",
     "@sentry/browser": "^6.12.0",
     "@sentry/integrations": "^6.12.0",
     "@sentry/react-native": "^3.1.1",
@@ -56,15 +56,15 @@
   "devDependencies": {
     "@types/mkdirp": "^1.0.0",
     "@types/node": "^14.0.1",
-    "@types/react-native": "^0.64.10",
+    "@types/react-native": "^0.67.6",
     "@types/rimraf": "^3.0.0",
-    "expo-application": "~3.2.0",
-    "expo-constants": "~11.0.0",
-    "expo-device": "~3.3.0",
+    "expo-application": "~4.1.0",
+    "expo-constants": "~13.1.1",
+    "expo-device": "~4.2.0",
     "expo-module-scripts": "^2.0.0",
-    "expo-updates": "~0.7.0",
-    "react": "16.13.1",
-    "react-native": "^0.64.1",
-    "react-native-web": "~0.13.7"
+    "expo-updates": "~0.13.1",
+    "react": "17.0.2",
+    "react-native": "^0.68.2",
+    "react-native-web": "~0.17.7"
   }
 }

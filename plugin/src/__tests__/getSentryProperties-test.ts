@@ -3,6 +3,14 @@ import { WarningAggregator } from '@expo/config-plugins';
 
 import { getSentryProperties } from '../withSentry';
 
+jest.mock('@expo/config-plugins', () => {
+  const plugins = jest.requireActual('@expo/config-plugins');
+  return {
+    ...plugins,
+    WarningAggregator: { addWarningIOS: jest.fn(), addWarningAndroid: jest.fn() },
+  };
+});
+
 type ExpoConfigHook = Pick<ExpoConfig, 'hooks'>;
 
 const expoConfigBase: ExpoConfig = {
@@ -188,11 +196,6 @@ auth.token=123-abc
   });
 
   describe('Tests with warnings', () => {
-    beforeEach(() => {
-      WarningAggregator.flushWarningsAndroid();
-      WarningAggregator.flushWarningsIOS();
-    });
-
     it(`Warns (returns empty string) if no config found under hook`, () => {
       expect(
         getSentryProperties({
@@ -208,8 +211,8 @@ auth.token=123-abc
         })
       ).not.toBe('');
 
-      expect(WarningAggregator.hasWarningsAndroid()).toBeTruthy();
-      expect(WarningAggregator.hasWarningsIOS()).toBeTruthy();
+      expect(WarningAggregator.addWarningIOS).toHaveBeenCalled();
+      expect(WarningAggregator.addWarningAndroid).toHaveBeenCalled();
     });
 
     it(`Warns if not all necessary fields are found`, () => {
@@ -217,8 +220,9 @@ auth.token=123-abc
         ...expoConfigBase,
         ...hookWithEmptyConfig,
       });
-      expect(WarningAggregator.hasWarningsAndroid()).toBeTruthy();
-      expect(WarningAggregator.hasWarningsIOS()).toBeTruthy();
+
+      expect(WarningAggregator.addWarningIOS).toHaveBeenCalled();
+      expect(WarningAggregator.addWarningAndroid).toHaveBeenCalled();
     });
   });
 });

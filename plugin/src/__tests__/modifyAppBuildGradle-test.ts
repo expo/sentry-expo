@@ -2,6 +2,14 @@ import { WarningAggregator } from '@expo/config-plugins';
 
 import { modifyAppBuildGradle } from '../withSentryAndroid';
 
+jest.mock('@expo/config-plugins', () => {
+  const plugins = jest.requireActual('@expo/config-plugins');
+  return {
+    ...plugins,
+    WarningAggregator: { addWarningAndroid: jest.fn() },
+  };
+});
+
 const buildGradleWithSentry = `
 rectly from the development server. Below you can see all the possible configurations
  * and their defaults. If you decide to add a configuration block, make sure to add it before the
@@ -16,7 +24,7 @@ rectly from the development server. Below you can see all the possible configura
  * and their defaults. If you decide to add a configuration block, make sure to add it before the
  * \`apply from: "../../node_modules/react-native/react.gradle"\` line.
  *
-apply from: "../../node_modules/react-native/react.gradle" 
+apply from: "../../node_modules/react-native/react.gradle"
 
 `;
 
@@ -41,10 +49,6 @@ const buildGradleWithOutReactGradleScript = `
 `;
 
 describe('Configures Android native project correctly', () => {
-  beforeAll(() => {
-    WarningAggregator.flushWarningsAndroid();
-  });
-
   it(`Non monorepo: Doesn't modify app/build.gradle if Sentry's already configured`, () => {
     expect(modifyAppBuildGradle(buildGradleWithSentry)).toMatch(buildGradleWithSentry);
   });
@@ -67,6 +71,6 @@ describe('Configures Android native project correctly', () => {
 
   it(`Warns to file a bug report if no react.gradle is found`, () => {
     modifyAppBuildGradle(buildGradleWithOutReactGradleScript);
-    expect(WarningAggregator.hasWarningsAndroid).toBeTruthy();
+    expect(WarningAggregator.addWarningAndroid).toHaveBeenCalled();
   });
 });

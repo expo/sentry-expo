@@ -1,6 +1,6 @@
 {
   "name": "sentry-expo",
-  "version": "4.1.1",
+  "version": "4.2.0",
   "description": "Catch your Javascript errors for your production Expo apps!",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -37,8 +37,8 @@
   "author": "650 Industries, Inc.",
   "homepage": "https://docs.expo.io/guides/using-sentry/",
   "dependencies": {
-    "@expo/config-plugins": "^2.0.2",
-    "@expo/config-types": "^41.0.0",
+    "@expo/config-plugins": "~4.1.4",
+    "@expo/config-types": "^45.0.0",
     "@expo/spawn-async": "^1.2.8",
     "@sentry/browser": "^6.12.0",
     "@sentry/integrations": "^6.12.0",

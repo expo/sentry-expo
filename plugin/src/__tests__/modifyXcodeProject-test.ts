@@ -28,8 +28,14 @@ const buildScriptWeDontExpect = {
 };
 
 describe('Configures iOS native project correctly', () => {
-  beforeAll(() => {
-    WarningAggregator.flushWarningsIOS();
+  let consoleWarnMock;
+
+  beforeEach(() => {
+    consoleWarnMock = jest.spyOn(console, 'warn').mockImplementation();
+  });
+
+  afterEach(() => {
+    consoleWarnMock.mockRestore();
   });
 
   it(`Doesn't modify build script if Sentry's already configured`, () => {
@@ -58,6 +64,6 @@ describe('Configures iOS native project correctly', () => {
 
   it(`Warns to file a bug report if build script isn't what we expect to find`, () => {
     modifyExistingXcodeBuildScript(buildScriptWeDontExpect);
-    expect(WarningAggregator.hasWarningsIOS).toBeTruthy();
+    expect(console.warn).toHaveBeenCalled();
   });
 });

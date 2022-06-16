@@ -41,9 +41,15 @@ const buildGradleWithOutReactGradleScript = `
 `;
 
 describe('Configures Android native project correctly', () => {
-  beforeAll(() => {
-    WarningAggregator.flushWarningsAndroid();
-  });
+  let consoleWarnMock;
+
+    beforeEach(() => {
+      consoleWarnMock = jest.spyOn(console, 'warn').mockImplementation();
+    });
+
+    afterEach(() => {
+      consoleWarnMock.mockRestore();
+    });
 
   it(`Non monorepo: Doesn't modify app/build.gradle if Sentry's already configured`, () => {
     expect(modifyAppBuildGradle(buildGradleWithSentry)).toMatch(buildGradleWithSentry);
@@ -67,6 +73,6 @@ describe('Configures Android native project correctly', () => {
 
   it(`Warns to file a bug report if no react.gradle is found`, () => {
     modifyAppBuildGradle(buildGradleWithOutReactGradleScript);
-    expect(WarningAggregator.hasWarningsAndroid).toBeTruthy();
+    expect(console.warn).toHaveBeenCalledTimes(1);
   });
 });

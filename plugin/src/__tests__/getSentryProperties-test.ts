@@ -187,10 +187,14 @@ auth.token=123-abc
     );
   });
 
+  let consoleWarnMock;
   describe('Tests with warnings', () => {
     beforeEach(() => {
-      WarningAggregator.flushWarningsAndroid();
-      WarningAggregator.flushWarningsIOS();
+      consoleWarnMock = jest.spyOn(console, 'warn').mockImplementation();
+    });
+
+    afterEach(() => {
+      consoleWarnMock.mockRestore();
     });
 
     it(`Warns (returns empty string) if no config found under hook`, () => {
@@ -208,17 +212,18 @@ auth.token=123-abc
         })
       ).not.toBe('');
 
-      expect(WarningAggregator.hasWarningsAndroid()).toBeTruthy();
-      expect(WarningAggregator.hasWarningsIOS()).toBeTruthy();
+      // todo: replace with WarningAggregator calls
+      expect(console.warn).toHaveBeenCalled();
     });
 
     it(`Warns if not all necessary fields are found`, () => {
+      const consoleWarnMock = jest.spyOn(console, 'warn').mockImplementation();
       getSentryProperties({
         ...expoConfigBase,
         ...hookWithEmptyConfig,
       });
-      expect(WarningAggregator.hasWarningsAndroid()).toBeTruthy();
-      expect(WarningAggregator.hasWarningsIOS()).toBeTruthy();
+      expect(console.warn).toHaveBeenCalled();
+      consoleWarnMock.mockRestore();
     });
   });
 });

@@ -79,7 +79,7 @@ class ExpoBareIntegration {
             error.stack = error.stack.replace(/\/(bundle\-\d+|[\dabcdef]+\.bundle)/g, `/${sentryFilename}`);
             react_native_2.getCurrentHub().withScope((scope) => {
                 if (isFatal) {
-                    scope.setLevel(react_native_2.Severity.Fatal);
+                    scope.setLevel('fatal');
                 }
                 react_native_2.getCurrentHub().captureException(error, {
                     originalException: error,

@@ -6,7 +6,6 @@ import {
   setExtras,
   setTags,
   getCurrentHub,
-  Severity,
   setTag,
   addGlobalEventProcessor,
 } from '@sentry/react-native';
@@ -74,7 +73,7 @@ export class ExpoBareIntegration {
 
       getCurrentHub().withScope((scope) => {
         if (isFatal) {
-          scope.setLevel(Severity.Fatal);
+          scope.setLevel('fatal');
         }
         getCurrentHub().captureException(error, {
           originalException: error,

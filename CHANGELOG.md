@@ -1,5 +1,18 @@
 # Changelog
 
+## master
+
+### 🛠 Breaking changes
+
+### 🎉 New features
+
+### 🧹 Chores
+
+- Upgrade `@sentry/browser`, `@sentry/integrations`, `@sentry/react-native`, `@sentry/types` to support Sentry React Native V4
+- Upgrade devDependencies to match Expo SDK 45
+
+### 🐛 Bug fixes
+
 ## 4.0.5 — 2021-11-23
 
 - Fixed using `deviceYearClass` from `expo-constants`, which is now deprecated. `deviceYearClass` is now pulled from `expo-device`

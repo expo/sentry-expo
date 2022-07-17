@@ -80,7 +80,7 @@ class ExpoManagedIntegration {
             }
             react_native_2.getCurrentHub().withScope((scope) => {
                 if (isFatal) {
-                    scope.setLevel(react_native_2.Severity.Fatal);
+                    scope.setLevel("fatal");
                 }
                 react_native_2.getCurrentHub().captureException(error, {
                     originalException: error,

@@ -195,6 +195,7 @@ auth.token=123-abc
     );
   });
 
+  let consoleWarnMock;
   describe('Tests with warnings', () => {
     it(`Warns (returns empty string) if no config found under hook`, () => {
       expect(
@@ -216,6 +217,7 @@ auth.token=123-abc
     });
 
     it(`Warns if not all necessary fields are found`, () => {
+      const consoleWarnMock = jest.spyOn(console, 'warn').mockImplementation();
       getSentryProperties({
         ...expoConfigBase,
         ...hookWithEmptyConfig,

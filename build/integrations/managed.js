@@ -1,7 +1,11 @@
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -47,27 +51,26 @@ const DEFAULT_TAGS = [
     },
 ];
 class ExpoManagedIntegration {
-    constructor() {
-        this.name = ExpoManagedIntegration.id;
-    }
+    static id = 'ExpoManagedIntegration';
+    name = ExpoManagedIntegration.id;
     setupOnce() {
         const manifest = Updates.manifest;
-        react_native_2.setExtras({
+        (0, react_native_2.setExtras)({
             manifest,
             deviceYearClass: Device.deviceYearClass,
             linkingUri: expo_constants_1.default.linkingUri,
         });
-        react_native_2.setTags({
+        (0, react_native_2.setTags)({
             deviceId: expo_constants_1.default.sessionId,
             appOwnership: expo_constants_1.default.appOwnership || 'N/A',
         });
         if (expo_constants_1.default.appOwnership === 'expo' && expo_constants_1.default.expoVersion) {
-            react_native_2.setTag('expoAppVersion', expo_constants_1.default.expoVersion);
+            (0, react_native_2.setTag)('expoAppVersion', expo_constants_1.default.expoVersion);
         }
         if (typeof manifest === 'object') {
             DEFAULT_TAGS.forEach((tag) => {
                 if (manifest.hasOwnProperty(tag.manifestName)) {
-                    react_native_2.setTag(tag.tagName, manifest[tag.manifestName]);
+                    (0, react_native_2.setTag)(tag.tagName, manifest[tag.manifestName]);
                 }
             });
         }
@@ -78,15 +81,15 @@ class ExpoManagedIntegration {
             if (react_native_1.Platform.OS === 'android') {
                 error.stack = error.stack.replace(/\/.*\/\d+\.\d+.\d+\/cached\-bundle\-experience\-/g, 'https://classic-assets.eascdn.net:443/');
             }
-            react_native_2.getCurrentHub().withScope((scope) => {
+            (0, react_native_2.getCurrentHub)().withScope((scope) => {
                 if (isFatal) {
                     scope.setLevel("fatal");
                 }
-                react_native_2.getCurrentHub().captureException(error, {
+                (0, react_native_2.getCurrentHub)().captureException(error, {
                     originalException: error,
                 });
             });
-            const client = react_native_2.getCurrentHub().getClient();
+            const client = (0, react_native_2.getCurrentHub)().getClient();
             if (client && !__DEV__) {
                 // @ts-ignore PR to add this to types: https://github.com/getsentry/sentry-javascript/pull/2669
                 client.flush(client.getOptions().shutdownTimeout || 2000).then(() => {
@@ -98,8 +101,8 @@ class ExpoManagedIntegration {
                 defaultHandler(error, isFatal);
             }
         });
-        react_native_2.addGlobalEventProcessor(function (event, _hint) {
-            const that = react_native_2.getCurrentHub().getIntegration(ExpoManagedIntegration);
+        (0, react_native_2.addGlobalEventProcessor)(function (event, _hint) {
+            const that = (0, react_native_2.getCurrentHub)().getIntegration(ExpoManagedIntegration);
             if (that) {
                 event.contexts = {
                     ...(event.contexts || {}),
@@ -118,5 +121,4 @@ class ExpoManagedIntegration {
     }
 }
 exports.ExpoManagedIntegration = ExpoManagedIntegration;
-ExpoManagedIntegration.id = 'ExpoManagedIntegration';
 //# sourceMappingURL=managed.js.map

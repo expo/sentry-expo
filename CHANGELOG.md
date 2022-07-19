@@ -4,11 +4,17 @@
 
 ### 🛠 Breaking changes
 
-- Upgrade `@sentry/browser`, `@sentry/integrations`, `@sentry/react-native`, `@sentry/types` to support Sentry React Native V4
-
 ### 🎉 New features
 
 ### 🐛 Bug fixes
+
+### 🧹 Chores
+
+## [5.0.0](https://github.com/expo/eas-cli/releases/tag/v5.0.0) - 2022-07-19
+
+### 🛠 Breaking changes
+
+- Upgrade `@sentry/browser`, `@sentry/integrations`, `@sentry/react-native`, `@sentry/types` to support Sentry React Native V4
 
 ### 🧹 Chores
 
@@ -80,7 +86,6 @@
 ```json
 "plugins": ["sentry-expo"]
 ```
-
 to your app.json or app.config.js. This will also auto-configure Sentry for bare workflow projects when you run `expo eject`.
 
 - `sentry-expo` now supports sending sessions data. See Sentry's [Release Health docs to learn more](https://docs.sentry.io/product/releases/health/).
@@ -119,17 +124,13 @@ to your app.json or app.config.js. This will also auto-configure Sentry for bare
 
   ```js
   import { Native, Browser } from 'sentry-expo';
-
+  
   const { ReactNativeClient } = Native;
   const { Transports } = Browser;
   ```
-
 - The iOS sourcemap files' names were changed from `main.ios.bundle` and `main.ios.map` to `main.jsbundle` and `main.jsbundle.map`, respectively. This matches the filenames created in the bare workflow during [no publish builds](https://github.com/expo/sentry-expo#configure-no-publish-builds). This only affects you if you were manually generating & uploading sourcemaps to Sentry, rather than relying on `expo publish` or `expo export`. [#129](https://github.com/expo/sentry-expo/pull/129)
-
 - The Android sourcemap files' names were changed from `main.android.bundle` and `main.android.map` to `index.android.bundle` and `index.android.bundle.map`, respectively. This matches the filenames created in the bare workflow during [no publish builds](https://github.com/expo/sentry-expo#configure-no-publish-builds). This only affects you if you were manually generating & uploading sourcemaps to Sentry, rather than relying on `expo publish` or `expo export`. [#130](https://github.com/expo/sentry-expo/pull/130)
-
 - `sentry-expo` now sets your release's `distribution` automatically, defaulting to your app's `version` (`version` in app.json) but can be overriden with `distribution` in the `postPublish` hooks config, or the `SENTRY_DIST` environment variable. If you override the `distribution`, make sure you pass the same value to `dist` in your call to `Sentry.init()`. [#136](https://github.com/expo/sentry-expo/pull/136)
-
 - upgraded to `@sentry/react-native` 1.7.1 [#136](https://github.com/expo/sentry-expo/pull/136)
 
 ### 🎉 New features
@@ -151,7 +152,6 @@ to your app.json or app.config.js. This will also auto-configure Sentry for bare
     }
   )
   ```
-
 - Fixed tags with invalid values. ([#137](https://github.com/expo/sentry-expo/pull/137) by [@RodolfoGS](https://github.com/RodolfoGS))
 
 ## 2.1.2 — 2020-06-05
@@ -179,5 +179,5 @@ to your app.json or app.config.js. This will also auto-configure Sentry for bare
 
 - Upgrade `@sentry/react-native` to 1.3.9
 - Fixed accidental calls to the native SDK that resulted in:
-  `Sentry Logger [Log]: Failed to get device context from native: SentryError: Native Client is not available, can't start on native.`
+`Sentry Logger [Log]: Failed to get device context from native: SentryError: Native Client is not available, can't start on native.`
 - Fixed bug where Android device model name wasn't being added to context.

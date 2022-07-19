@@ -6,10 +6,10 @@ import {
   setExtras,
   setTags,
   getCurrentHub,
-  Severity,
   setTag,
   addGlobalEventProcessor,
 } from '@sentry/react-native';
+import { SeverityLevel } from '@sentry/types';
 
 const DEFAULT_TAGS = [
   {
@@ -74,7 +74,7 @@ export class ExpoManagedIntegration {
 
       getCurrentHub().withScope((scope) => {
         if (isFatal) {
-          scope.setLevel(Severity.Fatal);
+          scope.setLevel("fatal" as SeverityLevel);
         }
         getCurrentHub().captureException(error, {
           originalException: error,

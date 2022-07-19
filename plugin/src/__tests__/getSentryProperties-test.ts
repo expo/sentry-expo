@@ -3,6 +3,14 @@ import { WarningAggregator } from '@expo/config-plugins';
 
 import { getSentryProperties } from '../withSentry';
 
+jest.mock('@expo/config-plugins', () => {
+  const plugins = jest.requireActual('@expo/config-plugins');
+  return {
+    ...plugins,
+    WarningAggregator: { addWarningIOS: jest.fn(), addWarningAndroid: jest.fn() },
+  };
+});
+
 type ExpoConfigHook = Pick<ExpoConfig, 'hooks'>;
 
 const expoConfigBase: ExpoConfig = {
@@ -213,7 +221,8 @@ auth.token=123-abc
       ).not.toBe('');
 
       // todo: replace with WarningAggregator calls
-      expect(console.warn).toHaveBeenCalled();
+      expect(WarningAggregator.addWarningIOS).toHaveBeenCalled();
+      expect(WarningAggregator.addWarningAndroid).toHaveBeenCalled();
     });
 
     it(`Warns if not all necessary fields are found`, () => {
@@ -222,7 +231,8 @@ auth.token=123-abc
         ...expoConfigBase,
         ...hookWithEmptyConfig,
       });
-      expect(console.warn).toHaveBeenCalled();
+      expect(WarningAggregator.addWarningIOS).toHaveBeenCalled();
+      expect(WarningAggregator.addWarningAndroid).toHaveBeenCalled();
       consoleWarnMock.mockRestore();
     });
   });

@@ -66,13 +66,13 @@ async function createAndUploadRelease(userOptions, childProcessEnv, projectRoot,
     const { useGlobalSentryCli, release, distribution, setCommits, deployEnv, platform, } = userOptions;
     const sentryCliBinaryPath = useGlobalSentryCli ? 'sentry-cli' : cli_1.default.getPath();
     let output;
-    let createReleaseResult = await spawn_async_1.default(sentryCliBinaryPath, ['releases', 'new', release], {
+    let createReleaseResult = await (0, spawn_async_1.default)(sentryCliBinaryPath, ['releases', 'new', release], {
         cwd: tmpdir,
         env: childProcessEnv,
     });
     output = createReleaseResult.stdout.toString();
     log(output);
-    let uploadResult = await spawn_async_1.default(sentryCliBinaryPath, [
+    let uploadResult = await (0, spawn_async_1.default)(sentryCliBinaryPath, [
         'releases',
         'files',
         release,
@@ -91,19 +91,19 @@ async function createAndUploadRelease(userOptions, childProcessEnv, projectRoot,
     output = uploadResult.stdout.toString();
     log(output);
     if (setCommits) {
-        let commitsResult = await spawn_async_1.default(sentryCliBinaryPath, ['releases', 'set-commits', '--auto', release], {
+        let commitsResult = await (0, spawn_async_1.default)(sentryCliBinaryPath, ['releases', 'set-commits', '--auto', release], {
             env: childProcessEnv,
         });
         output = commitsResult.stdout.toString();
         log(output);
     }
-    let finalizeReleaseResult = await spawn_async_1.default(sentryCliBinaryPath, ['releases', 'finalize', release], {
+    let finalizeReleaseResult = await (0, spawn_async_1.default)(sentryCliBinaryPath, ['releases', 'finalize', release], {
         env: childProcessEnv,
     });
     output = finalizeReleaseResult.stdout.toString();
     log(output);
     if (deployEnv) {
-        let deployResult = await spawn_async_1.default(sentryCliBinaryPath, ['releases', 'deploys', release, 'new', '-e', deployEnv], {
+        let deployResult = await (0, spawn_async_1.default)(sentryCliBinaryPath, ['releases', 'deploys', release, 'new', '-e', deployEnv], {
             env: childProcessEnv,
         });
         // filter out unnamed deloy

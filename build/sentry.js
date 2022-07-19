@@ -1,7 +1,11 @@
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -75,13 +79,13 @@ const init = (options = {}) => {
     let nativeOptions = { ...DEFAULT_OPTIONS, ...options };
     if (Array.isArray(nativeOptions.integrations)) {
         // Allow users to override Expo defaults...ymmv
-        nativeOptions.integrations = utils_1.overrideDefaultIntegrations(defaultExpoIntegrations, nativeOptions.integrations);
+        nativeOptions.integrations = (0, utils_1.overrideDefaultIntegrations)(defaultExpoIntegrations, nativeOptions.integrations);
     }
     else if (typeof nativeOptions.integrations === 'function') {
         // Need to rewrite the function to take Expo's default integrations
         let functionWithoutExpoIntegrations = nativeOptions.integrations;
         const functionWithExpoIntegrations = (integrations) => {
-            return functionWithoutExpoIntegrations(utils_1.overrideDefaultIntegrations(integrations, defaultExpoIntegrations));
+            return functionWithoutExpoIntegrations((0, utils_1.overrideDefaultIntegrations)(integrations, defaultExpoIntegrations));
         };
         nativeOptions.integrations = functionWithExpoIntegrations;
     }
@@ -95,13 +99,13 @@ const init = (options = {}) => {
         }
     }
     try {
-        return react_native_2.init({ ...nativeOptions });
+        return (0, react_native_2.init)({ ...nativeOptions });
     }
     catch (e) {
         if (IS_BARE_WORKFLOW) {
             // Native projects have not been linked, try to continue with no native capability
             console.warn(`[sentry-expo] Disabling the Sentry Native SDK (all JS errors will still be reported).\nTo enable it, run 'yarn add @sentry/react-native' or 'npm install @sentry/react-native' in your project directory. To silence this warning, pass 'enableNative: false' to Sentry.init().`);
-            return react_native_2.init({
+            return (0, react_native_2.init)({
                 ...nativeOptions,
                 enableNative: false,
                 enableNativeCrashHandling: false,

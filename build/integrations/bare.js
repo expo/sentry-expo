@@ -1,7 +1,11 @@
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -47,23 +51,22 @@ const DEFAULT_TAGS = [
     },
 ];
 class ExpoBareIntegration {
-    constructor() {
-        this.name = ExpoBareIntegration.id;
-    }
+    static id = 'ExpoBareIntegration';
+    name = ExpoBareIntegration.id;
     setupOnce() {
         const manifest = Updates.manifest;
-        react_native_2.setExtras({
+        (0, react_native_2.setExtras)({
             manifest,
             deviceYearClass: Device.deviceYearClass,
             linkingUri: expo_constants_1.default.linkingUri,
         });
-        react_native_2.setTags({
+        (0, react_native_2.setTags)({
             deviceId: expo_constants_1.default.sessionId,
         });
         if (typeof manifest === 'object') {
             DEFAULT_TAGS.forEach((tag) => {
                 if (manifest.hasOwnProperty(tag.manifestName)) {
-                    react_native_2.setTag(tag.tagName, manifest[tag.manifestName]);
+                    (0, react_native_2.setTag)(tag.tagName, manifest[tag.manifestName]);
                 }
             });
         }
@@ -77,15 +80,15 @@ class ExpoBareIntegration {
             let sentryFilename;
             sentryFilename = react_native_1.Platform.OS === 'android' ? 'index.android.bundle' : 'main.jsbundle';
             error.stack = error.stack.replace(/\/(bundle\-\d+|[\dabcdef]+\.bundle)/g, `/${sentryFilename}`);
-            react_native_2.getCurrentHub().withScope((scope) => {
+            (0, react_native_2.getCurrentHub)().withScope((scope) => {
                 if (isFatal) {
-                    scope.setLevel(react_native_2.Severity.Fatal);
+                    scope.setLevel("fatal");
                 }
-                react_native_2.getCurrentHub().captureException(error, {
+                (0, react_native_2.getCurrentHub)().captureException(error, {
                     originalException: error,
                 });
             });
-            const client = react_native_2.getCurrentHub().getClient();
+            const client = (0, react_native_2.getCurrentHub)().getClient();
             // If in dev, we call the default handler anyway and hope the error will be sent
             // Just for a better dev experience
             if (client && !__DEV__) {
@@ -99,8 +102,8 @@ class ExpoBareIntegration {
                 defaultHandler(error, isFatal);
             }
         });
-        react_native_2.addGlobalEventProcessor(function (event, _hint) {
-            const that = react_native_2.getCurrentHub().getIntegration(ExpoBareIntegration);
+        (0, react_native_2.addGlobalEventProcessor)(function (event, _hint) {
+            const that = (0, react_native_2.getCurrentHub)().getIntegration(ExpoBareIntegration);
             if (that) {
                 event.contexts = {
                     ...(event.contexts || {}),
@@ -119,5 +122,4 @@ class ExpoBareIntegration {
     }
 }
 exports.ExpoBareIntegration = ExpoBareIntegration;
-ExpoBareIntegration.id = 'ExpoBareIntegration';
 //# sourceMappingURL=bare.js.map

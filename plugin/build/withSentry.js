@@ -9,13 +9,13 @@ const withSentry = (config) => {
     const sentryProperties = getSentryProperties(config);
     if (sentryProperties !== null) {
         try {
-            config = withSentryAndroid_1.withSentryAndroid(config, sentryProperties);
+            config = (0, withSentryAndroid_1.withSentryAndroid)(config, sentryProperties);
         }
         catch (e) {
             config_plugins_1.WarningAggregator.addWarningAndroid('sentry-expo', 'There was a problem configuring sentry-expo in your native Android project: ' + e);
         }
         try {
-            config = withSentryIOS_1.withSentryIOS(config, sentryProperties);
+            config = (0, withSentryIOS_1.withSentryIOS)(config, sentryProperties);
         }
         catch (e) {
             config_plugins_1.WarningAggregator.addWarningIOS('sentry-expo', 'There was a problem configuring sentry-expo in your native iOS project: ' + e);
@@ -62,4 +62,4 @@ ${project ? `defaults.project=${project}` : missingProjectMessage}
 ${authToken ? `auth.token=${authToken}` : missingAuthTokenMessage}
 `;
 }
-exports.default = config_plugins_1.createRunOncePlugin(withSentry, pkg.name, pkg.version);
+exports.default = (0, config_plugins_1.createRunOncePlugin)(withSentry, pkg.name, pkg.version);

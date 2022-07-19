@@ -1,17 +1,17 @@
 # Changelog
 
-## master
+## main
 
 ### 🛠 Breaking changes
 
 ### 🎉 New features
 
+### 🐛 Bug fixes
+
 ### 🧹 Chores
 
 - Upgrade `@sentry/browser`, `@sentry/integrations`, `@sentry/react-native`, `@sentry/types` to support Sentry React Native V4
 - Upgrade devDependencies to match Expo SDK 45
-
-### 🐛 Bug fixes
 
 ## 4.0.5 — 2021-11-23
 

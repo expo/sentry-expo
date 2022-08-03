@@ -37,7 +37,7 @@
   "author": "650 Industries, Inc.",
   "homepage": "https://docs.expo.io/guides/using-sentry/",
   "dependencies": {
-    "@expo/config-plugins": "~4.1.5",
+    "@expo/config-plugins": "~5.0.0",
     "@expo/config-types": "^45.0.0",
     "@expo/spawn-async": "^1.6.0",
     "@sentry/browser": "^7.7.0",

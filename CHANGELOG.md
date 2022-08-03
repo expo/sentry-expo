@@ -10,6 +10,8 @@
 
 ### 🧹 Chores
 
+- Bump `@expo/config-plugins` to `~5.0.0`. ([#276](https://github.com/expo/eas-cli/pull/276) by [@kbrandwijk](https://github.com/kbrandwijk))
+
 ## [5.0.0](https://github.com/expo/eas-cli/releases/tag/v5.0.0) - 2022-07-19
 
 ### 🛠 Breaking changes
@@ -85,8 +87,7 @@
 
 ```json
 "plugins": ["sentry-expo"]
-```
-to your app.json or app.config.js. This will also auto-configure Sentry for bare workflow projects when you run `expo eject`.
+```to your app.json or app.config.js. This will also auto-configure Sentry for bare workflow projects when you run `expo eject`.
 
 - `sentry-expo` now supports sending sessions data. See Sentry's [Release Health docs to learn more](https://docs.sentry.io/product/releases/health/).
 

@@ -14,7 +14,7 @@
 
 ### 🧹 Chores
 
-- Bump `@expo/config-plugins` to `~5.0.0`. ([#276](https://github.com/expo/eas-cli/pull/276) by [@kbrandwijk](https://github.com/kbrandwijk))
+- Bump `@expo/config-plugins` to `~5.0.0`. ([#276](https://github.com/expo/sentry-expo/pull/276) by [@kbrandwijk](https://github.com/kbrandwijk))
 
 ## [5.0.0](https://github.com/expo/sentry-expo/releases/tag/v5.0.0) - 2022-07-19
 

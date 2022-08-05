@@ -8,3 +8,4 @@ export interface SentryExpoNativeOptions extends ReactNativeOptions {
     enableInExpoDevelopment?: boolean;
 }
 export declare function overrideDefaultIntegrations(defaults: Integration[], overrides: Integration[]): Integration[];
+//# sourceMappingURL=utils.d.ts.map

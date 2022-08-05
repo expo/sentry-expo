@@ -3,3 +3,4 @@ export declare class ExpoBareIntegration {
     name: string;
     setupOnce(): void;
 }
+//# sourceMappingURL=bare.d.ts.map

@@ -3,3 +3,4 @@ export declare class ExpoManagedIntegration {
     name: string;
     setupOnce(): void;
 }
+//# sourceMappingURL=managed.d.ts.map

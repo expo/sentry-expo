@@ -69,7 +69,7 @@ function formatEntry({ message, prNumber, author }: Entry): string {
   const messageWithDot = capitalizedMessage.endsWith('.')
     ? capitalizedMessage
     : `${capitalizedMessage}.`;
-  return `${messageWithDot} ([#${prNumber}](https://github.com/expo/eas-cli/pull/${prNumber}) by [@${author}](https://github.com/${author}))`;
+  return `${messageWithDot} ([#${prNumber}](https://github.com/expo/sentry-expo/pull/${prNumber}) by [@${author}](https://github.com/${author}))`;
 }
 
 function sanitizeInput(

@@ -10,6 +10,8 @@
 
 ### 🧹 Chores
 
+- Bump `@sentry/react-native` to `4.2.2`. ([#277](https://github.com/expo/sentry-expo/pull/277) by [@SimenB](https://github.com/SimenB))
+
 ## [5.0.1](https://github.com/expo/sentry-expo/releases/tag/v5.0.1) - 2022-08-05
 
 ### 🧹 Chores

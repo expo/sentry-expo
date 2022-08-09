@@ -10,6 +10,10 @@
 
 ### 🧹 Chores
 
+## [5.0.2](https://github.com/expo/sentry-expo/releases/tag/v5.0.2) - 2022-08-09
+
+### 🧹 Chores
+
 - Bump `@sentry/react-native` to `4.2.2`. ([#277](https://github.com/expo/sentry-expo/pull/277) by [@SimenB](https://github.com/SimenB))
 
 ## [5.0.1](https://github.com/expo/sentry-expo/releases/tag/v5.0.1) - 2022-08-05
@@ -157,8 +161,7 @@
       return filteredIntegrations;
     }
   )
-  ```
-- Fixed tags with invalid values. ([#137](https://github.com/expo/sentry-expo/pull/137) by [@RodolfoGS](https://github.com/RodolfoGS))
+```- Fixed tags with invalid values. ([#137](https://github.com/expo/sentry-expo/pull/137) by [@RodolfoGS](https://github.com/RodolfoGS))
 
 ## 2.1.2 — 2020-06-05
 

@@ -8,6 +8,8 @@
 
 ### 🐛 Bug fixes
 
+- Fix issue with config plugin being unable to modify Android gradle file with Expo 46
+
 ### 🧹 Chores
 
 ## [5.0.2](https://github.com/expo/sentry-expo/releases/tag/v5.0.2) - 2022-08-09

@@ -41,7 +41,7 @@ export function modifyAppBuildGradle(buildGradle: string) {
   if (buildGradle.includes('/sentry.gradle"')) {
     return buildGradle;
   }
-  const pattern = /(.*\/react\.gradle"\)?)(\s|\n|$)/;
+  const pattern = /(.*(\/|")react\.gradle"\)?)(\s|\n|$)/;
 
   if (!buildGradle.match(pattern)) {
     WarningAggregator.addWarningAndroid(

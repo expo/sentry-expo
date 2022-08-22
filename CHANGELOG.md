@@ -8,7 +8,7 @@
 
 ### 🐛 Bug fixes
 
-- Fix issue with config plugin being unable to modify Android gradle file with Expo 46
+- Fix issue with config plugin being unable to modify Android gradle file with Expo 46. ([#283](https://github.com/expo/sentry-expo/pull/283) by [@stezu](https://github.com/stezu))
 
 ### 🧹 Chores
 

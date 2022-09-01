@@ -2,7 +2,7 @@
 
 # sentry-expo
 
-This library provides a [config plugin](https://github.com/getsentry/sentry-react-native), a publishing hook script, and a JavaScript package to integrate Sentry into your Expo project.
+This library provides a [config plugin](https://docs.expo.dev/guides/config-plugins/), a publishing hook script, and a JavaScript package to integrate [Sentry](https://github.com/getsentry/sentry-react-native) into your Expo project.
 
 ## Installation, configuration, and usage
 

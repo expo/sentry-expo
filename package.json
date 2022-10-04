@@ -48,6 +48,7 @@
     "rimraf": "^3.0.2"
   },
   "peerDependencies": {
+    "expo": "*",
     "expo-application": "*",
     "expo-constants": "*",
     "expo-device": "*",
@@ -58,6 +59,7 @@
     "@types/node": "^14.0.1",
     "@types/react-native": "^0.69.1",
     "@types/rimraf": "^3.0.2",
+    "expo": "^46.0.10",
     "expo-application": "~4.2.0",
     "expo-constants": "~13.2.2",
     "expo-device": "~4.3.0",

@@ -8,6 +8,8 @@
 
 ### 🐛 Bug fixes
 
+- Added `expo` to `peerDependencies` to match own `peerDependencies` ([#286](https://github.com/expo/sentry-expo/pull/286) by [@SimenB](https://github.com/SimenB))
+
 ### 🧹 Chores
 
 ## [5.0.2](https://github.com/expo/sentry-expo/releases/tag/v5.0.2) - 2022-08-09

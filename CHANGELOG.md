@@ -97,7 +97,8 @@
 
 ```json
 "plugins": ["sentry-expo"]
-```to your app.json or app.config.js. This will also auto-configure Sentry for bare workflow projects when you run `expo eject`.
+```
+to your app.json or app.config.js. This will also auto-configure Sentry for bare workflow projects when you run `expo eject`.
 
 - `sentry-expo` now supports sending sessions data. See Sentry's [Release Health docs to learn more](https://docs.sentry.io/product/releases/health/).
 
@@ -161,7 +162,8 @@
       return filteredIntegrations;
     }
   )
-```- Fixed tags with invalid values. ([#137](https://github.com/expo/sentry-expo/pull/137) by [@RodolfoGS](https://github.com/RodolfoGS))
+  ```
+- Fixed tags with invalid values. ([#137](https://github.com/expo/sentry-expo/pull/137) by [@RodolfoGS](https://github.com/RodolfoGS))
 
 ## 2.1.2 — 2020-06-05
 

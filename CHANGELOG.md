@@ -8,7 +8,8 @@
 
 ### 🐛 Bug fixes
 
-- Added `expo` to `peerDependencies` to match own `peerDependencies` ([#286](https://github.com/expo/sentry-expo/pull/286) by [@SimenB](https://github.com/SimenB))
+- Added `expo` to `peerDependencies` to match own `peerDependencies`. ([#286](https://github.com/expo/sentry-expo/pull/286) by [@SimenB](https://github.com/SimenB))
+- Fix issue with config plugin being unable to modify Android gradle file with Expo 46. ([#290](https://github.com/expo/sentry-expo/pull/290)) by [@kbrandwijk](https://github.com/kbrandwijk))
 
 ### 🧹 Chores
 

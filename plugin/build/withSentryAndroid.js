@@ -56,7 +56,7 @@ function modifyAppBuildGradle(buildGradle) {
     if (buildGradle.includes('/sentry.gradle"')) {
         return buildGradle;
     }
-    const pattern = /(.*\/react\.gradle"\)?)(\s|\n|$)/;
+    const pattern = /(.*(\/|")react\.gradle"\)?)(\s|\n|$)/;
     if (!buildGradle.match(pattern)) {
         config_plugins_1.WarningAggregator.addWarningAndroid('sentry-expo', 'Could not find react.gradle script in android/app/build.gradle. Please open a bug report at https://github.com/expo/sentry-expo.');
     }

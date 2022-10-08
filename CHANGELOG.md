@@ -8,10 +8,14 @@
 
 ### 🐛 Bug fixes
 
+### 🧹 Chores
+
+## [5.0.3](https://github.com/expo/sentry-expo/releases/tag/v5.0.3) - 2022-10-08
+
+### 🐛 Bug fixes
+
 - Added `expo` to `peerDependencies` to match own `peerDependencies`. ([#286](https://github.com/expo/sentry-expo/pull/286) by [@SimenB](https://github.com/SimenB))
 - Fix issue with config plugin being unable to modify Android gradle file with Expo 46. ([#290](https://github.com/expo/sentry-expo/pull/290)) by [@kbrandwijk](https://github.com/kbrandwijk))
-
-### 🧹 Chores
 
 ## [5.0.2](https://github.com/expo/sentry-expo/releases/tag/v5.0.2) - 2022-08-09
 
@@ -100,8 +104,7 @@
 
 ```json
 "plugins": ["sentry-expo"]
-```
-to your app.json or app.config.js. This will also auto-configure Sentry for bare workflow projects when you run `expo eject`.
+```to your app.json or app.config.js. This will also auto-configure Sentry for bare workflow projects when you run `expo eject`.
 
 - `sentry-expo` now supports sending sessions data. See Sentry's [Release Health docs to learn more](https://docs.sentry.io/product/releases/health/).
 
@@ -138,10 +141,10 @@ to your app.json or app.config.js. This will also auto-configure Sentry for bare
 - Exports from `@sentry/react-native` or `@sentry/browser` are now namespaced.
 
   ```js
-  import { Native, Browser } from 'sentry-expo';
-  
+import { Native, Browser } from 'sentry-expo';
+
   const { ReactNativeClient } = Native;
-  const { Transports } = Browser;
+const { Transports } = Browser;
 ```- The iOS sourcemap files' names were changed from `main.ios.bundle` and `main.ios.map` to `main.jsbundle` and `main.jsbundle.map`, respectively. This matches the filenames created in the bare workflow during [no publish builds](https://github.com/expo/sentry-expo#configure-no-publish-builds). This only affects you if you were manually generating & uploading sourcemaps to Sentry, rather than relying on `expo publish` or `expo export`. [#129](https://github.com/expo/sentry-expo/pull/129)
 - The Android sourcemap files' names were changed from `main.android.bundle` and `main.android.map` to `index.android.bundle` and `index.android.bundle.map`, respectively. This matches the filenames created in the bare workflow during [no publish builds](https://github.com/expo/sentry-expo#configure-no-publish-builds). This only affects you if you were manually generating & uploading sourcemaps to Sentry, rather than relying on `expo publish` or `expo export`. [#130](https://github.com/expo/sentry-expo/pull/130)
 - `sentry-expo` now sets your release's `distribution` automatically, defaulting to your app's `version` (`version` in app.json) but can be overriden with `distribution` in the `postPublish` hooks config, or the `SENTRY_DIST` environment variable. If you override the `distribution`, make sure you pass the same value to `dist` in your call to `Sentry.init()`. [#136](https://github.com/expo/sentry-expo/pull/136)

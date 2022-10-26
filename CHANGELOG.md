@@ -8,7 +8,7 @@
 
 ### 🐛 Bug fixes
 
-- Fix an issue where `TypeError: undefined is not an object (evaluating 'error.stack.replace')` was thrown in some cases. (TODO add PR number by [@lachenmayer](https://github.com/lachenmayer))
+- Fix an issue where `TypeError: undefined is not an object (evaluating 'error.stack.replace')` was thrown in some cases. ([#296](https://github.com/expo/sentry-expo/pull/296) by [@lachenmayer](https://github.com/lachenmayer))
 
 ### 🧹 Chores
 

@@ -4,7 +4,7 @@
 
 ### 🛠 Breaking changes
 
-- Upgrade to SDK 47 by [@SimenB](https://github.com/SimenB))
+- Upgrade to SDK 47 ([#299](https://github.com/expo/sentry-expo/pull/299) by [@SimenB](https://github.com/SimenB))
 
 ### 🎉 New features
 

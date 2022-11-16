@@ -12,6 +12,8 @@
 
 ### 🧹 Chores
 
+- Replace `@sentry/browser` with `@sentry/react` ([#300](https://github.com/expo/sentry-expo/pull/300) by [@SimenB](https://github.com/SimenB))
+
 ## [5.0.3](https://github.com/expo/sentry-expo/releases/tag/v5.0.3) - 2022-10-08
 
 ### 🐛 Bug fixes

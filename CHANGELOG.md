@@ -6,7 +6,7 @@
 
 ### 🎉 New features
 
-- Upgrade `@sentry/react-natuve` to `4.8.0` ([#301](https://github.com/expo/sentry-expo/pull/301) by [@SimenB](https://github.com/SimenB))
+- Upgrade `@sentry/react-native` to `4.8.0` ([#301](https://github.com/expo/sentry-expo/pull/301) by [@SimenB](https://github.com/SimenB))
 
 ### 🐛 Bug fixes
 

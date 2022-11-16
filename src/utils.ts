@@ -1,4 +1,4 @@
-import type { BrowserOptions } from '@sentry/browser';
+import type { BrowserOptions } from '@sentry/react';
 import type { Integration } from '@sentry/types';
 import type { ReactNativeOptions } from '@sentry/react-native';
 

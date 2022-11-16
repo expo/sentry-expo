@@ -37,8 +37,6 @@
   "author": "650 Industries, Inc.",
   "homepage": "https://docs.expo.io/guides/using-sentry/",
   "dependencies": {
-    "@expo/config-plugins": "~5.0.0",
-    "@expo/config-types": "^46.0.1",
     "@expo/spawn-async": "^1.6.0",
     "@sentry/browser": "7.16.0",
     "@sentry/integrations": "7.16.0",
@@ -48,26 +46,27 @@
     "rimraf": "^3.0.2"
   },
   "peerDependencies": {
-    "expo": "*",
+    "expo": ">=47.0.0",
     "expo-application": "*",
     "expo-constants": "*",
     "expo-device": "*",
     "expo-updates": "*"
   },
   "devDependencies": {
+    "@expo/config-types": "^47.0.0",
     "@types/mkdirp": "^1.0.2",
     "@types/node": "^14.0.1",
-    "@types/react-native": "^0.69.1",
+    "@types/react-native": "^0.70.6",
     "@types/rimraf": "^3.0.2",
-    "expo": "^46.0.10",
-    "expo-application": "~4.2.0",
-    "expo-constants": "~13.2.2",
-    "expo-device": "~4.3.0",
-    "expo-module-scripts": "2.1.0",
-    "expo-updates": "~0.14.2",
+    "expo": "^47.0.6",
+    "expo-application": "~5.0.1",
+    "expo-constants": "~14.0.2",
+    "expo-device": "~5.0.0",
+    "expo-module-scripts": "3.0.3",
+    "expo-updates": "~0.15.5",
     "jest": "26",
-    "react": "18.0.0",
-    "react-native": "^0.69.1",
+    "react": "18.1.0",
+    "react-native": "^0.70.4",
     "react-native-web": "~0.18.6",
     "typescript": "^4.7.4"
   }

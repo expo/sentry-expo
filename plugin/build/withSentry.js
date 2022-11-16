@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getSentryProperties = void 0;
-const config_plugins_1 = require("@expo/config-plugins");
+const config_plugins_1 = require("expo/config-plugins");
 const withSentryAndroid_1 = require("./withSentryAndroid");
 const withSentryIOS_1 = require("./withSentryIOS");
 const pkg = require('../../package.json');
@@ -27,10 +27,9 @@ const missingAuthTokenMessage = `# no auth.token found, falling back to SENTRY_A
 const missingProjectMessage = `# no project found, falling back to SENTRY_PROJECT environment variable`;
 const missingOrgMessage = `# no org found, falling back to SENTRY_ORG environment variable`;
 function getSentryProperties(config) {
-    var _a, _b, _c, _d;
     const sentryHook = [
-        ...((_b = (_a = config.hooks) === null || _a === void 0 ? void 0 : _a.postPublish) !== null && _b !== void 0 ? _b : []),
-        ...((_d = (_c = config.hooks) === null || _c === void 0 ? void 0 : _c.postExport) !== null && _d !== void 0 ? _d : []),
+        ...(config.hooks?.postPublish ?? []),
+        ...(config.hooks?.postExport ?? []),
     ].filter((hook) => hook.file === 'sentry-expo/upload-sourcemaps')[0];
     if (!sentryHook) {
         return null;
@@ -44,9 +43,9 @@ function getSentryProperties(config) {
 }
 exports.getSentryProperties = getSentryProperties;
 function buildSentryPropertiesString(sentryHookConfig) {
-    const { organization, project, authToken, url = 'https://sentry.io/' } = sentryHookConfig !== null && sentryHookConfig !== void 0 ? sentryHookConfig : {};
+    const { organization, project, authToken, url = 'https://sentry.io/' } = sentryHookConfig ?? {};
     const missingProperties = ['organization', 'project', 'authToken'].filter((each) => {
-        if (!(sentryHookConfig === null || sentryHookConfig === void 0 ? void 0 : sentryHookConfig.hasOwnProperty(each))) {
+        if (!sentryHookConfig?.hasOwnProperty(each)) {
             return true;
         }
         return false;

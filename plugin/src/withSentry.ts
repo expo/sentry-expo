@@ -1,5 +1,6 @@
-import { ConfigPlugin, createRunOncePlugin, WarningAggregator } from '@expo/config-plugins';
-import { ExpoConfig, PublishHook } from '@expo/config-types';
+import { ConfigPlugin, createRunOncePlugin, WarningAggregator } from 'expo/config-plugins';
+import type { ExpoConfig } from 'expo/config';
+import type { PublishHook } from '@expo/config-types';
 
 import { withSentryAndroid } from './withSentryAndroid';
 import { withSentryIOS } from './withSentryIOS';

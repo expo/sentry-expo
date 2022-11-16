@@ -4,6 +4,8 @@
 
 ### 🛠 Breaking changes
 
+- Upgrade to SDK 47 by [@SimenB](https://github.com/SimenB))
+
 ### 🎉 New features
 
 ### 🐛 Bug fixes

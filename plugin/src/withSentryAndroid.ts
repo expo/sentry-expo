@@ -3,7 +3,7 @@ import {
   WarningAggregator,
   withAppBuildGradle,
   withDangerousMod,
-} from '@expo/config-plugins';
+} from 'expo/config-plugins';
 import * as path from 'path';
 
 import { writeSentryPropertiesTo } from './withSentryIOS';
@@ -42,7 +42,7 @@ export function modifyAppBuildGradle(buildGradle: string) {
     return buildGradle;
   }
   const pattern = /(.*(\/|")react\.gradle"\)?)(\s|\n|$)/;
-  
+
   if (!buildGradle.match(pattern)) {
     WarningAggregator.addWarningAndroid(
       'sentry-expo',

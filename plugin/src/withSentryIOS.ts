@@ -3,7 +3,7 @@ import {
   withDangerousMod,
   withXcodeProject,
   WarningAggregator,
-} from '@expo/config-plugins';
+} from 'expo/config-plugins';
 import * as fs from 'fs';
 import * as path from 'path';
 

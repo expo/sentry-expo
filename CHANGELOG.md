@@ -12,6 +12,8 @@
 
 ### 🐛 Bug fixes
 
+- Fix an issue where `TypeError: undefined is not an object (evaluating 'error.stack.replace')` was thrown in some cases. ([#296](https://github.com/expo/sentry-expo/pull/296) by [@lachenmayer](https://github.com/lachenmayer))
+
 ### 🧹 Chores
 
 - Replace `@sentry/browser` with `@sentry/react` ([#300](https://github.com/expo/sentry-expo/pull/300) by [@SimenB](https://github.com/SimenB))

@@ -4,6 +4,8 @@
 
 ### 🛠 Breaking changes
 
+- Add support for EAS Update. ([#302](https://github.com/expo/sentry-expo/pull/302) by [@kbrandwijk](https://github.com/kbrandwijk))
+
 ### 🎉 New features
 
 ### 🐛 Bug fixes

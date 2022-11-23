@@ -5,6 +5,7 @@
 ### 🛠 Breaking changes
 
 - Add support for EAS Update. ([#302](https://github.com/expo/sentry-expo/pull/302) by [@kbrandwijk](https://github.com/kbrandwijk))
+- Upgrade to SDK 47 ([#299](https://github.com/expo/sentry-expo/pull/299) by [@SimenB](https://github.com/SimenB))
 
 ### 🎉 New features
 
@@ -13,6 +14,8 @@
 ### 🐛 Bug fixes
 
 ### 🧹 Chores
+
+- Replace `@sentry/browser` with `@sentry/react` ([#300](https://github.com/expo/sentry-expo/pull/300) by [@SimenB](https://github.com/SimenB))
 
 ## [5.0.3](https://github.com/expo/sentry-expo/releases/tag/v5.0.3) - 2022-10-08
 

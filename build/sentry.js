@@ -39,7 +39,7 @@ const IS_BARE_WORKFLOW = expo_constants_1.default.executionEnvironment === expo_
 const DEFAULT_OPTIONS = {
     enableNativeNagger: false,
     release: getDefaultRelease(),
-    dist: MANIFEST.revisionId ? MANIFEST.version : `${Application.nativeBuildVersion}`,
+    dist: Updates.isEmbeddedLaunch ? (MANIFEST.revisionId ? MANIFEST.version : `${Application.nativeBuildVersion}`) : Updates.updateId,
     ...(IS_BARE_WORKFLOW ? {} : { enableNative: false, enableNativeCrashHandling: false }),
 };
 /**

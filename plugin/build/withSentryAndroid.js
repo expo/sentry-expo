@@ -24,7 +24,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.modifyAppBuildGradle = exports.withSentryAndroid = void 0;
-const config_plugins_1 = require("@expo/config-plugins");
+const config_plugins_1 = require("expo/config-plugins");
 const path = __importStar(require("path"));
 const withSentryIOS_1 = require("./withSentryIOS");
 const withSentryAndroid = (config, sentryProperties) => {

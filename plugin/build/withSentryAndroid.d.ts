@@ -1,4 +1,4 @@
-import { ConfigPlugin } from '@expo/config-plugins';
+import { ConfigPlugin } from 'expo/config-plugins';
 export declare const withSentryAndroid: ConfigPlugin<string>;
 /**
  * Writes to projectDirectory/android/app/build.gradle,

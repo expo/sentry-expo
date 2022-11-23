@@ -20,7 +20,7 @@ const IS_BARE_WORKFLOW = Constants.executionEnvironment === ExecutionEnvironment
 const DEFAULT_OPTIONS = {
   enableNativeNagger: false, // Otherwise this will trigger an Alert(), let's rely on the logs instead
   release: getDefaultRelease(),
-  dist: MANIFEST.revisionId ? MANIFEST.version : `${Application.nativeBuildVersion}`,
+  dist: Updates.isEmbeddedLaunch ? (MANIFEST.revisionId ? MANIFEST.version : `${Application.nativeBuildVersion}`) : Updates.updateId,
   ...(IS_BARE_WORKFLOW ? {} : { enableNative: false, enableNativeCrashHandling: false }),
 };
 

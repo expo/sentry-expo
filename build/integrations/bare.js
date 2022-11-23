@@ -109,11 +109,11 @@ class ExpoBareIntegration {
                     ...(event.contexts || {}),
                     device: {
                         simulator: !Device.isDevice,
-                        model: Device.modelName,
+                        model: Device.modelName || undefined,
                     },
                     os: {
-                        name: Device.osName,
-                        version: Device.osVersion,
+                        name: Device.osName || undefined,
+                        version: Device.osVersion || undefined,
                     },
                 };
             }

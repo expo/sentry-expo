@@ -20,13 +20,25 @@ const IS_BARE_WORKFLOW = Constants.executionEnvironment === ExecutionEnvironment
 const DEFAULT_OPTIONS = {
   enableNativeNagger: false, // Otherwise this will trigger an Alert(), let's rely on the logs instead
   release: getDefaultRelease(),
-  dist: MANIFEST.revisionId ? MANIFEST.version : `${Application.nativeBuildVersion}`,
+  dist: getDist(),
   ...(IS_BARE_WORKFLOW ? {} : { enableNative: false, enableNativeCrashHandling: false }),
 };
 
 /**
+ * For embedded updates, the dist version needs to match what is set by the Sentry build script.
+ * For modern manifest OTA updates, the updateId is used.
+ */
+function getDist(): string | null | undefined {
+  if (Updates.isEmbeddedLaunch) {
+    return MANIFEST.revisionId ? MANIFEST.version : `${Application.nativeBuildVersion}`;
+  } else {
+    return Updates.updateId;
+  }
+}
+
+/**
  * We assign the appropriate release based on if the app is running in development,
- * on an OTA Update, or on a no-publish build.
+ * on an Classic OTA Update, or on a no-publish build.
  */
 function getDefaultRelease(): string {
   if (__DEV__) {

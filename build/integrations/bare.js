@@ -77,9 +77,10 @@ class ExpoBareIntegration {
             // The name of the sourcemap file in Sentry is different depending on whether it was uploaded
             // by the upload-sourcemaps script in this package (in which case it will have a revisionId)
             // or by the default @sentry/react-native script.
-            let sentryFilename;
-            sentryFilename = react_native_1.Platform.OS === 'android' ? 'index.android.bundle' : 'main.jsbundle';
-            error.stack = error.stack.replace(/\/(bundle\-\d+|[\dabcdef]+\.bundle)/g, `/${sentryFilename}`);
+            if (typeof error.stack === 'string') {
+                const sentryFilename = react_native_1.Platform.OS === 'android' ? 'index.android.bundle' : 'main.jsbundle';
+                error.stack = error.stack.replace(/\/(bundle\-\d+|[\dabcdef]+\.bundle)/g, `/${sentryFilename}`);
+            }
             (0, react_native_2.getCurrentHub)().withScope((scope) => {
                 if (isFatal) {
                     scope.setLevel("fatal");

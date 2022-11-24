@@ -60,6 +60,10 @@ export class ExpoManagedIntegration {
       });
     }
 
+    if (Updates?.channel) {
+      setTag('expoChannel', Updates.channel);
+    }
+
     const defaultHandler = ErrorUtils.getGlobalHandler();
 
     ErrorUtils.setGlobalHandler((error, isFatal) => {

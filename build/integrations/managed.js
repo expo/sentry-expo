@@ -74,6 +74,9 @@ class ExpoManagedIntegration {
                 }
             });
         }
+        if (Updates?.channel) {
+            (0, react_native_2.setTag)('expoChannel', Updates.channel);
+        }
         const defaultHandler = ErrorUtils.getGlobalHandler();
         ErrorUtils.setGlobalHandler((error, isFatal) => {
             // On Android, the Expo bundle filepath cannot be handled by TraceKit,

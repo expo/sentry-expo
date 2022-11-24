@@ -1,1 +1,1 @@
-{"version":3,"file":"sentry.d.ts","sourceRoot":"","sources":["../src/sentry.ts"],"names":[],"mappings":"AASA,OAAO,EAAE,uBAAuB,EAA+B,MAAM,SAAS,CAAC;AAK/E,OAAO,KAAK,MAAM,MAAM,sBAAsB,CAAC;AA4B/C,eAAO,MAAM,IAAI,aAAa,uBAAuB,SAiEpD,CAAC"}
+{"version":3,"file":"sentry.d.ts","sourceRoot":"","sources":["../src/sentry.ts"],"names":[],"mappings":"AASA,OAAO,EAAE,uBAAuB,EAA+B,MAAM,SAAS,CAAC;AAK/E,OAAO,KAAK,MAAM,MAAM,sBAAsB,CAAC;AAwC/C,eAAO,MAAM,IAAI,aAAa,uBAAuB,SAiEpD,CAAC"}

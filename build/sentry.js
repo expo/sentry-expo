@@ -39,12 +39,24 @@ const IS_BARE_WORKFLOW = expo_constants_1.default.executionEnvironment === expo_
 const DEFAULT_OPTIONS = {
     enableNativeNagger: false,
     release: getDefaultRelease(),
-    dist: Updates.isEmbeddedLaunch ? (MANIFEST.revisionId ? MANIFEST.version : `${Application.nativeBuildVersion}`) : Updates.updateId,
+    dist: getDist(),
     ...(IS_BARE_WORKFLOW ? {} : { enableNative: false, enableNativeCrashHandling: false }),
 };
 /**
+ * For embedded updates, the dist version needs to match what is set by the Sentry build script.
+ * For modern manifest OTA updates, the updateId is used.
+ */
+function getDist() {
+    if (Updates.isEmbeddedLaunch) {
+        return MANIFEST.revisionId ? MANIFEST.version : `${Application.nativeBuildVersion}`;
+    }
+    else {
+        return Updates.updateId;
+    }
+}
+/**
  * We assign the appropriate release based on if the app is running in development,
- * on an OTA Update, or on a no-publish build.
+ * on an Classic OTA Update, or on a no-publish build.
  */
 function getDefaultRelease() {
     if (__DEV__) {

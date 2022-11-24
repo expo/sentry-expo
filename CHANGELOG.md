@@ -4,6 +4,16 @@
 
 ### 🛠 Breaking changes
 
+### 🎉 New features
+
+### 🐛 Bug fixes
+
+### 🧹 Chores
+
+## [6.0.0](https://github.com/expo/sentry-expo/releases/tag/v6.0.0) - 2022-11-24
+
+### 🛠 Breaking changes
+
 - Add support for EAS Update. ([#302](https://github.com/expo/sentry-expo/pull/302) by [@kbrandwijk](https://github.com/kbrandwijk))
 - Upgrade to SDK 47 ([#299](https://github.com/expo/sentry-expo/pull/299) by [@SimenB](https://github.com/SimenB))
 
@@ -177,8 +187,7 @@ const { Transports } = Browser;
       return filteredIntegrations;
     }
   )
-  ```
-- Fixed tags with invalid values. ([#137](https://github.com/expo/sentry-expo/pull/137) by [@RodolfoGS](https://github.com/RodolfoGS))
+```- Fixed tags with invalid values. ([#137](https://github.com/expo/sentry-expo/pull/137) by [@RodolfoGS](https://github.com/RodolfoGS))
 
 ## 2.1.2 — 2020-06-05
 

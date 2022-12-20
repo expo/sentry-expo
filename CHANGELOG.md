@@ -6,7 +6,7 @@
 
 ### 🎉 New features
 
-- Upgrade `@sentry/react-native` to `4.10.1`
+- Upgrade `@sentry/react-native` to `4.12.0`
 
 ### 🐛 Bug fixes
 

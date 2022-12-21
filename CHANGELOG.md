@@ -8,7 +8,7 @@
 
 ### 🐛 Bug fixes
 
-- Only create bundle & map files for the specified platform when uploading sourcemaps ([#309](https://github.com/expo/sentry-expo/pull/309) by [@danshilm](https://github.com/danshilm))
+- Only create bundle & map files for the specified platform when uploading sourcemaps ([#311](https://github.com/expo/sentry-expo/pull/311) by [@danshilm](https://github.com/danshilm))
 
 ### 🧹 Chores
 

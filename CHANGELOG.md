@@ -6,6 +6,8 @@
 
 ### 🎉 New features
 
+- Upgrade `@sentry/react-native` to `4.13.0`. ([#314](https://github.com/expo/sentry-expo/pull/314) by [@jbagaresgaray](https://github.com/jbagaresgaray))
+
 ### 🐛 Bug fixes
 
 ### 🧹 Chores

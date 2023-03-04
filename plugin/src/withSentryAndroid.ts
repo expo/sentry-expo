@@ -34,14 +34,15 @@ export const withSentryAndroid: ConfigPlugin<string> = (config, sentryProperties
 /**
  * Writes to projectDirectory/android/app/build.gradle,
  * adding the relevant @sentry/react-native script.
- *
- * We can be confident that the react-native/react.gradle script will be there.
  */
 export function modifyAppBuildGradle(buildGradle: string) {
   if (buildGradle.includes('/sentry.gradle"')) {
     return buildGradle;
   }
-  const pattern = /(.*(\/|")react\.gradle"\)?)(\s|\n|$)/;
+  
+  // Use the same location that sentry-wizard uses 
+  // See: https://github.com/getsentry/sentry-wizard/blob/e9b4522f27a852069c862bd458bdf9b07cab6e33/lib/Steps/Integrations/ReactNative.ts#L232
+  const pattern = /^android {/m;
 
   if (!buildGradle.match(pattern)) {
     WarningAggregator.addWarningAndroid(
@@ -50,10 +51,10 @@ export function modifyAppBuildGradle(buildGradle: string) {
     );
   }
 
+  const applyFrom = `apply from: new File(["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim(), "../sentry.gradle")`;
+  
   return buildGradle.replace(
     pattern,
-    `$1
-apply from: new File(["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim(), "../sentry.gradle")
-`
+    match => applyFrom + '\n\n' + match
   );
 }

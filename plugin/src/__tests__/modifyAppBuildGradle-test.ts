@@ -11,38 +11,27 @@ jest.mock('@expo/config-plugins', () => {
 });
 
 const buildGradleWithSentry = `
-rectly from the development server. Below you can see all the possible configurations
- * and their defaults. If you decide to add a configuration block, make sure to add it before the
- * \`apply from: "../../node_modules/react-native/react.gradle"\` line.
- *
-apply from: "../../node_modules/react-native/react.gradle"
 apply from: new File(["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim(), "../sentry.gradle")
+
+android {
+}
 `;
 
 const buildGradleWithOutSentry = `
-rectly from the development server. Below you can see all the possible configurations
- * and their defaults. If you decide to add a configuration block, make sure to add it before the
- * \`apply from: "../../node_modules/react-native/react.gradle"\` line.
- *
-apply from: "../../node_modules/react-native/react.gradle"
-
+android {
+}
 `;
 
 const monoRepoBuildGradleWithSentry = `
-rectly from the development server. Below you can see all the possible configurations
- * and their defaults. If you decide to add a configuration block, make sure to add it before the
- * \`apply from: "../../node_modules/react-native/react.gradle"\` line.
- *
-apply from: new File(["node", "--print", "require.resolve('react-native/package.json')"].execute().text.trim(), "../react.gradle")
 apply from: new File(["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim(), "../sentry.gradle")
+
+android {
+}
 `;
 
 const monoRepoBuildGradleWithOutSentry = `
-rectly from the development server. Below you can see all the possible configurations
- * and their defaults. If you decide to add a configuration block, make sure to add it before the
- * \`apply from: "../../node_modules/react-native/react.gradle"\` line.
- *
-apply from: new File(["node", "--print", "require.resolve('react-native/package.json')"].execute().text.trim(), "../react.gradle")
+android {
+}
 `;
 
 const buildGradleWithOutReactGradleScript = `

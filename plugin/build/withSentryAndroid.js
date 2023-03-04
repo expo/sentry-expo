@@ -49,8 +49,6 @@ exports.withSentryAndroid = withSentryAndroid;
 /**
  * Writes to projectDirectory/android/app/build.gradle,
  * adding the relevant @sentry/react-native script.
- *
- * We can be confident that the react-native/react.gradle script will be there.
  */
 function modifyAppBuildGradle(buildGradle) {
     if (buildGradle.includes('/sentry.gradle"')) {

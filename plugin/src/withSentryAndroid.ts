@@ -34,8 +34,6 @@ export const withSentryAndroid: ConfigPlugin<string> = (config, sentryProperties
 /**
  * Writes to projectDirectory/android/app/build.gradle,
  * adding the relevant @sentry/react-native script.
- *
- * We can be confident that the react-native/react.gradle script will be there.
  */
 export function modifyAppBuildGradle(buildGradle: string) {
   if (buildGradle.includes('/sentry.gradle"')) {

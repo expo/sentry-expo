@@ -63,6 +63,6 @@ function modifyAppBuildGradle(buildGradle) {
         config_plugins_1.WarningAggregator.addWarningAndroid('sentry-expo', 'Could not find react.gradle script in android/app/build.gradle. Please open a bug report at https://github.com/expo/sentry-expo.');
     }
     const applyFrom = `apply from: new File(["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim(), "../sentry.gradle")`;
-    return buildGradle.replace(pattern, match => applyFrom + '\n' + match);
+    return buildGradle.replace(pattern, match => applyFrom + '\n\n' + match);
 }
 exports.modifyAppBuildGradle = modifyAppBuildGradle;

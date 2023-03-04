@@ -57,6 +57,6 @@ export function modifyAppBuildGradle(buildGradle: string) {
   
   return buildGradle.replace(
     pattern,
-    match => applyFrom + '\n' + match
+    match => applyFrom + '\n\n' + match
   );
 }

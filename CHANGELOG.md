@@ -6,13 +6,19 @@
 
 ### 🎉 New features
 
+### 🐛 Bug fixes
+
+### 🧹 Chores
+
+## [6.1.0](https://github.com/expo/sentry-expo/releases/tag/v6.1.0) - 2023-03-04
+
+### 🎉 New features
+
 - Upgrade `@sentry/react-native` to `4.13.0`. ([#314](https://github.com/expo/sentry-expo/pull/314) by [@jbagaresgaray](https://github.com/jbagaresgaray))
 
 ### 🐛 Bug fixes
 
 - Update Android script injection logic ([#322](https://github.com/expo/sentry-expo/pull/322) by [@kbrandwijk](https://github.com/kbrandwijk))
-
-### 🧹 Chores
 
 ## [6.0.0](https://github.com/expo/sentry-expo/releases/tag/v6.0.0) - 2022-11-24
 
@@ -220,3 +226,4 @@ const { Transports } = Browser;
 - Fixed accidental calls to the native SDK that resulted in:
 `Sentry Logger [Log]: Failed to get device context from native: SentryError: Native Client is not available, can't start on native.`
 - Fixed bug where Android device model name wasn't being added to context.
+```

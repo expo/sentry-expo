@@ -56,12 +56,13 @@ function modifyAppBuildGradle(buildGradle) {
     if (buildGradle.includes('/sentry.gradle"')) {
         return buildGradle;
     }
-    const pattern = /(.*(\/|")react\.gradle"\)?)(\s|\n|$)/;
+    // Use the same location that sentry-wizard uses 
+    // See: https://github.com/getsentry/sentry-wizard/blob/e9b4522f27a852069c862bd458bdf9b07cab6e33/lib/Steps/Integrations/ReactNative.ts#L232
+    const pattern = /^android {/m;
     if (!buildGradle.match(pattern)) {
         config_plugins_1.WarningAggregator.addWarningAndroid('sentry-expo', 'Could not find react.gradle script in android/app/build.gradle. Please open a bug report at https://github.com/expo/sentry-expo.');
     }
-    return buildGradle.replace(pattern, `$1
-apply from: new File(["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim(), "../sentry.gradle")
-`);
+    const applyFrom = `apply from: new File(["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim(), "../sentry.gradle")`;
+    return buildGradle.replace(pattern, match => applyFrom + '\n' + match);
 }
 exports.modifyAppBuildGradle = modifyAppBuildGradle;

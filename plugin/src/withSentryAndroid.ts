@@ -53,7 +53,7 @@ export function modifyAppBuildGradle(buildGradle: string) {
     );
   }
 
-  const applyFrom = 'apply from: new File(["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim(), "../sentry.gradle")'
+  const applyFrom = `apply from: new File(["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim(), "../sentry.gradle")`;
   
   return buildGradle.replace(
     pattern,

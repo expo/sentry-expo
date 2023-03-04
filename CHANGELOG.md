@@ -8,6 +8,8 @@
 
 ### 🐛 Bug fixes
 
+- Update Android script injection logic ([#322](https://github.com/expo/sentry-expo/pull/322) by [@kbrandwijk](https://github.com/kbrandwijk))
+
 ### 🧹 Chores
 
 ## [6.0.0](https://github.com/expo/sentry-expo/releases/tag/v6.0.0) - 2022-11-24

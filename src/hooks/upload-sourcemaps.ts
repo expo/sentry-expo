@@ -64,10 +64,10 @@ module.exports = async (options: Options) => {
     }
 
     const childProcessEnv = Object.assign({}, process.env, {
-      SENTRY_ORG: (config && config.organization) || process.env.SENTRY_ORG,
-      SENTRY_PROJECT: (config && config.project) || process.env.SENTRY_PROJECT,
-      SENTRY_AUTH_TOKEN: (config && config.authToken) || process.env.SENTRY_AUTH_TOKEN,
-      SENTRY_URL: (config && config.url) || process.env.SENTRY_URL || 'https://sentry.io/',
+      SENTRY_ORG: process.env.SENTRY_ORG,
+      SENTRY_PROJECT: process.env.SENTRY_PROJECT,
+      SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
+      SENTRY_URL: process.env.SENTRY_URL || 'https://sentry.io/',
     });
 
     const uploadOptions = getUploadOptions(config, process.env, iosManifest);
@@ -75,7 +75,7 @@ module.exports = async (options: Options) => {
   } catch (e) {
     log(messageForError(e));
     log(
-      `Verify that your Sentry configuration in app.json is correct and refer to https://docs.expo.io/versions/latest/guides/using-sentry.html`
+      `Verify that you have correctly set the environment variables - SENTRY_* - and refer to https://docs.expo.io/versions/latest/guides/using-sentry.html`
     );
   } finally {
     rimraf.sync(tmpdir);

@@ -43,14 +43,14 @@ export function getSentryProperties(config: ExpoConfig): string | null {
     return null;
   }
 
-  if (!sentryHook.config) {
+  if (sentryHook.config) {
     WarningAggregator.addWarningAndroid(
       'sentry-expo',
-      'No Sentry config found in app.json, builds will fall back to environment variables. Refer to @sentry/react-native docs for how to configure this.'
+      'Sentry config found in app.json, this is risky - please consider using environment variables. Refer to @sentry/react-native docs for how to configure this.'
     );
     WarningAggregator.addWarningIOS(
       'sentry-expo',
-      'No Sentry config found in app.json, builds will fall back to environment variables. Refer to @sentry/react-native docs for how to configure this.'
+      'Sentry config found in app.json, this is risky - please consider using environment variables. Refer to @sentry/react-native docs for how to configure this.'
     );
     return '';
   }

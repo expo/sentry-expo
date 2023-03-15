@@ -8,6 +8,8 @@
 
 ### 🐛 Bug fixes
 
+- Discourage configuring `authToken` and point to `SENTRY_AUTH_TOKEN` and docs. ([#325](https://github.com/expo/sentry-expo/pull/325) by [@byCedric](https://github.com/byCedric))
+
 ### 🧹 Chores
 
 ## [6.1.0](https://github.com/expo/sentry-expo/releases/tag/v6.1.0) - 2023-03-04

@@ -23,7 +23,7 @@ const withSentry = (config) => {
     }
     return config;
 };
-const missingAuthTokenMessage = `# Configured through SENTRY_AUTH_TOKEN environment variable`;
+const missingAuthTokenMessage = `# auth.token is configured through SENTRY_AUTH_TOKEN environment variable`;
 const missingProjectMessage = `# no project found, falling back to SENTRY_PROJECT environment variable`;
 const missingOrgMessage = `# no org found, falling back to SENTRY_ORG environment variable`;
 function getSentryProperties(config) {
@@ -48,12 +48,7 @@ function getSentryProperties(config) {
 exports.getSentryProperties = getSentryProperties;
 function buildSentryPropertiesString(sentryHookConfig) {
     const { organization, project, authToken, url = 'https://sentry.io/' } = sentryHookConfig ?? {};
-    const missingProperties = ['organization', 'project', 'authToken'].filter((each) => {
-        if (!sentryHookConfig?.hasOwnProperty(each)) {
-            return true;
-        }
-        return false;
-    });
+    const missingProperties = ['organization', 'project'].filter((each) => !sentryHookConfig?.hasOwnProperty(each));
     if (missingProperties.length) {
         const warningMessage = `Missing Sentry configuration properties: ${missingProperties.join(', ')} from app.json. Builds will fall back to environment variables. Refer to @sentry/react-native docs for how to configure this.`;
         config_plugins_1.WarningAggregator.addWarningAndroid('sentry-expo', warningMessage);

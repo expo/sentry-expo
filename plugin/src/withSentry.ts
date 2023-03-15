@@ -71,12 +71,8 @@ export function getSentryProperties(config: ExpoConfig): string | null {
 
 function buildSentryPropertiesString(sentryHookConfig: PublishHook['config']) {
   const { organization, project, authToken, url = 'https://sentry.io/' } = sentryHookConfig ?? {};
-  const missingProperties = ['organization', 'project', 'authToken'].filter((each) => {
-    if (!sentryHookConfig?.hasOwnProperty(each)) {
-      return true
-    }
-    return false
-  });
+  const missingProperties = ['organization', 'project'].filter((each) => !sentryHookConfig?.hasOwnProperty(each));
+
   if (missingProperties.length) {
     const warningMessage = `Missing Sentry configuration properties: ${missingProperties.join(
       ', '
@@ -84,6 +80,7 @@ function buildSentryPropertiesString(sentryHookConfig: PublishHook['config']) {
     WarningAggregator.addWarningAndroid('sentry-expo', warningMessage);
     WarningAggregator.addWarningIOS('sentry-expo', warningMessage);
   }
+
   return `defaults.url=${url}
 ${organization ? `defaults.org=${organization}` : missingOrgMessage}
 ${project ? `defaults.project=${project}` : missingProjectMessage}

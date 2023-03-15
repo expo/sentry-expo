@@ -55,6 +55,17 @@ export function getSentryProperties(config: ExpoConfig): string | null {
     return '';
   }
 
+  if (sentryHook.config?.authToken) {
+    WarningAggregator.addWarningAndroid(
+      'sentry-expo',
+      'Sentry `authToken` found in app.json. Avoid committing this value to your repository, configure it through `SENTRY_AUTH_TOKEN` environment variable instead. See: https://docs.expo.dev/guides/using-sentry/#app-configuration'
+    );
+    WarningAggregator.addWarningIOS(
+      'sentry-expo',
+      'Sentry `authToken` found in app.json. Avoid committing this value to your repository, configure it through `SENTRY_AUTH_TOKEN` environment variable instead. See: https://docs.expo.dev/guides/using-sentry/#app-configuration'
+    );
+  }
+
   return buildSentryPropertiesString(sentryHook.config);
 }
 

@@ -39,6 +39,10 @@ function getSentryProperties(config) {
         config_plugins_1.WarningAggregator.addWarningIOS('sentry-expo', 'No Sentry config found in app.json, builds will fall back to environment variables. Refer to @sentry/react-native docs for how to configure this.');
         return '';
     }
+    if (sentryHook.config?.authToken) {
+        config_plugins_1.WarningAggregator.addWarningAndroid('sentry-expo', 'Sentry `authToken` found in app.json. Avoid committing this value to your repository, configure it through `SENTRY_AUTH_TOKEN` environment variable instead. See: https://docs.expo.dev/guides/using-sentry/#app-configuration');
+        config_plugins_1.WarningAggregator.addWarningIOS('sentry-expo', 'Sentry `authToken` found in app.json. Avoid committing this value to your repository, configure it through `SENTRY_AUTH_TOKEN` environment variable instead. See: https://docs.expo.dev/guides/using-sentry/#app-configuration');
+    }
     return buildSentryPropertiesString(sentryHook.config);
 }
 exports.getSentryProperties = getSentryProperties;

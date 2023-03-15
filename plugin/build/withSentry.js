@@ -23,7 +23,7 @@ const withSentry = (config) => {
     }
     return config;
 };
-const missingAuthTokenMessage = `# no auth.token found, falling back to SENTRY_AUTH_TOKEN environment variable`;
+const missingAuthTokenMessage = `# Configured through SENTRY_AUTH_TOKEN environment variable`;
 const missingProjectMessage = `# no project found, falling back to SENTRY_PROJECT environment variable`;
 const missingOrgMessage = `# no org found, falling back to SENTRY_ORG environment variable`;
 function getSentryProperties(config) {
@@ -62,7 +62,7 @@ function buildSentryPropertiesString(sentryHookConfig) {
     return `defaults.url=${url}
 ${organization ? `defaults.org=${organization}` : missingOrgMessage}
 ${project ? `defaults.project=${project}` : missingProjectMessage}
-${authToken ? `auth.token=${authToken}` : missingAuthTokenMessage}
+${authToken ? `# Configure this value through \`SENTRY_AUTH_TOKEN\` environment variable instead. See:https://docs.expo.dev/guides/using-sentry/#app-configuration\nauth.token=${authToken}` : missingAuthTokenMessage}
 `;
 }
 exports.default = (0, config_plugins_1.createRunOncePlugin)(withSentry, pkg.name, pkg.version);

@@ -155,6 +155,7 @@ describe('Get Sentry properties from app config', () => {
       `defaults.url=https://sentry.io/
 defaults.org=test-org
 defaults.project=myProjectName
+# Configure this value through \`SENTRY_AUTH_TOKEN\` environment variable instead. See:https://docs.expo.dev/guides/using-sentry/#app-configuration
 auth.token=123-abc
 `
     );
@@ -170,6 +171,7 @@ auth.token=123-abc
       `defaults.url=https://sentry.io/
 defaults.org=test-org
 defaults.project=myProjectName
+# Configure this value through \`SENTRY_AUTH_TOKEN\` environment variable instead. See:https://docs.expo.dev/guides/using-sentry/#app-configuration
 auth.token=123-abc
 `
     );
@@ -180,7 +182,7 @@ auth.token=123-abc
       `defaults.url=some-url
 # no org found, falling back to SENTRY_ORG environment variable
 # no project found, falling back to SENTRY_PROJECT environment variable
-# no auth.token found, falling back to SENTRY_AUTH_TOKEN environment variable
+# auth.token is configured through SENTRY_AUTH_TOKEN environment variable
 `
     );
   });
@@ -190,7 +192,7 @@ auth.token=123-abc
       `defaults.url=some-url
 # no org found, falling back to SENTRY_ORG environment variable
 # no project found, falling back to SENTRY_PROJECT environment variable
-# no auth.token found, falling back to SENTRY_AUTH_TOKEN environment variable
+# auth.token is configured through SENTRY_AUTH_TOKEN environment variable
 `
     );
   });

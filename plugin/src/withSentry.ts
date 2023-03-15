@@ -30,7 +30,7 @@ const withSentry: ConfigPlugin = (config) => {
   return config;
 };
 
-const missingAuthTokenMessage = `# no auth.token found, falling back to SENTRY_AUTH_TOKEN environment variable`;
+const missingAuthTokenMessage = `# auth.token is configured through SENTRY_AUTH_TOKEN environment variable`;
 const missingProjectMessage = `# no project found, falling back to SENTRY_PROJECT environment variable`;
 const missingOrgMessage = `# no org found, falling back to SENTRY_ORG environment variable`;
 
@@ -55,17 +55,24 @@ export function getSentryProperties(config: ExpoConfig): string | null {
     return '';
   }
 
+  if (sentryHook.config?.authToken) {
+    WarningAggregator.addWarningAndroid(
+      'sentry-expo',
+      'Sentry `authToken` found in app.json. Avoid committing this value to your repository, configure it through `SENTRY_AUTH_TOKEN` environment variable instead. See: https://docs.expo.dev/guides/using-sentry/#app-configuration'
+    );
+    WarningAggregator.addWarningIOS(
+      'sentry-expo',
+      'Sentry `authToken` found in app.json. Avoid committing this value to your repository, configure it through `SENTRY_AUTH_TOKEN` environment variable instead. See: https://docs.expo.dev/guides/using-sentry/#app-configuration'
+    );
+  }
+
   return buildSentryPropertiesString(sentryHook.config);
 }
 
 function buildSentryPropertiesString(sentryHookConfig: PublishHook['config']) {
   const { organization, project, authToken, url = 'https://sentry.io/' } = sentryHookConfig ?? {};
-  const missingProperties = ['organization', 'project', 'authToken'].filter((each) => {
-    if (!sentryHookConfig?.hasOwnProperty(each)) {
-      return true
-    }
-    return false
-  });
+  const missingProperties = ['organization', 'project'].filter((each) => !sentryHookConfig?.hasOwnProperty(each));
+
   if (missingProperties.length) {
     const warningMessage = `Missing Sentry configuration properties: ${missingProperties.join(
       ', '
@@ -73,10 +80,11 @@ function buildSentryPropertiesString(sentryHookConfig: PublishHook['config']) {
     WarningAggregator.addWarningAndroid('sentry-expo', warningMessage);
     WarningAggregator.addWarningIOS('sentry-expo', warningMessage);
   }
+
   return `defaults.url=${url}
 ${organization ? `defaults.org=${organization}` : missingOrgMessage}
 ${project ? `defaults.project=${project}` : missingProjectMessage}
-${authToken ? `auth.token=${authToken}` : missingAuthTokenMessage}
+${authToken ? `# Configure this value through \`SENTRY_AUTH_TOKEN\` environment variable instead. See:https://docs.expo.dev/guides/using-sentry/#app-configuration\nauth.token=${authToken}` : missingAuthTokenMessage}
 `;
 }
 

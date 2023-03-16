@@ -1,6 +1,6 @@
 {
   "name": "sentry-expo",
-  "version": "6.1.0",
+  "version": "6.1.1",
   "description": "Catch your Javascript errors for your production Expo apps!",
   "main": "build/index.js",
   "types": "build/index.d.ts",

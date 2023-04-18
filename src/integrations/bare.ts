@@ -73,7 +73,7 @@ export class ExpoBareIntegration {
 
       getCurrentHub().withScope((scope) => {
         if (isFatal) {
-          scope.setLevel("fatal" as SeverityLevel);
+          scope.setLevel('fatal' as SeverityLevel);
         }
         getCurrentHub().captureException(error, {
           originalException: error,
@@ -84,7 +84,6 @@ export class ExpoBareIntegration {
       // If in dev, we call the default handler anyway and hope the error will be sent
       // Just for a better dev experience
       if (client && !__DEV__) {
-        // @ts-ignore PR to add this to types: https://github.com/getsentry/sentry-javascript/pull/2669
         client.flush(client.getOptions().shutdownTimeout || 2000).then(() => {
           defaultHandler(error, isFatal);
         });

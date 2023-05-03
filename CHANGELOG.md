@@ -10,6 +10,8 @@
 
 ### 🧹 Chores
 
+- Add `sentry-expo` metadata to the Sentry clients. This will help with debugging issues related to the SDKs. 
+
 ## [6.1.1](https://github.com/expo/sentry-expo/releases/tag/v6.1.1) - 2023-03-16
 
 ### 🐛 Bug fixes

@@ -32,8 +32,23 @@ const integrations_1 = require("@sentry/integrations");
 const bare_1 = require("./integrations/bare");
 const managed_1 = require("./integrations/managed");
 const utils_1 = require("./utils");
+const version_1 = require("./version");
 const react_native_2 = require("@sentry/react-native");
 exports.Native = __importStar(require("@sentry/react-native"));
+const defaultSdkInfo = {
+    name: 'sentry.javascript.react-native.expo',
+    packages: [
+        {
+            name: version_1.SENTRY_EXPO_PACKAGE,
+            version: version_1.SENTRY_EXPO_VERSION,
+        },
+        {
+            name: version_1.SENTRY_REACT_NATIVE_PACKAGE,
+            version: version_1.SENTRY_REACT_NATIVE_VERSION,
+        }
+    ],
+    version: version_1.SENTRY_EXPO_VERSION,
+};
 const MANIFEST = Updates.manifest;
 const IS_BARE_WORKFLOW = expo_constants_1.default.executionEnvironment === expo_constants_1.ExecutionEnvironment.Bare;
 const DEFAULT_OPTIONS = {
@@ -41,6 +56,9 @@ const DEFAULT_OPTIONS = {
     release: getDefaultRelease(),
     dist: getDist(),
     ...(IS_BARE_WORKFLOW ? {} : { enableNative: false, enableNativeCrashHandling: false }),
+    _metadata: {
+        sdk: defaultSdkInfo,
+    },
 };
 /**
  * For embedded updates, the dist version needs to match what is set by the Sentry build script.

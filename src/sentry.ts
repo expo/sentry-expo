@@ -3,16 +3,37 @@ import * as Updates from 'expo-updates';
 import Constants, { ExecutionEnvironment } from 'expo-constants';
 import * as Application from 'expo-application';
 import { RewriteFrames } from '@sentry/integrations';
-import { Integration } from '@sentry/types';
+import { Integration, SdkInfo } from '@sentry/types';
 
 import { ExpoBareIntegration } from './integrations/bare';
 import { ExpoManagedIntegration } from './integrations/managed';
 import { SentryExpoNativeOptions, overrideDefaultIntegrations } from './utils';
+import {
+  SENTRY_EXPO_PACKAGE,
+  SENTRY_EXPO_VERSION,
+  SENTRY_REACT_NATIVE_PACKAGE,
+  SENTRY_REACT_NATIVE_VERSION,
+} from './version';
 
 import { init as initNative, Integrations } from '@sentry/react-native';
 import { AppManifest } from 'expo-constants/build/Constants.types';
 
 export * as Native from '@sentry/react-native';
+
+const defaultSdkInfo: SdkInfo = {
+  name: 'sentry.javascript.react-native.expo',
+  packages: [
+    {
+      name: SENTRY_EXPO_PACKAGE,
+      version: SENTRY_EXPO_VERSION,
+    },
+    {
+      name: SENTRY_REACT_NATIVE_PACKAGE,
+      version: SENTRY_REACT_NATIVE_VERSION,
+    }
+  ],
+  version: SENTRY_EXPO_VERSION,
+};
 
 const MANIFEST = Updates.manifest as AppManifest;
 const IS_BARE_WORKFLOW = Constants.executionEnvironment === ExecutionEnvironment.Bare;
@@ -22,6 +43,9 @@ const DEFAULT_OPTIONS = {
   release: getDefaultRelease(),
   dist: getDist(),
   ...(IS_BARE_WORKFLOW ? {} : { enableNative: false, enableNativeCrashHandling: false }),
+  _metadata: {
+    sdk: defaultSdkInfo,
+  },
 };
 
 /**

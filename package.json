@@ -11,7 +11,7 @@
     "app.plugin.js"
   ],
   "scripts": {
-    "build": "expo-module build",
+    "build": "yarn bake-version && expo-module build",
     "clean": "expo-module clean",
     "test": "expo-module test",
     "prepare": "expo-module prepare",

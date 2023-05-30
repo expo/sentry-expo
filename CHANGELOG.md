@@ -4,6 +4,9 @@
 
 ### 🛠 Breaking changes
 
+- Upgrade `@sentry/react-native` to `5.5.0`.
+  - Checkout [the migration guide](https://docs.sentry.io/platforms/react-native/migration/#from-4x-to-5x) for breaking changes
+
 ### 🎉 New features
 
 ### 🐛 Bug fixes

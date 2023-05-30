@@ -27,6 +27,7 @@ exports.writeSentryPropertiesTo = exports.modifyExistingXcodeBuildScript = expor
 const config_plugins_1 = require("expo/config-plugins");
 const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
+const SENTRY_CLI = `\`node --print "require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'"\``;
 const withSentryIOS = (config, sentryProperties) => {
     config = (0, config_plugins_1.withXcodeProject)(config, (config) => {
         const xcodeProject = config.modResults;
@@ -35,9 +36,9 @@ const withSentryIOS = (config, sentryProperties) => {
             xcodeProject.addBuildPhase([], 'PBXShellScriptBuildPhase', 'Upload Debug Symbols to Sentry', null, {
                 shellPath: '/bin/sh',
                 shellScript: `
-          export SENTRY_PROPERTIES=sentry.properties
-          [[ $SENTRY_INCLUDE_NATIVE_SOURCES == "true" ]] && INCLUDE_SOURCES_FLAG="--include-sources" || INCLUDE_SOURCES_FLAG=""
-          node --print "require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'" debug-files upload "$INCLUDE_SOURCES_FLAG" "$DWARF_DSYM_FOLDER_PATH"
+export SENTRY_PROPERTIES=sentry.properties
+[[ $SENTRY_INCLUDE_NATIVE_SOURCES == "true" ]] && INCLUDE_SOURCES_FLAG="--include-sources" || INCLUDE_SOURCES_FLAG=""
+${SENTRY_CLI} debug-files upload "$INCLUDE_SOURCES_FLAG" "$DWARF_DSYM_FOLDER_PATH"
           `
             });
         }
@@ -64,8 +65,7 @@ function modifyExistingXcodeBuildScript(script) {
     code =
         'export SENTRY_PROPERTIES=sentry.properties\n' +
             'export EXTRA_PACKAGER_ARGS="--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map"\n' +
-            code.replace(/^.*?(packager|scripts)\/react-native-xcode\.sh\s*(\\'\\\\")?/m, (match) => "`node --print \"require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'\"` react-native xcode --force-foreground " +
-                match) +
+            code.replace(/^.*?(packager|scripts)\/react-native-xcode\.sh\s*(\\'\\\\")?/m, (match) => `${SENTRY_CLI} react-native xcode --force-foreground ${match}`) +
             "`node --print \"require.resolve('@sentry/react-native/package.json').slice(0, -13) + '/scripts/collect-modules.sh'\"`";
     script.shellScript = JSON.stringify(code);
 }

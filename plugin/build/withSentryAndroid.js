@@ -54,7 +54,7 @@ function modifyAppBuildGradle(buildGradle) {
     if (buildGradle.includes('/sentry.gradle"')) {
         return buildGradle;
     }
-    // Use the same location that sentry-wizard uses 
+    // Use the same location that sentry-wizard uses
     // See: https://github.com/getsentry/sentry-wizard/blob/e9b4522f27a852069c862bd458bdf9b07cab6e33/lib/Steps/Integrations/ReactNative.ts#L232
     const pattern = /^android {/m;
     if (!buildGradle.match(pattern)) {

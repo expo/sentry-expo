@@ -38,7 +38,7 @@ const withSentryIOS = (config, sentryProperties) => {
                 shellScript: `
 export SENTRY_PROPERTIES=sentry.properties
 [[ $SENTRY_INCLUDE_NATIVE_SOURCES == "true" ]] && INCLUDE_SOURCES_FLAG="--include-sources" || INCLUDE_SOURCES_FLAG=""
-${SENTRY_CLI} debug-files upload "$INCLUDE_SOURCES_FLAG" "$DWARF_DSYM_FOLDER_PATH"
+${SENTRY_CLI} debug-files upload --force-foreground "$INCLUDE_SOURCES_FLAG" "$DWARF_DSYM_FOLDER_PATH"
           `
             });
         }
@@ -66,7 +66,7 @@ function modifyExistingXcodeBuildScript(script) {
         'export SENTRY_PROPERTIES=sentry.properties\n' +
             'export EXTRA_PACKAGER_ARGS="--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map"\n' +
             code.replace(/^.*?(packager|scripts)\/react-native-xcode\.sh\s*(\\'\\\\")?/m, (match) => `${SENTRY_CLI} react-native xcode --force-foreground ${match}`) +
-            "`node --print \"require.resolve('@sentry/react-native/package.json').slice(0, -13) + '/scripts/collect-modules.sh'\"`";
+            "\n\n`node --print \"require.resolve('@sentry/react-native/package.json').slice(0, -13) + '/scripts/collect-modules.sh'\"`";
     script.shellScript = JSON.stringify(code);
 }
 exports.modifyExistingXcodeBuildScript = modifyExistingXcodeBuildScript;

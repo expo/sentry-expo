@@ -65,8 +65,8 @@
     "expo-module-scripts": "3.0.4",
     "expo-updates": "~0.15.6",
     "jest": "26",
-    "react": "18.1.0",
-    "react-native": "^0.70.5",
+    "react": "18.2.0",
+    "react-native": "0.71.8",
     "react-native-web": "~0.18.9",
     "typescript": "^4.7.4"
   }

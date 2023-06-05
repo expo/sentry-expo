@@ -38,10 +38,10 @@
   "homepage": "https://docs.expo.io/guides/using-sentry/",
   "dependencies": {
     "@expo/spawn-async": "^1.7.0",
-    "@sentry/integrations": "7.29.0",
-    "@sentry/react": "7.29.0",
-    "@sentry/react-native": "4.13.0",
-    "@sentry/types": "7.29.0",
+    "@sentry/integrations": "7.37.2",
+    "@sentry/react": "7.37.2",
+    "@sentry/react-native": "4.15.2",
+    "@sentry/types": "7.37.2",
     "mkdirp": "^1.0.4",
     "rimraf": "^3.0.2"
   },

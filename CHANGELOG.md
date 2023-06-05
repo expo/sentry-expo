@@ -6,7 +6,11 @@
 
 ### 🎉 New features
 
+- Upgrade `@sentry/react-native` to `4.15.2`.
+
 ### 🐛 Bug fixes
+
+- Android automatic source maps upload with Expo SDK 48
 
 ### 🧹 Chores
 

@@ -6,15 +6,15 @@
 
 ### 🎉 New features
 
-- Upgrade `@sentry/react-native` to `4.15.2`.
+- Upgrade `@sentry/react-native` to `4.15.2`. ([#339](https://github.com/expo/sentry-expo/pull/339) by [@krystofwoldrich](https://github.com/krystofwoldrich))
 
 ### 🐛 Bug fixes
 
-- Android automatic source maps upload with Expo SDK 48
+- Build-time source maps upload support for Expo SDK 48. ([#331](https://github.com/expo/sentry-expo/pull/339) by [@krystofwoldrich](https://github.com/krystofwoldrich))
 
 ### 🧹 Chores
 
-- Add `sentry-expo` metadata to the Sentry clients. This will help with debugging issues related to the SDKs. 
+- Add `sentry-expo` metadata to the Sentry clients. This will help with debugging issues related to the SDKs. ([#331](https://github.com/expo/sentry-expo/pull/331) by [@krystofwoldrich](https://github.com/krystofwoldrich))
 
 ## [6.1.1](https://github.com/expo/sentry-expo/releases/tag/v6.1.1) - 2023-03-16
 

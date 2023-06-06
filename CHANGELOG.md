@@ -6,6 +6,16 @@
 
 ### 🎉 New features
 
+### 🐛 Bug fixes
+
+### 🧹 Chores
+
+## [6.2.0](https://github.com/expo/sentry-expo/releases/tag/v6.2.0) - 2023-06-06
+
+### 🛠 Breaking changes
+
+### 🎉 New features
+
 - Upgrade `@sentry/react-native` to `4.15.2`. ([#339](https://github.com/expo/sentry-expo/pull/339) by [@krystofwoldrich](https://github.com/krystofwoldrich))
 
 ### 🐛 Bug fixes

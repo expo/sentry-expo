@@ -11,12 +11,13 @@
     "app.plugin.js"
   ],
   "scripts": {
-    "build": "expo-module build",
+    "build": "yarn bake-version && expo-module build",
     "clean": "expo-module clean",
     "test": "expo-module test",
     "prepare": "expo-module prepare",
     "prepublishOnly": "expo-module prepublishOnly",
-    "expo-module": "expo-module"
+    "expo-module": "expo-module",
+    "bake-version": "cd scripts; yarn bake-version; cd .."
   },
   "license": "MIT",
   "keywords": [

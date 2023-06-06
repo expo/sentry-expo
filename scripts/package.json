@@ -7,7 +7,8 @@
     "changelog-entry": "ts-node-esm src/changelogEntry.ts",
     "release-changelog": "ts-node-esm src/releaseChangelog.ts",
     "update-local-plugin": "./src/updateLocalPlugin.sh",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "bake-version": "ts-node-esm src/bake-version.ts"
   },
   "author": "Expo <support@expo.dev>",
   "license": "MIT",

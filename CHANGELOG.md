@@ -8,6 +8,8 @@
 
 ### 🐛 Bug fixes
 
+- RN Web Builds can import SDK from version `@sentry/react-native`
+
 ### 🧹 Chores
 
 ## [6.2.0](https://github.com/expo/sentry-expo/releases/tag/v6.2.0) - 2023-06-06

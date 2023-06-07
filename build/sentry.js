@@ -44,7 +44,7 @@ const defaultSdkInfo = {
         },
         {
             name: version_1.SENTRY_REACT_NATIVE_PACKAGE,
-            version: version_1.SENTRY_REACT_NATIVE_VERSION,
+            version: react_native_2.SDK_VERSION,
         }
     ],
     version: version_1.SENTRY_EXPO_VERSION,

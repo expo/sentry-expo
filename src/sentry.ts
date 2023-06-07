@@ -12,10 +12,13 @@ import {
   SENTRY_EXPO_PACKAGE,
   SENTRY_EXPO_VERSION,
   SENTRY_REACT_NATIVE_PACKAGE,
-  SENTRY_REACT_NATIVE_VERSION,
 } from './version';
 
-import { init as initNative, Integrations } from '@sentry/react-native';
+import {
+  init as initNative,
+  Integrations,
+  SDK_VERSION as SENTRY_REACT_NATIVE_VERSION,
+} from '@sentry/react-native';
 import { AppManifest } from 'expo-constants/build/Constants.types';
 
 export * as Native from '@sentry/react-native';

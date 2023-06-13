@@ -53,7 +53,9 @@ export function modifyAppBuildGradle(buildGradle: string) {
     );
   }
 
-  const sentryOptions = `project.ext.sentryCli=[collectModulesScript: new File(${resolveSentryReactNativePackageJsonPath}, "../dist/js/tools/collectModules.js")]`;
+  const sentryOptions = !buildGradle.includes('project.ext.sentryCli')
+    ? `project.ext.sentryCli=[collectModulesScript: new File(${resolveSentryReactNativePackageJsonPath}, "../dist/js/tools/collectModules.js")]`
+    : '';
   const applyFrom = `apply from: new File(${resolveSentryReactNativePackageJsonPath}, "../sentry.gradle")`;
   
   return buildGradle.replace(

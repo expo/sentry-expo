@@ -1,6 +1,6 @@
 {
   "name": "sentry-expo",
-  "version": "6.1.1",
+  "version": "6.2.1",
   "description": "Catch your Javascript errors for your production Expo apps!",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -11,12 +11,13 @@
     "app.plugin.js"
   ],
   "scripts": {
-    "build": "expo-module build",
+    "build": "yarn bake-version && expo-module build",
     "clean": "expo-module clean",
     "test": "expo-module test",
     "prepare": "expo-module prepare",
     "prepublishOnly": "expo-module prepublishOnly",
-    "expo-module": "expo-module"
+    "expo-module": "expo-module",
+    "bake-version": "cd scripts; yarn bake-version; cd .."
   },
   "license": "MIT",
   "keywords": [

@@ -27,8 +27,13 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install dependencies
         run: yarn install --frozen-lockfile --check-files --ignore-scripts
+      - name: Install scripts dependencies
+        working-directory: ./scripts
+        run: yarn install --frozen-lockfile --check-files --ignore-scripts
       - name: Clean build
         run: rm -rf build plugin/build
+      - name: Bake version
+        run: yarn bake-version
       - name: Build package
         run: yarn build
       - name: Build up-to-date

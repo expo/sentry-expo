@@ -39,8 +39,8 @@ export function modifyAppBuildGradle(buildGradle: string) {
   if (buildGradle.includes('/sentry.gradle"')) {
     return buildGradle;
   }
-  
-  // Use the same location that sentry-wizard uses 
+
+  // Use the same location that sentry-wizard uses
   // See: https://github.com/getsentry/sentry-wizard/blob/e9b4522f27a852069c862bd458bdf9b07cab6e33/lib/Steps/Integrations/ReactNative.ts#L232
   const pattern = /^android {/m;
 
@@ -52,7 +52,7 @@ export function modifyAppBuildGradle(buildGradle: string) {
   }
 
   const applyFrom = `apply from: new File(["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim(), "../sentry.gradle")`;
-  
+
   return buildGradle.replace(
     pattern,
     match => applyFrom + '\n\n' + match

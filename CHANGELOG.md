@@ -8,7 +8,17 @@
 
 ### 🐛 Bug fixes
 
-- Dynamically resolve `collectModulesScript` script path to support monorepos.
+### 🧹 Chores
+
+## [6.2.2](https://github.com/expo/sentry-expo/releases/tag/v6.2.2) - 2023-06-19
+
+### 🛠 Breaking changes
+
+### 🎉 New features
+
+### 🐛 Bug fixes
+
+- Dynamically resolve `collectModulesScript` script path to support monorepos. ([#343](https://github.com/expo/sentry-expo/pull/343) by [@krystofwoldrich](https://github.com/krystofwoldrich))
 
 ### 🧹 Chores
 

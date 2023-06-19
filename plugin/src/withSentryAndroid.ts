@@ -31,6 +31,8 @@ export const withSentryAndroid: ConfigPlugin<string> = (config, sentryProperties
   ]);
 };
 
+const resolveSentryReactNativePackageJsonPath = `["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim()`;
+
 /**
  * Writes to projectDirectory/android/app/build.gradle,
  * adding the relevant @sentry/react-native script.
@@ -51,10 +53,13 @@ export function modifyAppBuildGradle(buildGradle: string) {
     );
   }
 
-  const applyFrom = `apply from: new File(["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim(), "../sentry.gradle")`;
+  const sentryOptions = !buildGradle.includes('project.ext.sentryCli')
+    ? `project.ext.sentryCli=[collectModulesScript: new File(${resolveSentryReactNativePackageJsonPath}, "../dist/js/tools/collectModules.js")]`
+    : '';
+  const applyFrom = `apply from: new File(${resolveSentryReactNativePackageJsonPath}, "../sentry.gradle")`;
   
   return buildGradle.replace(
     pattern,
-    match => applyFrom + '\n\n' + match
+    match => sentryOptions + '\n\n' + applyFrom + '\n\n' + match
   );
 }

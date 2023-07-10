@@ -30,7 +30,7 @@ exports.ExpoBareIntegration = void 0;
 const react_native_1 = require("react-native");
 const expo_constants_1 = __importDefault(require("expo-constants"));
 const Device = __importStar(require("expo-device"));
-const Updates = __importStar(require("expo-updates"));
+const Updates = __importStar(require("./Updates"));
 const react_native_2 = require("@sentry/react-native");
 const DEFAULT_TAGS = [
     {

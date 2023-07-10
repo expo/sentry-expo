@@ -27,10 +27,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ExpoManagedIntegration = void 0;
+const Updates = __importStar(require("./Updates"));
 const react_native_1 = require("react-native");
 const expo_constants_1 = __importDefault(require("expo-constants"));
 const Device = __importStar(require("expo-device"));
-const Updates = __importStar(require("expo-updates"));
 const react_native_2 = require("@sentry/react-native");
 const DEFAULT_TAGS = [
     {
@@ -74,7 +74,7 @@ class ExpoManagedIntegration {
                 }
             });
         }
-        if (Updates?.channel) {
+        if (Updates.channel) {
             (0, react_native_2.setTag)('expoChannel', Updates.channel);
         }
         const defaultHandler = ErrorUtils.getGlobalHandler();

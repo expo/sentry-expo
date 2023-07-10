@@ -50,8 +50,7 @@
     "expo": ">=47.0.0",
     "expo-application": "*",
     "expo-constants": "*",
-    "expo-device": "*",
-    "expo-updates": "*"
+    "expo-device": "*"
   },
   "devDependencies": {
     "@expo/config-types": "^47.0.0",
@@ -64,7 +63,6 @@
     "expo-constants": "~14.0.2",
     "expo-device": "~5.0.0",
     "expo-module-scripts": "3.0.4",
-    "expo-updates": "~0.15.6",
     "jest": "26",
     "react": "18.1.0",
     "react-native": "^0.70.5",

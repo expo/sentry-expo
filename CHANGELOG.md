@@ -10,18 +10,6 @@
 
 ### 🧹 Chores
 
-## [6.2.2](https://github.com/expo/sentry-expo/releases/tag/v6.2.2) - 2023-06-19
-
-### 🛠 Breaking changes
-
-### 🎉 New features
-
-### 🐛 Bug fixes
-
-- Dynamically resolve `collectModulesScript` script path to support monorepos. ([#343](https://github.com/expo/sentry-expo/pull/343) by [@krystofwoldrich](https://github.com/krystofwoldrich))
-
-### 🧹 Chores
-
 ## [7.0.0](https://github.com/expo/sentry-expo/releases/tag/v7.0.0) - 2023-06-16
 
 ### 🛠 Breaking changes
@@ -32,6 +20,18 @@ Checkout [the migration guide](https://docs.sentry.io/platforms/react-native/mig
 ### 🎉 New features
 
 ### 🐛 Bug fixes
+
+### 🧹 Chores
+
+## [6.2.2](https://github.com/expo/sentry-expo/releases/tag/v6.2.2) - 2023-06-19
+
+### 🛠 Breaking changes
+
+### 🎉 New features
+
+### 🐛 Bug fixes
+
+- Dynamically resolve `collectModulesScript` script path to support monorepos. ([#343](https://github.com/expo/sentry-expo/pull/343) by [@krystofwoldrich](https://github.com/krystofwoldrich))
 
 ### 🧹 Chores
 

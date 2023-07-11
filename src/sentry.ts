@@ -41,7 +41,7 @@ const defaultSdkInfo: SdkInfo = {
 const MANIFEST = Updates.manifest as AppManifest;
 const IS_BARE_WORKFLOW = Constants.executionEnvironment === ExecutionEnvironment.Bare;
 
-const DEFAULT_OPTIONS = {
+const getDefaultOptions = () => ({
   enableNativeNagger: false, // Otherwise this will trigger an Alert(), let's rely on the logs instead
   release: getDefaultRelease(),
   dist: getDist(),
@@ -49,7 +49,7 @@ const DEFAULT_OPTIONS = {
   _metadata: {
     sdk: defaultSdkInfo,
   },
-};
+});
 
 /**
  * For embedded updates, the dist version needs to match what is set by the Sentry build script.
@@ -97,7 +97,7 @@ export const init = (options: SentryExpoNativeOptions = {}) => {
     }),
   ];
 
-  let nativeOptions = { ...DEFAULT_OPTIONS, ...options } as SentryExpoNativeOptions;
+  let nativeOptions = { ...getDefaultOptions(), ...options } as SentryExpoNativeOptions;
 
   if (Array.isArray(nativeOptions.integrations)) {
     // Allow users to override Expo defaults...ymmv

@@ -51,7 +51,7 @@ const defaultSdkInfo = {
 };
 const MANIFEST = Updates.manifest;
 const IS_BARE_WORKFLOW = expo_constants_1.default.executionEnvironment === expo_constants_1.ExecutionEnvironment.Bare;
-const DEFAULT_OPTIONS = {
+const getDefaultOptions = () => ({
     enableNativeNagger: false,
     release: getDefaultRelease(),
     dist: getDist(),
@@ -59,7 +59,7 @@ const DEFAULT_OPTIONS = {
     _metadata: {
         sdk: defaultSdkInfo,
     },
-};
+});
 /**
  * For embedded updates, the dist version needs to match what is set by the Sentry build script.
  * For modern manifest OTA updates, the updateId is used.
@@ -106,7 +106,7 @@ const init = (options = {}) => {
             },
         }),
     ];
-    let nativeOptions = { ...DEFAULT_OPTIONS, ...options };
+    let nativeOptions = { ...getDefaultOptions(), ...options };
     if (Array.isArray(nativeOptions.integrations)) {
         // Allow users to override Expo defaults...ymmv
         nativeOptions.integrations = (0, utils_1.overrideDefaultIntegrations)(defaultExpoIntegrations, nativeOptions.integrations);

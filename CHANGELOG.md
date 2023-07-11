@@ -8,6 +8,21 @@
 
 ### 🐛 Bug fixes
 
+- Create new options object on every init to avoid read only error when initializing multiple times ([#350](https://github.com/expo/sentry-expo/pull/350) by [@krystofwoldrich](https://github.com/krystofwoldrich))
+
+### 🧹 Chores
+
+## [7.0.0](https://github.com/expo/sentry-expo/releases/tag/v7.0.0) - 2023-06-16
+
+### 🛠 Breaking changes
+
+- Upgrade `@sentry/react-native` to `5.5.0`. ([#337](https://github.com/expo/sentry-expo/pull/337) by [@krystofwoldrich](https://github.com/krystofwoldrich))
+Checkout [the migration guide](https://docs.sentry.io/platforms/react-native/migration/#from-4x-to-5x) for breaking changes
+
+### 🎉 New features
+
+### 🐛 Bug fixes
+
 ### 🧹 Chores
 
 ## [6.2.2](https://github.com/expo/sentry-expo/releases/tag/v6.2.2) - 2023-06-19

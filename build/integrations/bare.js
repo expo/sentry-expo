@@ -83,7 +83,7 @@ class ExpoBareIntegration {
             }
             (0, react_native_2.getCurrentHub)().withScope((scope) => {
                 if (isFatal) {
-                    scope.setLevel("fatal");
+                    scope.setLevel('fatal');
                 }
                 (0, react_native_2.getCurrentHub)().captureException(error, {
                     originalException: error,
@@ -93,7 +93,6 @@ class ExpoBareIntegration {
             // If in dev, we call the default handler anyway and hope the error will be sent
             // Just for a better dev experience
             if (client && !__DEV__) {
-                // @ts-ignore PR to add this to types: https://github.com/getsentry/sentry-javascript/pull/2669
                 client.flush(client.getOptions().shutdownTimeout || 2000).then(() => {
                     defaultHandler(error, isFatal);
                 });

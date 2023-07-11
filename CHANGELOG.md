@@ -8,6 +8,7 @@
 
 ### 🐛 Bug fixes
 
+- Remove dependency on expo-updates ([#356](https://github.com/expo/sentry-expo/pull/356) by [@brentvatne](https://github.com/brentvatne))
 - Create new options object on every init to avoid read only error when initializing multiple times ([#350](https://github.com/expo/sentry-expo/pull/350) by [@krystofwoldrich](https://github.com/krystofwoldrich))
 
 ### 🧹 Chores

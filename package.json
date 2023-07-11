@@ -50,8 +50,7 @@
     "expo": ">=47.0.0",
     "expo-application": "*",
     "expo-constants": "*",
-    "expo-device": "*",
-    "expo-updates": "*"
+    "expo-device": "*"
   },
   "devDependencies": {
     "@expo/config-types": "^47.0.0",

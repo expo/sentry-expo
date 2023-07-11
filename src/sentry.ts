@@ -1,5 +1,4 @@
 import { Platform } from 'react-native';
-import * as Updates from 'expo-updates';
 import Constants, { ExecutionEnvironment } from 'expo-constants';
 import * as Application from 'expo-application';
 import { RewriteFrames } from '@sentry/integrations';
@@ -7,6 +6,7 @@ import { Integration, SdkInfo } from '@sentry/types';
 
 import { ExpoBareIntegration } from './integrations/bare';
 import { ExpoManagedIntegration } from './integrations/managed';
+import * as Updates from './integrations/Updates'
 import { SentryExpoNativeOptions, overrideDefaultIntegrations } from './utils';
 import {
   SENTRY_EXPO_PACKAGE,

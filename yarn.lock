@@ -347,15 +347,15 @@
   dependencies:
     "@babel/types" "^7.22.5"
 
+"@babel/helper-string-parser@^7.19.4", "@babel/helper-string-parser@^7.22.5":
+  version "7.22.5"
+  resolved "https://registry.yarnpkg.com/@babel/helper-string-parser/-/helper-string-parser-7.22.5.tgz#533f36457a25814cf1df6488523ad547d784a99f"
+  integrity sha512-mM4COjgZox8U+JcXQwPijIZLElkgEpO5rsERVDJTc2qfCDfERyob6k5WegS14SX18IIjv+XD+GrqNumY5JRCDw==
+
 "@babel/helper-string-parser@^7.21.5":
   version "7.21.5"
   resolved "https://registry.yarnpkg.com/@babel/helper-string-parser/-/helper-string-parser-7.21.5.tgz#2b3eea65443c6bdc31c22d037c65f6d323b6b2bd"
   integrity sha512-5pTUx3hAJaZIdW99sJ6ZUUgWq/Y+Hja7TowEnLNMm1VivRgZQL3vpBY3qUACVsvw+yQU6+YgfBVmcbLaZtrA1w==
-
-"@babel/helper-string-parser@^7.22.5":
-  version "7.22.5"
-  resolved "https://registry.yarnpkg.com/@babel/helper-string-parser/-/helper-string-parser-7.22.5.tgz#533f36457a25814cf1df6488523ad547d784a99f"
-  integrity sha512-mM4COjgZox8U+JcXQwPijIZLElkgEpO5rsERVDJTc2qfCDfERyob6k5WegS14SX18IIjv+XD+GrqNumY5JRCDw==
 
 "@babel/helper-validator-identifier@^7.19.1":
   version "7.19.1"
@@ -405,7 +405,7 @@
     "@babel/traverse" "^7.22.5"
     "@babel/types" "^7.22.5"
 
-"@babel/highlight@^7.10.4", "@babel/highlight@^7.22.5":
+"@babel/highlight@^7.10.4", "@babel/highlight@^7.18.6", "@babel/highlight@^7.22.5":
   version "7.22.5"
   resolved "https://registry.yarnpkg.com/@babel/highlight/-/highlight-7.22.5.tgz#aa6c05c5407a67ebce408162b7ede789b4d22031"
   integrity sha512-BSKlD1hgnedS5XRnGOljZawtag7H1yPfQp0tdNJCHoH6AZ+Pcm9VvkrK59/Yy593Ypg0zMxH2BxD1VPYUQ7UIw==
@@ -6418,11 +6418,6 @@ jsc-android@^250231.0.0:
   version "250231.0.0"
   resolved "https://registry.yarnpkg.com/jsc-android/-/jsc-android-250231.0.0.tgz#91720f8df382a108872fa4b3f558f33ba5e95262"
   integrity sha512-rS46PvsjYmdmuz1OAWXY/1kCYG7pnf1TBqeTiOJr1iDz7s5DLxxC9n/ZMknLDxzYzNVfI7R95MH10emSSG1Wuw==
-
-jsc-safe-url@^0.2.2:
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/jsc-safe-url/-/jsc-safe-url-0.2.4.tgz#141c14fbb43791e88d5dc64e85a374575a83477a"
-  integrity sha512-0wM3YBWtYePOjfyXQH5MWQ8H7sdk5EXSwZvmSLKk2RboVQ2Bu239jycHDz5J/8Blf3K0Qnoy2b6xD+z10MFB+Q==
 
 jscodeshift@^0.13.1:
   version "0.13.1"

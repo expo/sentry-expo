@@ -7,6 +7,8 @@ import {
 import * as fs from 'fs';
 import * as path from 'path';
 
+const SENTRY_CLI = `\`node --print "require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'"\``;
+
 export const withSentryIOS: ConfigPlugin<string> = (config, sentryProperties: string) => {
   config = withXcodeProject(config, (config) => {
     const xcodeProject = config.modResults;
@@ -23,9 +25,11 @@ export const withSentryIOS: ConfigPlugin<string> = (config, sentryProperties: st
         null,
         {
           shellPath: '/bin/sh',
-          shellScript:
-            'export SENTRY_PROPERTIES=sentry.properties\\n' +
-            "`node --print \"require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'\"` upload-dsym --force-foreground",
+          shellScript: `
+export SENTRY_PROPERTIES=sentry.properties
+[[ $SENTRY_INCLUDE_NATIVE_SOURCES == "true" ]] && INCLUDE_SOURCES_FLAG="--include-sources" || INCLUDE_SOURCES_FLAG=""
+${SENTRY_CLI} debug-files upload --force-foreground "$INCLUDE_SOURCES_FLAG" "$DWARF_DSYM_FOLDER_PATH"
+          `
         }
       );
     }
@@ -65,10 +69,9 @@ export function modifyExistingXcodeBuildScript(script: any): void {
     'export EXTRA_PACKAGER_ARGS="--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map"\n' +
     code.replace(
       /^.*?(packager|scripts)\/react-native-xcode\.sh\s*(\\'\\\\")?/m,
-      (match: any) =>
-        "`node --print \"require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'\"` react-native xcode --force-foreground " +
-        match
-    );
+      (match: any) => `${SENTRY_CLI} react-native xcode --force-foreground ${match}`
+    ) +
+    "\n\n`node --print \"require.resolve('@sentry/react-native/package.json').slice(0, -13) + '/scripts/collect-modules.sh'\"`";
 
   script.shellScript = JSON.stringify(code);
 }

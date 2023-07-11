@@ -1,1 +1,1 @@
-{"version":3,"file":"bare.d.ts","sourceRoot":"","sources":["../../src/integrations/bare.ts"],"names":[],"mappings":"AAgCA,qBAAa,mBAAmB;IAC9B,MAAM,CAAC,EAAE,SAAyB;IAClC,IAAI,SAA0B;IAE9B,SAAS;CAgFV"}
+{"version":3,"file":"bare.d.ts","sourceRoot":"","sources":["../../src/integrations/bare.ts"],"names":[],"mappings":"AAgCA,qBAAa,mBAAmB;IAC9B,MAAM,CAAC,EAAE,SAAyB;IAClC,IAAI,SAA0B;IAE9B,SAAS;CA+EV"}

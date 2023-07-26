@@ -8,6 +8,8 @@
 
 ### 🐛 Bug fixes
 
+- Align versions of `@sentry/*` dependencies to match what ships with `@sentry/react-native` ([#358](https://github.com/expo/sentry-expo/pull/358) by [@SimenB](https://github.com/SimenB))
+
 ### 🧹 Chores
 
 ## [7.0.1](https://github.com/expo/sentry-expo/releases/tag/v7.0.1) - 2023-07-12

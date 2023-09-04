@@ -6,6 +6,8 @@
 
 ### 🎉 New features
 
+- Upgrade `@sentry/react-native` to `5.9.1`. ([#367](https://github.com/expo/sentry-expo/pull/367) by [@mroswald](https://github.com/mroswald))
+
 ### 🐛 Bug fixes
 
 ### 🧹 Chores

@@ -134,7 +134,7 @@ const init = (options = {}) => {
     catch (e) {
         if (IS_BARE_WORKFLOW) {
             // Native projects have not been linked, try to continue with no native capability
-            console.warn(`[sentry-expo] Disabling the Sentry Native SDK (all JS errors will still be reported).\nTo enable it, run 'yarn add @sentry/react-native' or 'npm install @sentry/react-native' in your project directory. To silence this warning, pass 'enableNative: false' to Sentry.init().`);
+            console.warn(`[sentry-expo] Disabling the Sentry Native SDK (all JS errors will still be reported).\nTo enable it, run 'npx expo install @sentry/react-native' in your project directory. To silence this warning, pass 'enableNative: false' to Sentry.init().`);
             return (0, react_native_2.init)({
                 ...nativeOptions,
                 enableNative: false,

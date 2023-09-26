@@ -1,11 +1,18 @@
 import { ConfigPlugin, createRunOncePlugin, WarningAggregator } from 'expo/config-plugins';
 import type { ExpoConfig } from 'expo/config';
-import type { PublishHook } from '@expo/config-types';
 
 import { withSentryAndroid } from './withSentryAndroid';
 import { withSentryIOS } from './withSentryIOS';
 
 const pkg = require('../../package.json');
+
+interface PublishHook {
+  file?: string;
+  config?: {
+    [k: string]: any;
+  };
+  [k: string]: any;
+}
 
 const withSentry: ConfigPlugin = (config) => {
   const sentryProperties = getSentryProperties(config);
@@ -71,7 +78,9 @@ export function getSentryProperties(config: ExpoConfig): string | null {
 
 function buildSentryPropertiesString(sentryHookConfig: PublishHook['config']) {
   const { organization, project, authToken, url = 'https://sentry.io/' } = sentryHookConfig ?? {};
-  const missingProperties = ['organization', 'project'].filter((each) => !sentryHookConfig?.hasOwnProperty(each));
+  const missingProperties = ['organization', 'project'].filter(
+    (each) => !sentryHookConfig?.hasOwnProperty(each)
+  );
 
   if (missingProperties.length) {
     const warningMessage = `Missing Sentry configuration properties: ${missingProperties.join(
@@ -84,7 +93,11 @@ function buildSentryPropertiesString(sentryHookConfig: PublishHook['config']) {
   return `defaults.url=${url}
 ${organization ? `defaults.org=${organization}` : missingOrgMessage}
 ${project ? `defaults.project=${project}` : missingProjectMessage}
-${authToken ? `# Configure this value through \`SENTRY_AUTH_TOKEN\` environment variable instead. See:https://docs.expo.dev/guides/using-sentry/#app-configuration\nauth.token=${authToken}` : missingAuthTokenMessage}
+${
+  authToken
+    ? `# Configure this value through \`SENTRY_AUTH_TOKEN\` environment variable instead. See:https://docs.expo.dev/guides/using-sentry/#app-configuration\nauth.token=${authToken}`
+    : missingAuthTokenMessage
+}
 `;
 }
 

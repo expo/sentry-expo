@@ -1,4 +1,4 @@
-import { ExpoConfig } from '@expo/config-types';
+import { ExpoConfig } from 'expo/config';
 import { WarningAggregator } from '@expo/config-plugins';
 
 import { getSentryProperties } from '../withSentry';

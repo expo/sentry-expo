@@ -57,7 +57,9 @@ function buildSentryPropertiesString(sentryHookConfig) {
     return `defaults.url=${url}
 ${organization ? `defaults.org=${organization}` : missingOrgMessage}
 ${project ? `defaults.project=${project}` : missingProjectMessage}
-${authToken ? `# Configure this value through \`SENTRY_AUTH_TOKEN\` environment variable instead. See:https://docs.expo.dev/guides/using-sentry/#app-configuration\nauth.token=${authToken}` : missingAuthTokenMessage}
+${authToken
+        ? `# Configure this value through \`SENTRY_AUTH_TOKEN\` environment variable instead. See:https://docs.expo.dev/guides/using-sentry/#app-configuration\nauth.token=${authToken}`
+        : missingAuthTokenMessage}
 `;
 }
 exports.default = (0, config_plugins_1.createRunOncePlugin)(withSentry, pkg.name, pkg.version);

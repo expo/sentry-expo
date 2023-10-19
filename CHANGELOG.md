@@ -6,6 +6,9 @@
 
 ### 🎉 New features
 
+- Upgrade `@sentry/react-native` to `5.10.0`. ([#374](https://github.com/expo/sentry-expo/pull/374) by [@krystofwoldrich](https://github.com/krystofwoldrich))
+Checkout [the changelog](https://github.com/getsentry/sentry-react-native/blob/5.10.0/CHANGELOG.md#5100) for the new features and fixes
+
 ### 🐛 Bug fixes
 
 ### 🧹 Chores

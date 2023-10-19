@@ -6,18 +6,18 @@
 
 ### 🎉 New features
 
-- Upgrade `@sentry/react-native` to `5.10.0`. ([#374](https://github.com/expo/sentry-expo/pull/374) by [@krystofwoldrich](https://github.com/krystofwoldrich))
-Checkout [the changelog](https://github.com/getsentry/sentry-react-native/blob/5.10.0/CHANGELOG.md#5100) for the new features and fixes
-
 ### 🐛 Bug fixes
 
 ### 🧹 Chores
 
-## [7.0.1](https://github.com/expo/sentry-expo/releases/tag/v7.0.1) - 2023-07-12
-
-### 🛠 Breaking changes
+## [7.1.1](https://github.com/expo/sentry-expo/releases/tag/v7.1.1) - 2023-10-18
 
 ### 🎉 New features
+
+- Upgrade `@sentry/react-native` to `5.10.0`. ([#374](https://github.com/expo/sentry-expo/pull/374) by [@krystofwoldrich](https://github.com/krystofwoldrich))
+Checkout [the changelog](https://github.com/getsentry/sentry-react-native/blob/5.10.0/CHANGELOG.md#5100) for the new features and fixes
+
+## [7.0.1](https://github.com/expo/sentry-expo/releases/tag/v7.0.1) - 2023-07-12
 
 ### 🐛 Bug fixes
 

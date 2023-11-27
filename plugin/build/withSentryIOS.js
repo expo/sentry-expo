@@ -27,7 +27,7 @@ exports.writeSentryPropertiesTo = exports.modifyExistingXcodeBuildScript = expor
 const config_plugins_1 = require("expo/config-plugins");
 const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
-const SENTRY_CLI = `\`node --print "require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'"\``;
+const SENTRY_CLI = `\`$NODE_BINARY --print "require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'"\``;
 const withSentryIOS = (config, sentryProperties) => {
     config = (0, config_plugins_1.withXcodeProject)(config, (config) => {
         const xcodeProject = config.modResults;
@@ -66,7 +66,7 @@ function modifyExistingXcodeBuildScript(script) {
         'export SENTRY_PROPERTIES=sentry.properties\n' +
             'export EXTRA_PACKAGER_ARGS="--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map"\n' +
             code.replace(/^.*?(packager|scripts)\/react-native-xcode\.sh\s*(\\'\\\\")?/m, (match) => `${SENTRY_CLI} react-native xcode --force-foreground ${match}`) +
-            "\n\n`node --print \"require.resolve('@sentry/react-native/package.json').slice(0, -13) + '/scripts/collect-modules.sh'\"`";
+            "\n\n`$NODE_BINARY --print \"require.resolve('@sentry/react-native/package.json').slice(0, -13) + '/scripts/collect-modules.sh'\"`";
     script.shellScript = JSON.stringify(code);
 }
 exports.modifyExistingXcodeBuildScript = modifyExistingXcodeBuildScript;

@@ -8,6 +8,8 @@
 
 ### 🐛 Bug fixes
 
+- Use NODE_BINARY as per https://github.com/getsentry/sentry-react-native/pull/2805
+
 ### 🧹 Chores
 
 ## [7.1.1](https://github.com/expo/sentry-expo/releases/tag/v7.1.1) - 2023-10-18

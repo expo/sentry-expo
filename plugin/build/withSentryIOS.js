@@ -36,6 +36,12 @@ const withSentryIOS = (config, sentryProperties) => {
             xcodeProject.addBuildPhase([], 'PBXShellScriptBuildPhase', 'Upload Debug Symbols to Sentry', null, {
                 shellPath: '/bin/sh',
                 shellScript: `
+if [[ -f "$PODS_ROOT/../.xcode.env" ]]; then
+    source "$PODS_ROOT/../.xcode.env"
+fi
+if [[ -f "$PODS_ROOT/../.xcode.env.local" ]]; then
+    source "$PODS_ROOT/../.xcode.env.local"
+fi
 export SENTRY_PROPERTIES=sentry.properties
 [[ $SENTRY_INCLUDE_NATIVE_SOURCES == "true" ]] && INCLUDE_SOURCES_FLAG="--include-sources" || INCLUDE_SOURCES_FLAG=""
 ${SENTRY_CLI} debug-files upload --force-foreground "$INCLUDE_SOURCES_FLAG" "$DWARF_DSYM_FOLDER_PATH"

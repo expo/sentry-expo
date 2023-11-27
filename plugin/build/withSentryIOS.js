@@ -27,7 +27,7 @@ exports.writeSentryPropertiesTo = exports.modifyExistingXcodeBuildScript = expor
 const config_plugins_1 = require("expo/config-plugins");
 const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
-const SENTRY_CLI = `\`$NODE_BINARY --print "require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'"\``;
+const SENTRY_CLI = `PATH=$PATH:$(dirname $NODE_BINARY) \`$NODE_BINARY --print "require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'"\``;
 const withSentryIOS = (config, sentryProperties) => {
     config = (0, config_plugins_1.withXcodeProject)(config, (config) => {
         const xcodeProject = config.modResults;

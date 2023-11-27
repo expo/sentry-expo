@@ -7,7 +7,7 @@ import {
 import * as fs from 'fs';
 import * as path from 'path';
 
-const SENTRY_CLI = `\`$NODE_BINARY --print "require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'"\``;
+const SENTRY_CLI = `PATH=$PATH:$(dirname $NODE_BINARY) \`$NODE_BINARY --print "require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'"\``;
 
 export const withSentryIOS: ConfigPlugin<string> = (config, sentryProperties: string) => {
   config = withXcodeProject(config, (config) => {

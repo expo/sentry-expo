@@ -18,13 +18,13 @@ For first-time installation guidance, please follow the installation guides:
 - [A guide on installing and configuring Sentry for crash reporting](https://docs.expo.dev/guides/using-sentry/) by Expo
 - [Set up Sentry React Native SDK in your Expo project](https://docs.expo.dev/guides/using-sentry/) by Sentry
 
-### Questions & Support:
+### Questions & Support
 
 While official support is no longer provided, you might find help from the community in [Expo Discord](https://discord.com/invite/expo) and [Sentry Discord](https://discord.com/invite/sentry). Additionally, the [documentation for SDK 49 and below](https://docs.expo.dev/guides/using-sentry/) will remain available as a reference.
 
 Thank you for your understanding and support. If you have any questions, please open an issue in [`@sentry/react-native`](https://github.com/getsentry/sentry-react-native) repository, and we'll do our best to provide guidance.
 
-### What the deprecation means for you:
+### What the deprecation means for you
 
 - `sentry-expo` keeps working as is in SDK 49 and older.
 - **No New Features:** The library will not receive new features.

@@ -8,6 +8,8 @@
 
 ### 🐛 Bug fixes
 
+- Only create bundle & map files for the specified platform when uploading sourcemaps ([#311](https://github.com/expo/sentry-expo/pull/311) by [@danshilm](https://github.com/danshilm))
+
 ### 🧹 Chores
 
 ## [7.1.1](https://github.com/expo/sentry-expo/releases/tag/v7.1.1) - 2023-10-18

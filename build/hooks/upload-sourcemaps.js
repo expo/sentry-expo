@@ -16,10 +16,14 @@ module.exports = async (options) => {
     mkdirp_1.default.sync(tmpdir);
     try {
         // We use the same filenames for sourcemaps as Sentry does (even though the naming is unfortunate)
-        fs_1.default.writeFileSync(tmpdir + '/main.jsbundle', iosBundle, 'utf-8');
-        fs_1.default.writeFileSync(tmpdir + '/main.jsbundle.map', iosSourceMap, 'utf-8');
-        fs_1.default.writeFileSync(tmpdir + '/index.android.bundle', androidBundle, 'utf-8');
-        fs_1.default.writeFileSync(tmpdir + '/index.android.bundle.map', androidSourceMap, 'utf-8');
+        if (!config?.platform || config.platform === 'ios') {
+            fs_1.default.writeFileSync(tmpdir + '/main.jsbundle', iosBundle, 'utf-8');
+            fs_1.default.writeFileSync(tmpdir + '/main.jsbundle.map', iosSourceMap, 'utf-8');
+        }
+        if (!config?.platform || config.platform === 'android') {
+            fs_1.default.writeFileSync(tmpdir + '/index.android.bundle', androidBundle, 'utf-8');
+            fs_1.default.writeFileSync(tmpdir + '/index.android.bundle.map', androidSourceMap, 'utf-8');
+        }
         if (!config) {
             log('No config found in app.json, falling back to environment variables...');
         }

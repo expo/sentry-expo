@@ -7,7 +7,7 @@ import {
 import * as fs from 'fs';
 import * as path from 'path';
 
-const SENTRY_CLI = `\`node --print "require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'"\``;
+const SENTRY_CLI = `PATH=$PATH:$(dirname $NODE_BINARY) \`$NODE_BINARY --print "require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'"\``;
 
 export const withSentryIOS: ConfigPlugin<string> = (config, sentryProperties: string) => {
   config = withXcodeProject(config, (config) => {
@@ -26,6 +26,12 @@ export const withSentryIOS: ConfigPlugin<string> = (config, sentryProperties: st
         {
           shellPath: '/bin/sh',
           shellScript: `
+if [[ -f "$PODS_ROOT/../.xcode.env" ]]; then
+  source "$PODS_ROOT/../.xcode.env"
+fi
+if [[ -f "$PODS_ROOT/../.xcode.env.local" ]]; then
+  source "$PODS_ROOT/../.xcode.env.local"
+fi
 export SENTRY_PROPERTIES=sentry.properties
 [[ $SENTRY_INCLUDE_NATIVE_SOURCES == "true" ]] && INCLUDE_SOURCES_FLAG="--include-sources" || INCLUDE_SOURCES_FLAG=""
 ${SENTRY_CLI} debug-files upload --force-foreground "$INCLUDE_SOURCES_FLAG" "$DWARF_DSYM_FOLDER_PATH"
@@ -71,7 +77,7 @@ export function modifyExistingXcodeBuildScript(script: any): void {
       /^.*?(packager|scripts)\/react-native-xcode\.sh\s*(\\'\\\\")?/m,
       (match: any) => `${SENTRY_CLI} react-native xcode --force-foreground ${match}`
     ) +
-    "\n\n`node --print \"require.resolve('@sentry/react-native/package.json').slice(0, -13) + '/scripts/collect-modules.sh'\"`";
+    "\n\n`$NODE_BINARY --print \"require.resolve('@sentry/react-native/package.json').slice(0, -13) + '/scripts/collect-modules.sh'\"`";
 
   script.shellScript = JSON.stringify(code);
 }

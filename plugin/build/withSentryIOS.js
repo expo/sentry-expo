@@ -27,7 +27,7 @@ exports.writeSentryPropertiesTo = exports.modifyExistingXcodeBuildScript = expor
 const config_plugins_1 = require("expo/config-plugins");
 const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
-const SENTRY_CLI = `\`node --print "require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'"\``;
+const SENTRY_CLI = `PATH=$PATH:$(dirname $NODE_BINARY) \`$NODE_BINARY --print "require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'"\``;
 const withSentryIOS = (config, sentryProperties) => {
     config = (0, config_plugins_1.withXcodeProject)(config, (config) => {
         const xcodeProject = config.modResults;
@@ -36,6 +36,12 @@ const withSentryIOS = (config, sentryProperties) => {
             xcodeProject.addBuildPhase([], 'PBXShellScriptBuildPhase', 'Upload Debug Symbols to Sentry', null, {
                 shellPath: '/bin/sh',
                 shellScript: `
+if [[ -f "$PODS_ROOT/../.xcode.env" ]]; then
+    source "$PODS_ROOT/../.xcode.env"
+fi
+if [[ -f "$PODS_ROOT/../.xcode.env.local" ]]; then
+    source "$PODS_ROOT/../.xcode.env.local"
+fi
 export SENTRY_PROPERTIES=sentry.properties
 [[ $SENTRY_INCLUDE_NATIVE_SOURCES == "true" ]] && INCLUDE_SOURCES_FLAG="--include-sources" || INCLUDE_SOURCES_FLAG=""
 ${SENTRY_CLI} debug-files upload --force-foreground "$INCLUDE_SOURCES_FLAG" "$DWARF_DSYM_FOLDER_PATH"
@@ -66,7 +72,7 @@ function modifyExistingXcodeBuildScript(script) {
         'export SENTRY_PROPERTIES=sentry.properties\n' +
             'export EXTRA_PACKAGER_ARGS="--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map"\n' +
             code.replace(/^.*?(packager|scripts)\/react-native-xcode\.sh\s*(\\'\\\\")?/m, (match) => `${SENTRY_CLI} react-native xcode --force-foreground ${match}`) +
-            "\n\n`node --print \"require.resolve('@sentry/react-native/package.json').slice(0, -13) + '/scripts/collect-modules.sh'\"`";
+            "\n\n`$NODE_BINARY --print \"require.resolve('@sentry/react-native/package.json').slice(0, -13) + '/scripts/collect-modules.sh'\"`";
     script.shellScript = JSON.stringify(code);
 }
 exports.modifyExistingXcodeBuildScript = modifyExistingXcodeBuildScript;

@@ -8,6 +8,8 @@
 
 ### 🐛 Bug fixes
 
+- Bump @sentry/react-native to 5.17.0 along with related packages. ([#386](https://github.com/expo/sentry-expo/pull/386) by [@kbrandwijk](https://github.com/kbrandwijk]))
+
 ### 🧹 Chores
 
 ## [7.1.1](https://github.com/expo/sentry-expo/releases/tag/v7.1.1) - 2023-10-18

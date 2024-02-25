@@ -20,7 +20,7 @@
     "fs-extra": "10.1.0",
     "lodash-es": "4.17.21",
     "marked": "3.0.4",
-    "semver": "7.3.7",
+    "semver": "7.5.2",
     "tslib": "2.4.0"
   },
   "devDependencies": {
